@@ -3,6 +3,7 @@
 ### Personal files
 files/
 functions/conf.php
+scripts/py/configs.py
 
 ### Composer stuff
 composer.lock
