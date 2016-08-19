@@ -24,14 +24,14 @@ img {
 }
 
 .thumb_box {
-  background: #222222;
+  background: #222;
   height: 360px;
   width: 100%;
 }
 
 .dark {
-  background: #222222;
-  color: #FFFFFF;
+  background: #222;
+  color: #FFF;
   padding: 20px 0;
 }
 
@@ -142,7 +142,7 @@ img {
 }
 
 .icon_host {
-  background-color: #777777;
+  background-color: #777;
   color: #FDFDFD;
   height: 140px;
   width: 140px;
@@ -185,7 +185,7 @@ img {
 }
 
 .ask_button {
-  background:#0044cc url("icons/ask_fm-button.png") no-repeat center left 3px;
+  background:#04c url("icons/ask_fm-button.png") no-repeat center left 3px;
   background-size:34px;
 }
 
@@ -212,7 +212,7 @@ img {
 .cyni_box {
   min-width:300px;
   background-color: #fdfdfd;
-  border: 2px solid #666666;
+  border: 2px solid #666;
   box-shadow: 4px 4px 4px #585858;
 }
 
@@ -259,8 +259,8 @@ img {
 }
 
 .wp_excerpt {
-  border-top: 2px solid #999999;
-  border-bottom: 2px solid #999999;
+  border-top: 2px solid #999;
+  border-bottom: 2px solid #999;
   padding: 7px;
   text-align:justify;
 }
@@ -319,7 +319,7 @@ img {
 
 .footer {
   background:#323232 url("stylistics/top_dark_to_tran.png") repeat-x top;
-  color:#ffffff;
+  color:#fff;
   font:18px Veranda, sans_serif;
   /*box-shadow: 0 -2px 5px 2px #585858;*/
 }
@@ -364,12 +364,12 @@ img {
 .footer_col > ul > li > a {
   color:white;
   text-decoration:none;
-  border-bottom: 1px #ffffff dotted;
+  border-bottom: 1px #fff dotted;
 }
 
 .footer_col > ul > li > a:hover {
   color:white;
-  border-bottom: 1px #ffffff solid;
+  border-bottom: 1px #fff solid;
 }
 
 .ad_under_page {
@@ -461,7 +461,7 @@ img {
     padding-top:0;
     margin:0;
     font-size: 32px;
-    border: 1px solid #ffffff;
+    border: 1px solid #fff;
     border-right:0;
     border-left:0;
   }
@@ -535,7 +535,7 @@ img {
   }
 
   .ask_button_max {
-    background:#0044cc url("icons/ask_fm-button.png") no-repeat center;
+    background:#04c url("icons/ask_fm-button.png") no-repeat center;
     background-size:32px;
   }
 
