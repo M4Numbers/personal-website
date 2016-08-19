@@ -39,6 +39,8 @@ else
 {
     //Manga
     $true_id = $database->get_id_of_manga($_GET['item_id']);
+    //$return['debug'] = sprintf("Searching for id %d (true id: %d)",
+    //    $_GET['item_id'], $true_id);
     $return['comments'] = $database->get_comments_for_manga($true_id);
 }
 

@@ -39,9 +39,9 @@ function toTheTop() {
 
 function loadComment(is_anime, item_id)
 {
-    console.log(item_id + ' id loaded');
-    $.get('/scripts/load_comments.php', {item_id: item_id, mode: is_anime},
+    $.get('/scripts/load_comments.php', {item_id: item_id, mode: (is_anime ? 1 : 0)},
         function updateComments(response) {
+            console.log(response);
             if (is_anime == true) {
                 $('#inputAnimeComments').val(JSON.parse(response).comments);
             }
