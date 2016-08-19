@@ -18,7 +18,13 @@ if ($_GET['key'] !== '')
     if ($additional['single'] == TRUE)
     {
         $additional['anime']['status'] = toggle_anime_state($additional['anime']['status']);
-        $additional['anime']['comments'] = $db->get_comments_for_anime($additional['anime']['id']);
+        $additional['anime']['comments'] = '';
+        $comments = $db->get_comments_for_anime($additional['anime']['id']);
+        if ($comments != '')
+        {
+            $additional['anime']['comments'] =
+                \Michelf\Markdown::defaultTransform($comments);
+        }
     }
 }
 
@@ -31,6 +37,5 @@ if ($additional['single'] == FALSE)
     {
         $a['status'] = toggle_anime_state((int)$a['status']);
     }
-
 
 }

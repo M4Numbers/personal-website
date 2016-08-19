@@ -67,6 +67,7 @@ CREATE TABLE `youtube_videos` (
 CREATE TABLE `art_projects` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
+  `released_on` INTEGER NOT NULL,
   `desc` TEXT,
   `slug` VARCHAR(32) NOT NULL,
   PRIMARY KEY (`id`)

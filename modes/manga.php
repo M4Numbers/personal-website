@@ -20,8 +20,13 @@ if ($_GET['key'] !== '')
     {
         $additional['manga']['status'] = toggle_manga_state(
             $additional['manga']['status']);
-        $additional['manga']['comments'] = $db->get_comments_for_manga(
-            $additional['manga']['id']);
+        $additional['manga']['comments'] = '';
+        $comments = $db->get_comments_for_manga($additional['manga']['id']);
+        if ($comments != '')
+        {
+            $additional['manga']['comments'] =
+                \Michelf\Markdown::defaultTransform($comments);
+        }
     }
 }
 

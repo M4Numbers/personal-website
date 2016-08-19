@@ -37,6 +37,21 @@ function toTheTop() {
     resetDial();
 }
 
+function loadComment(is_anime, item_id)
+{
+    console.log(item_id + ' id loaded');
+    $.get('/scripts/load_comments.php', {item_id: item_id, mode: is_anime},
+        function updateComments(response) {
+            if (is_anime == true) {
+                $('#inputAnimeComments').val(JSON.parse(response).comments);
+            }
+            else {
+                $('#inputMangaComments').val(JSON.parse(response).comments);
+            }
+        }
+    );
+}
+
 $(window).resize(function() {
     didResize = true;
 });

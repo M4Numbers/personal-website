@@ -15,18 +15,6 @@
  * limitations under the License.
  */
 
-/**
- * Created by PhpStorm.
- * User: M4Numbers
- * Date: 12/08/2016
- * Time: 12:45
- */
-
-if (!isset($_POST['inputMangaChoice']) || !isset($_POST['inputMangaComments']))
-{
-    die();
-}
-
 $home_dir = '/home/numbers/www/';
 
 require_once $home_dir . '/functions/funcs.php';
@@ -39,10 +27,19 @@ use m4numbers\Database\DataBase;
 
 $database = new DataBase($home_dir, DATABASE);
 
-$database->add_comment_to_manga($_POST['inputMangaChoice'], $_POST['inputMangaComments']);
+$return = array();
 
-$true_id = $database->get_id_of_manga($_POST['inputMangaChoice']);
+if ($_GET['mode'] == true)
+{
+    //Anime
+    $true_id = $database->get_id_of_anime($_GET['item_id']);
+    $return['comments'] = $database->get_comments_for_anime($true_id);
+}
+else
+{
+    //Manga
+    $true_id = $database->get_id_of_manga($_GET['item_id']);
+    $return['comments'] = $database->get_comments_for_manga($true_id);
+}
 
-$database->registerUpdate(UPDATE_MANGA, $true_id);
-
-header('location: /admin/');
+echo json_encode($return);

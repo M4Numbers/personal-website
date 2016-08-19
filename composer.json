@@ -2,6 +2,7 @@
   "require": {
     "twig/twig": "1.6.5",
     "google/apiclient": "1.1.6",
-    "twbs/bootstrap": "v3.3.5"
+    "twbs/bootstrap": "v3.3.5",
+    "michelf/php-markdown": "v1.6.0"
   }
 }

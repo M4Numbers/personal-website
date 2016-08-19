@@ -21,7 +21,7 @@
  * Time: 05:40
  */
 
-if (!isset($_POST['inputAnimeChoice']) || !isset($_POST['inputComments']))
+if (!isset($_POST['inputAnimeChoice']) || !isset($_POST['inputAnimeComments']))
 {
     die();
 }
@@ -38,7 +38,7 @@ use m4numbers\Database\DataBase;
 
 $database = new DataBase($home_dir, DATABASE);
 
-$database->add_comment_to_anime($_POST['inputAnimeChoice'], $_POST['inputComments']);
+$database->add_comment_to_anime($_POST['inputAnimeChoice'], $_POST['inputAnimeComments']);
 
 $true_id = $database->get_id_of_anime($_POST['inputAnimeChoice']);
 
