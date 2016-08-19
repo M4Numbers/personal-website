@@ -1,58 +1,61 @@
-__ __________________________________
-_ __ Created by M4Numbers 2016 __
-_ __________________________________
+-- ---------------------------------
+-- --- Created by M4Numbers 2016 ---
+-- ---------------------------------
 
-DROP TABLE IF EXISTS `lastUpdate`;
-DROP TABLE IF EXISTS `animeComments`;
-DROP TABLE IF EXISTS `animeList`;
-DROP TABLE IF EXISTS `mangaComments`;
-DROP TABLE IF EXISTS `mangaList`;
-DROP TABLE IF EXISTS `artProjects`;
-DROP TABLE IF EXISTS `youtubeVideos`;
-DROP TABLE IF EXISTS `develProjects`;
+DROP TABLE IF EXISTS `last_update`;
+DROP TABLE IF EXISTS `anime_comments`;
+DROP TABLE IF EXISTS `anime_list`;
+DROP TABLE IF EXISTS `manga_comments`;
+DROP TABLE IF EXISTS `manga_list`;
+DROP TABLE IF EXISTS `art_projects`;
+DROP TABLE IF EXISTS `youtube_videos`;
+DROP TABLE IF EXISTS `devel_projects`;
 
-CREATE TABLE `animeList` (
+CREATE TABLE `anime_list` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `animeId` INTEGER NOT NULL,
+  `anime_id` INTEGER NOT NULL,
   `title` VARCHAR(128) NOT NULL,
   `score` TINYINT NOT NULL,
   `status` INTEGER DEFAULT 201,
-  `currentEp` INTEGER DEFAULT 0,
+  `total_eps` INTEGER NOT NULL,
+  `current_ep` INTEGER DEFAULT 0,
   `synopsis` TEXT,
   `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `animeComments` (
-  `animeId` INTEGER NOT NULL,
+CREATE TABLE `anime_comments` (
+  `anime_id` INTEGER NOT NULL,
   `comments` TEXT,
-  FOREIGN KEY (`animeId`) REFERENCES `animeList`(`id`),
-  UNIQUE KEY `uniqueAnime` (`animeId`)
+  FOREIGN KEY (`anime_id`) REFERENCES `anime_list`(`id`),
+  UNIQUE KEY `unique_anime` (`anime_id`)
 );
 
-CREATE TABLE `mangaList` (
+CREATE TABLE `manga_list` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `mangaId` INTEGER NOT NULL,
+  `manga_id` INTEGER NOT NULL,
   `title` VARCHAR(128) NOT NULL,
   `score` TINYINT NOT NULL,
   `status` INTEGER DEFAULT 201,
-  `currentVol` INTEGER DEFAULT 0,
-  `currentChap` INTEGER DEFAULT 0,
+  `total_vols` INTEGER NOT NULL,
+  `total_chaps` INTEGER NOT NULL,
+  `current_vol` INTEGER DEFAULT 0,
+  `current_chap` INTEGER DEFAULT 0,
   `synopsis` TEXT,
   `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `mangaComments` (
-  `mangaId` INTEGER NOT NULL,
+CREATE TABLE `manga_comments` (
+  `manga_id` INTEGER NOT NULL,
   `comments` TEXT,
-  FOREIGN KEY (`mangaId`) REFERENCES `mangaList`(`id`),
-  UNIQUE KEY `uniqueManga` (`mangaId`)
+  FOREIGN KEY (`manga_id`) REFERENCES `manga_list`(`id`),
+  UNIQUE KEY `unique_manga` (`manga_id`)
 );
 
-CREATE TABLE `youtubeVideos` (
+CREATE TABLE `youtube_videos` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `videoKey` VARCHAR(20) NOT NULL,
+  `video_key` VARCHAR(20) NOT NULL,
   `title` VARCHAR(128) NOT NULL,
   `uploader` VARCHAR(128) NOT NULL,
   `description` TEXT,
@@ -61,7 +64,7 @@ CREATE TABLE `youtubeVideos` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `artProjects` (
+CREATE TABLE `art_projects` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
   `desc` TEXT,
@@ -69,7 +72,7 @@ CREATE TABLE `artProjects` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `develProjects` (
+CREATE TABLE `devel_projects` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
   `synopsis` TEXT,
@@ -78,20 +81,20 @@ CREATE TABLE `develProjects` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `lastUpdate` (
+CREATE TABLE `last_update` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `updateType` TINYINT NOT NULL,
-  `blogId` BIGINT(20) UNSIGNED NULL,
-  `videoId` INTEGER NULL,
-  `artId` INTEGER NULL,
-  `develId` INTEGER NULL,
-  `animeId` INTEGER NULL,
-  `mangaId` INTEGER NULL,
+  `update_type` TINYINT NOT NULL,
+  `blog_id` BIGINT(20) UNSIGNED NULL,
+  `video_id` INTEGER NULL,
+  `art_id` INTEGER NULL,
+  `devel_id` INTEGER NULL,
+  `anime_id` INTEGER NULL,
+  `manga_id` INTEGER NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`blogId`) REFERENCES `wpPosts`(`ID`),
-  FOREIGN KEY (`videoId`) REFERENCES `youtubeVideos`(`id`),
-  FOREIGN KEY (`artId`) REFERENCES `artProjects`(`id`),
-  FOREIGN KEY (`develId`) REFERENCES `develProjects`(`id`),
-  FOREIGN KEY (`animeId`) REFERENCES `animeList`(`id`),
-  FOREIGN KEY (`mangaId`) REFERENCES `mangaList`(`id`)
+  FOREIGN KEY (`blog_id`) REFERENCES `wp_posts`(`ID`),
+  FOREIGN KEY (`video_id`) REFERENCES `youtube_videos`(`id`),
+  FOREIGN KEY (`art_id`) REFERENCES `art_projects`(`id`),
+  FOREIGN KEY (`devel_id`) REFERENCES `devel_projects`(`id`),
+  FOREIGN KEY (`anime_id`) REFERENCES `anime_list`(`id`),
+  FOREIGN KEY (`manga_id`) REFERENCES `manga_list`(`id`)
 );
