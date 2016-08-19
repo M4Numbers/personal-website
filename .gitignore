@@ -2,6 +2,7 @@
 
 ### Personal files
 files/
+functions/conf.php
 
 ### Composer stuff
 composer.lock
