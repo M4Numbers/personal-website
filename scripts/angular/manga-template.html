@@ -1,0 +1,35 @@
+<div class="row row_fix" ng-if="$index % 3 == 0">
+    <div class="col-lg-4">
+        <div class="manga">
+            <a href="./manga/{[{ loadCtrl.getContent()[$index].manga_id }]}">
+                <img class="small_cover img-thumbnail" src="{[{ loadCtrl.getContent()[$index].cover }]}"
+                     alt="{[{ loadCtrl.getContent()[$index].title }]}" />
+                <p class="manga_title">{[{ loadCtrl.getContent()[$index].title }]}</p>
+            </a>
+            <p class="manga_status">{[{ loadCtrl.getContent()[$index].status }]}
+                <span class="pull-right">Score: {[{ loadCtrl.getContent()[$index].score }]}</span></p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="manga">
+            <a href="./manga/{[{ loadCtrl.getContent()[$index+1].manga_id }]}">
+                <img class="small_cover img-thumbnail" src="{[{ loadCtrl.getContent()[$index+1].cover }]}"
+                     alt="{[{ loadCtrl.getContent()[$index+1].title }]}" />
+                <p class="manga_title">{[{ loadCtrl.getContent()[$index+1].title }]}</p>
+            </a>
+            <p class="manga_status">{[{ loadCtrl.getContent()[$index+1].status }]}
+                <span class="pull-right">Score: {[{ loadCtrl.getContent()[$index+1].score }]}</span></p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="manga">
+            <a href="./manga/{[{ loadCtrl.getContent()[$index+2].manga_id }]}">
+                <img class="small_cover img-thumbnail" src="{[{ loadCtrl.getContent()[$index+2].cover }]}"
+                     alt="{[{ loadCtrl.getContent()[$index+2].title }]}" />
+                <p class="manga_title">{[{ loadCtrl.getContent()[$index+2].title }]}</p>
+            </a>
+            <p class="manga_status">{[{ loadCtrl.getContent()[$index+2].status }]}
+                <span class="pull-right">Score: {[{ loadCtrl.getContent()[$index+2].score }]}</span></p>
+        </div>
+    </div>
+</div>

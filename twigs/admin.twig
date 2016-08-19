@@ -1,0 +1,126 @@
+{% extends "master.twig" %}
+
+{% block ads %}{% endblock %}
+
+{% block content %}
+    <div class="column">
+        {% if logged_in is empty %}
+            <form class="form-signin" method="post" action="./admin/">
+                <h1 class="form-signin-heading">Sign In</h1>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control"
+                       name="inputPassword" placeholder="Password" required="required"
+                       autocomplete="off" />
+                <input type="hidden" name="attempted" id="attempt" value="1" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+            </form>
+        {% else %}
+            <h1>Admin Page</h1>
+
+            <div class="form-box">
+                <h2>Add New Anime</h2>
+                <form method="post" class="row" action="./scripts/add.php">
+                    <div class="col-xs-10">
+                        <label for="inputAnimeId" class="sr-only">Anime Id</label>
+                        <input type="text" id="inputAnimeId" class="form-control"
+                               name="inputAnimeId" placeholder="Anime Id" required="required" />
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-default btn-primary btn-block" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-box">
+                <h2>Edit Anime</h2>
+                <form method="post" class="" action="./scripts/updateAnime.php">
+                    <div class="form-group">
+                        <label for="inputAnimeChoice" class="sr-only">Anime Choice</label>
+                        <select class="form-control" name="inputAnimeChoice" id="inputAnimeChoice">
+                            <option value="0" selected="selected">Choose an Anime</option>
+                            {% for a in anime %}
+                                <option value="{{ a.anime_id }}">{{ a.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-2">
+                            <label for="inputEpisodes" class="sr-only">Episodes Watched</label>
+                            <input type="text" id="inputEpisodes" name="inputEpisodes"
+                                   placeholder="Episodes Watched" class="form-control"/>
+                        </div>
+                        <div class="col-xs-2">
+                            <label for="inputScore" class="sr-only">Anime Score</label>
+                            <select class="form-control" name="inputScore" id="inputScore" >
+                                {% for i in range(1, 10) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-xs-8">
+                            <label for="inputStatus" class="sr-only" >Status</label>
+                            <select class="form-control" name="inputStatus" id="inputStatus">
+                                <option value="201">Plan to Watch</option>
+                                <option value="202">Watching</option>
+                                <option value="203">Completed</option>
+                                <option value="204">Dropped</option>
+                                <option value="205">On Hold</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputComments" class="sr-only">Comments</label>
+                        <textarea class="form-control vertical-resize" name="inputComments" id="inputComments"
+                                  placeholder="Insert Comments Here"></textarea>
+                        <div class="booster" ></div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-box">
+                <h2>Edit Manga</h2>
+                <form method="post" class="" action="./scripts/updateManga.php">
+                    <div class="form-group">
+                        <label for="inputMangaChoice" class="sr-only">Manga Choice</label>
+                        <select class="form-control" name="inputMangaChoice" id="inputMangaChoice">
+                            <option value="0" selected="selected">Choose an Manga</option>
+                            {% for m in manga %}
+                                <option value="{{ m.manga_id }}">{{ m.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputComments" class="sr-only">Comments</label>
+                        <textarea class="form-control vertical-resize" name="inputComments" id="inputComments"
+                                  placeholder="Insert Comments Here"></textarea>
+                        <div class="booster" ></div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-box">
+                <h2>Add Development Project</h2>
+                <form class="" method="post" action="./scripts/addNewDevel.php" >
+                    <div class="form-group">
+                        <label for="inputDevelTitle" class="sr-only">Development Title</label>
+                        <input type="text" class="form-control" name="inputDevelTitle" id="inputDevelTitle"
+                               required="required" placeholder="Developement Title "/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSynopsis" class="sr-only">Synopsis</label>
+                        <textarea class="form-control vertical-resize" name="inputSynopsis" id="inputSynopsis"
+                                  placeholder="Insert Synopsis Here"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDevelUrl" class="sr-only">Development URL</label>
+                        <input type="url" class="form-control" name="inputDevelUrl" id="inputDevelUrl"
+                               placeholder="Developement URL "/>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

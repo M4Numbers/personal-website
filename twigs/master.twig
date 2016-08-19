@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html ng-app="m4numbers">
+<head>
+  <title>M4Numbers - {% if title is empty %}{{ general.title }}{% else %}{{ title }}{% endif %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="{% if description is empty %}{{ general.description }}{% else %}{{ description }}{% endif %}" />
+
+  <base href="{{ general.base_location }}" />
+
+  <link rel="shortcut icon" type="image/ico" href="./assets/images/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap-theme.min.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/mystyle.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/sticky_footer.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/sign_in.css" />
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js" ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+  <script type="text/javascript" src="./assets/js/angular.js" ></script>
+  <script type="text/javascript" src="./assets/js/QTransform.js" ></script>
+  <script type="text/javascript" src="./assets/js/cyniEss.js" ></script>
+  <script type="text/javascript" src="./assets/js/analytics.js"></script>
+  <script type="text/javascript" src="./assets/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <!-- Google Tag Manager -->
+  <noscript>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-W9QGMD"
+      height="0" width="0" style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-W9QGMD');
+  </script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-40961707-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  <!-- End Google Analytics -->
+
+  {% block style %}{% endblock %}
+</head>
+<body>
+
+  <div class="header" >
+    <div class="logo" id="dial" onclick="toTheTop()"></div>
+  </div>
+
+  <nav class="{% block navbar_carousel %}navbar{% endblock %} navbar-static-top navbar-inverse slots" >
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand no_underline" href="./" >M4Numbers</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="./blog/" class="no_underline">Blog</a></li>
+          <li><a href="./videos" class="no_underline">Videos</a></li>
+          <li><a href="./development" class="no_underline">Coding</a></li>
+          <li><a href="./anime" class="no_underline">Anime</a></li>
+          <li><a href="./manga" class="no_underline">Manga</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  {% block carousel %}{% endblock %}
+
+  {% block content %}{% endblock %}
+
+  <div class="fake_booster" ></div>
+
+  <div class="big_footer">
+
+    {% block social_content %}
+      <div id="social_links" class="center-block social_content">
+        <p class="face_button_max right_button">
+          <a href="https://facebook.com/M4Numbers" class="social_link face_button"
+             style="display: inline-block; width:0;" ></a>
+        </p>
+        <p class="twit_button_max right_button">
+          <a href="https://twitter.com/M4Numbers" class="social_link twit_button"
+            style="display: inline-block; width:0;"></a>
+        </p>
+        <p class="twitch_button_max right_button">
+          <a href="https://twitch.tv/m477h3w1012" class="social_link twitch_button"
+            style="display: inline-block; width:0;"></a>
+        </p>
+        <p class="yt_button_max right_button">
+          <a href="https://youtube.com/c/M4NumbersUK" class="social_link yt_button"
+            style="display: inline-block; width:0;"></a>
+        </p>
+      </div>
+    {% endblock %}
+
+    {% block ads %}
+      <div class="ad_under_page" >
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- M4Numbers_under_page -->
+        <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1618482815358407"
+           data-ad-slot="8350670970"
+           data-ad-format="auto"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    {% endblock %}
+
+    <div class="fake_booster"></div>
+
+    <!--<div class="ending" ></div>-->
+
+    <footer class="footer" >
+      <div class="container marketing" >
+        <div class="row">
+          <div class="col-lg-4 outer_left footer_col" >
+            General Pages
+            <ul>
+              <li><a href="./contact" title="Contact Me">Contact Me</a></li>
+              <li><a href="./about" title="About Me" >About Me</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-4  footer_col" >
+            Other Info
+            <ul>
+              <li>Created by M4Numbers (&copy; 2014-2016)</li>
+              <li>Page Generated in {{ general.time }} seconds</li>
+            </ul>
+          </div>
+          <div class="col-lg-4 outer_right footer_col">
+            Site Info
+            <ul>
+              <li><a href="./admin" title="Admin">Admin</a></li>
+              <li><a href="./stats" title="Statistics">Site Statistics</a></li>
+              <li><a href="./map" title="Sitemap">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+# If you are looking here, I am going to be optimistic and assume that you know
+# what you're doing. If you don't, and you glanced in here for the sake of curiosity,
+# I would advise that you back away slowly and run as soon as you're clear.
+
+# Options that JustHost is quite opinionated about. That is to say, in the opinion
+# of JustHost, these two options need to exist. I would disagree.
+DirectoryIndex index.php
+
+# Rewrite options for removing all of the nasty .php extensions from stuff. Will
+# probably need to alter this at some point so that direct access to a directory
+# will serve the directory instead, but that's for another time when I care enough
+# about it.
+RewriteEngine on
+Options -Indexes +FollowSymlinks
+RewriteBase /
+
+RewriteRule ^(.*)\.txt $1.txt [L,NC]
+
+RewriteRule ^(ssc)/(.*) $1/$2 [L,NC]
+RewriteRule ^(ajax.*) $1 [L,NC,QSA]
+RewriteRule ^(assets)/(.*) $1/$2 [L,NC]
+RewriteRule ^(blog)/(.*) $1/$2 [L,NC]
+RewriteRule ^(files)/(.*) $1/$2 [L,NC]
+RewriteRule ^(scripts)/(.*) $1/$2 [L,NC]
+#RewriteRule ^.*$ /index.php [L,QSA]
+#RewriteRule ^(.*?)/?$ index.php?mode=$1 [QSA,L]
+RewriteRule ^(.*?)(/(.*?))?/?$ index.php?mode=$1&key=$3 [QSA,L]
+
+deny from 146.0.74.205

@@ -1,0 +1,35 @@
+<div class="row row_fix" ng-if="$index % 3 == 0">
+  <div class="col-lg-4">
+    <div class="video">
+      <a href="./videos/{[{ loadCtrl.getContent()[$index].video_key }]}">
+        <img class="small_cover img-thumbnail" src="{[{ loadCtrl.getContent()[$index].thumb }]}"
+             alt="{[{ loadCtrl.getContent()[$index].title }]}" />
+        <p class="video_title">{[{ loadCtrl.getContent()[$index].title }]}</p>
+      </a>
+      <p class="video_status">{[{ loadCtrl.getContent()[$index].uploader }]}
+        <span class="pull-right">Published: {[{ loadCtrl.getContent()[$index].published }]}</span></p>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="video">
+      <a href="./videos/{[{ loadCtrl.getContent()[$index+1].video_key }]}">
+        <img class="small_cover img-thumbnail" src="{[{ loadCtrl.getContent()[$index+1].thumb }]}"
+             alt="{[{ loadCtrl.getContent()[$index+1].title }]}" />
+        <p class="video_title">{[{ loadCtrl.getContent()[$index+1].title }]}</p>
+      </a>
+      <p class="video_status">{[{ loadCtrl.getContent()[$index+1].uploader }]}
+        <span class="pull-right">Published: {[{ loadCtrl.getContent()[$index+1].published }]}</span></p>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="video">
+      <a href="./videos/{[{ loadCtrl.getContent()[$index+2].video_key }]}">
+        <img class="small_cover img-thumbnail" src="{[{ loadCtrl.getContent()[$index+2].thumb }]}"
+             alt="{[{ loadCtrl.getContent()[$index+2].title }]}" />
+        <p class="video_title">{[{ loadCtrl.getContent()[$index+2].title }]}</p>
+      </a>
+      <p class="video_status">{[{ loadCtrl.getContent()[$index+2].uploader }]}
+        <span class="pull-right">Published: {[{ loadCtrl.getContent()[$index+2].published }]}</span></p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+{% extends "master.twig" %}
+
+{% block content %}
+    <div class="column" >
+        <h1>Manga</h1>
+        {% if manga is empty %}
+            <p>
+                There is nothing here at the moment. Possibly because there was
+                never anything here to begin with, or because everything has gone
+                and broken into a million pieces.
+            </p>
+            <p>
+                I'll leave it up to you to decide that.
+            </p>
+        {% else %}
+
+            <div class="marketing" ng-controller="LoadingController as loadCtrl">
+                {% if single == true %}
+                    <div class="row row_fix">
+                        <div class="col-lg-4 col-lg-push-8">
+                            <div class="anime">
+                                <img class="small_cover img-thumbnail" src="{{ manga.cover }}"
+                                     alt="{{ manga.title }}" />
+                                <p class="text-right">{{ manga.status }}</p>
+                                <p class="text-right">Score: {{ manga.score }}/10</p>
+                                <a href="http://myanimelist.net/manga/{{ manga.manga_id }}">
+                                    <img class="" src="./assets/images/mal-logo-xsmall.png"
+                                         alt="MyAnimeList.net link" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-lg-pull-4">
+                            <h2>{{ manga.title }}</h2>
+                            <p>{{ manga.synopsis | raw }}</p>
+                            {% if manga.comments is not empty %}
+                                <h2>My Thoughts</h2>
+                                <p>{{ manga.comments | raw | nl2br }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    {% for m in manga %}
+                        {% if loop.index0 % 3 == 0 %}
+                            <div class="row row_fix">
+                        {% endif %}
+                        <div class="col-lg-4">
+                            <div class="manga">
+                                <a href="./manga/{{ m.manga_id }}">
+                                    <img class="small_cover img-thumbnail" src="{{ m.cover }}" alt="{{ m.title }}" />
+                                    <p class="manga_title">{{ m.title }}</p>
+                                </a>
+                                <p class="manga_status">{{ m.status }}
+                                    <span class="pull-right">Score: {{ m.score }}</span></p>
+                            </div>
+                        </div>
+                        {% if loop.index % 3 == 0 %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div ng-hide="loadCtrl.checkContentEmpty()" >
+                        <!--<anime-template ng-repeat="a in loadCtrl.getAnime()"></anime-template>-->
+                        <manga-template ng-repeat="n in [].constructor(loadCtrl.getContent().length) track by $index"></manga-template>
+                    </div>
+
+                    <button class="load_more btn btn-primary btn-lg btn-block"
+                            ng-click="loadCtrl.loadMore(304)">Load More</button>
+                {% endif %}
+            </div>
+
+        {% endif %}
+    </div>
+{% endblock %}
