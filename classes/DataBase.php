@@ -15,7 +15,7 @@ if (!class_exists('CentralDatabase'))
     require_once $home_dir . '/classes/CentralDatabase.php';
 }
 
-if (!function_exists('toggle_state'))
+if (!function_exists('process_manga_state'))
 {
     require_once $home_dir . '/functions/funcs.php';
 }
@@ -36,22 +36,24 @@ class DataBase extends CentralDatabase
         parent::__construct($home, $database, "");
     }
 
-    public function add_new_anime($anime_id, $anime_title, $anime_synopsis, $episodes_watched, $score,
-                                    $status, $image)
+    public function add_new_anime($anime_id, $anime_title, $anime_synopsis, $episodes_watched,
+                                    $total_eps, $score, $status, $image)
     {
         $aov = array(
             ':anid'=> $anime_id,
             ':antitle' => $anime_title,
             ':anscore' => $score,
-            ':anstatus' => toggle_anime_state($status),
+            ':anstatus' => process_anime_state($status),
+            ':toteps' => $total_eps,
             ':aneps' => $episodes_watched,
             ':ansyn' => $anime_synopsis,
             ':animg' => $image,
         );
 
         $sql = 'INSERT INTO `anime_list`
-                (`anime_id`, `title`, `score`, `status`, `current_ep`, `synopsis`, `cover`)
-                VALUES (:anid, :antitle, :anscore, :anstatus, :aneps, :ansyn, :animg)';
+                (`anime_id`, `title`, `score`, `status`, `total_eps`, `current_ep`,
+                 `synopsis`, `cover`) VALUES (:anid, :antitle, :anscore, :anstatus,
+                  :toteps, :aneps, :ansyn, :animg)';
         
         try
         {
@@ -76,7 +78,7 @@ class DataBase extends CentralDatabase
                 'type' => PDO::PARAM_INT
             ),
             ':anstate' => array(
-                'value' => toggle_anime_state($state),
+                'value' => process_anime_state($state),
                 'type' => PDO::PARAM_INT
             ),
             ':anscore' => array(
@@ -280,7 +282,7 @@ class DataBase extends CentralDatabase
         $aov = array(
             ':animeId' => $anime_id,
             ':eps' => $episodes_watched,
-            ':state' => toggle_state($status),
+            ':state' => process_anime_state($status),
         );
 
         echo $aov[':state'];
@@ -303,14 +305,17 @@ class DataBase extends CentralDatabase
 
     }
 
-    public function add_new_manga($manga_id, $manga_title, $manga_synopsis, $volumes_read,
-        $chapters_read, $score, $status, $image)
+    public function add_new_manga($manga_id, $manga_title, $manga_synopsis, $total_volumes,
+                                    $total_chapters, $volumes_read, $chapters_read, $score,
+                                    $status, $image)
     {
         $aov = array(
             ':maid'=> $manga_id,
             ':matitle' => $manga_title,
             ':mascore' => $score,
-            ':mastatus' => toggle_manga_state($status),
+            ':mastatus' => process_manga_state($status),
+            ':totvol' => $total_volumes,
+            ':totchap' => $total_chapters,
             ':mavol' => $volumes_read,
             ':mach' => $chapters_read,
             ':masyn' => $manga_synopsis,
@@ -318,9 +323,10 @@ class DataBase extends CentralDatabase
         );
 
         $sql = 'INSERT INTO `manga_list`
-                (`manga_id`, `title`, `score`, `status`, `current_vol`, `current_chap`,
-                 `synopsis`, `cover`)
-                 VALUES (:maid, :matitle, :mascore, :mastatus, :mavol, :mach, :masyn, :maimg)';
+                (`manga_id`, `title`, `score`, `status`, `total_vols`, `total_chaps`, 
+                `current_vol`, `current_chap`, `synopsis`, `cover`)
+                 VALUES (:maid, :matitle, :mascore, :mastatus, :totvol, :totchap, :mavol,
+                  :mach, :masyn, :maimg)';
 
         try
         {
@@ -349,7 +355,7 @@ class DataBase extends CentralDatabase
                 'type' => PDO::PARAM_INT
             ),
             ':mastate' => array(
-                'value' => toggle_manga_state($state),
+                'value' => process_manga_state($state),
                 'type' => PDO::PARAM_INT
             ),
             ':mascore' => array(
@@ -370,7 +376,7 @@ class DataBase extends CentralDatabase
         try
         {
             parent::executePreparedStatement(parent::makePreparedStatement($sql), $aov);
-            $this->registerUpdate(UPDATE_MANGA, $this->get_id_of_anime($manga_id));
+            $this->registerUpdate(UPDATE_MANGA, $this->get_id_of_manga($manga_id));
         }
         catch (PDOException $e)
         {
@@ -556,13 +562,13 @@ class DataBase extends CentralDatabase
         $aov = array(
             ':mangaId' => $manga_id,
             ':chapters' => $chapters_read,
-            ':state' => toggle_state($status),
+            ':state' => process_manga_state($status),
         );
 
         echo $aov[':state'];
 
         $rql = 'SELECT COUNT(*) AS `total` FROM `manga_list`
-                WHERE `manga_id`=:animeId AND `current_chap`=:chapters AND `status`=:state';
+                WHERE `manga_id`=:mangaId AND `current_chap`=:chapters AND `status`=:state';
 
         try
         {

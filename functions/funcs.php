@@ -9,6 +9,182 @@ function timer($t = 0) {
         return microtime(true) - $t;
 }
 
+function run_mal_python($home, $anime = true, $title, $id)
+{
+    if ($anime)
+    {
+        $file = 'mal_anime.py';
+    }
+    else
+    {
+        $file = 'mal_manga.py';
+    }
+
+    $descPipes = array(
+        0 => array('pipe', 'r'),
+        1 => array('pipe', 'w'),
+        2 => array('file', 'err.log', 'a')
+    );
+
+    $cwd = getcwd();
+    $env = array();
+
+    $proc = proc_open('python ' . $home . '/scripts/py/' . $file,
+        $descPipes, $pipes, $cwd, $env);
+
+    $got = '';
+
+    if (is_resource($proc))
+    {
+        fwrite($pipes[0], str_replace(' ', '+', $title) . ' ' . $id);
+        fclose($pipes[0]);
+
+        $got = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+
+        proc_close($proc);
+    }
+
+    return $got;
+}
+
+/**
+ * @param \m4numbers\Database\DataBase $database
+ * @param SimpleXMLElement $anime_page
+ * @param SimpleXMLElement $mal_entry
+ */
+function process_anime($database, $anime_page, $mal_entry)
+{
+    if ((int)$mal_entry->id == (int)$anime_page->series_animedb_id)
+    {
+        if ($database->check_anime_exists_already(
+            $anime_page->series_animedb_id))
+        {
+            if (!$database->check_freshness_of_anime(
+                (int) $anime_page->series_animedb_id,
+                (int) $anime_page->my_watched_episodes,
+                (int) $anime_page->my_status
+            ))
+            {
+                $database->update_anime(
+                    (int) $anime_page->series_animedb_id,
+                    (int) $anime_page->my_watched_episodes,
+                    (int) $anime_page->my_status,
+                    (int) $anime_page->my_score
+                );
+            }
+        }
+        else
+        {
+            $database->add_new_anime(
+                (int) $anime_page->series_animedb_id,
+                (string) $anime_page->series_title,
+                (string) $mal_entry->synopsis,
+                (int) $anime_page->my_watched_episodes,
+                (int) $anime_page->series_episodes,
+                (int) $anime_page->my_score,
+                (int) $anime_page->my_status,
+                (string) $anime_page->series_image
+            );
+        }
+    }
+}
+
+/**
+ * @param \m4numbers\Database\DataBase $database
+ * @param SimpleXMLElement $anime_page
+ * @param SimpleXMLElement $mal_entry
+ */
+function process_manga($database, $manga_page, $mal_entry)
+{
+    if ((int)$mal_entry->id == (int)$manga_page->series_mangadb_id)
+    {
+        if ($database->check_manga_exists_already(
+            $manga_page->series_mangadb_id))
+        {
+            if (!$database->check_freshness_of_manga(
+                (int) $manga_page->series_mangadb_id,
+                (int) $manga_page->my_read_chapters,
+                (int) $manga_page->my_status
+            ))
+            {
+                $database->update_manga(
+                    (int) $manga_page->series_mangadb_id,
+                    (int) $manga_page->my_read_volumes,
+                    (int) $manga_page->my_read_chapters,
+                    (int) $manga_page->my_status,
+                    (int) $manga_page->my_score
+                );
+            }
+        }
+        else
+        {
+            $database->add_new_manga(
+                (int) $manga_page->series_mangadb_id,
+                (string) $manga_page->series_title,
+                (string) $mal_entry->synopsis,
+                (int) $manga_page->series_volumes,
+                (int) $manga_page->series_chapters,
+                (int) $manga_page->my_read_volumes,
+                (int) $manga_page->my_read_chapters,
+                (int) $manga_page->my_score,
+                (int) $manga_page->my_status,
+                (string) $manga_page->image
+            );
+        }
+    }
+}
+
+function process_anime_state($state)
+{
+    switch ($state)
+    {
+        case 1:
+            return ANIME_WATCHING;
+            break;
+        case 2:
+            return ANIME_COMPLETED;
+            break;
+        case 3:
+            return ANIME_HOLDING;
+            break;
+        case 4:
+            return ANIME_DROPPED;
+            break;
+        case 5:
+            break;
+        case 6:
+            return ANIME_PLANNED;
+            break;
+    }
+    return -1;
+}
+
+function process_manga_state($state)
+{
+    switch ($state)
+    {
+        case 1:
+            return MANGA_READING;
+            break;
+        case 2:
+            return MANGA_COMPLETED;
+            break;
+        case 3:
+            return MANGA_HOLDING;
+            break;
+        case 4:
+            return MANGA_DROPPED;
+            break;
+        case 5:
+            break;
+        case 6:
+            return MANGA_PLANNED;
+            break;
+    }
+    return -1;
+}
+
 function toggle_anime_state($state)
 {
     if (is_numeric($state))
