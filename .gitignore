@@ -1,7 +1,12 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 ### Personal files
+
+# Non-essential files that I have around
 files/
+
+# These two are covered by the index now
+
 functions/conf.php
 scripts/py/configs.py
 
