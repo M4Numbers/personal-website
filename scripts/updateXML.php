@@ -18,7 +18,7 @@
 
 $home_dir = "/home/numbers/www/";
 
-require_once $home_dir . "/../vendor/autoload.php";
+require_once $home_dir . "/vendor/autoload.php";
 require_once $home_dir . "/classes/Google.php";
 require_once $home_dir . "/functions/conf.php";
 require_once $home_dir . "/functions/enums.php";

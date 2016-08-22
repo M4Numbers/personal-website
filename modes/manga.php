@@ -34,6 +34,7 @@ if ($additional['single'] == FALSE)
 {
     $filters = array(MANGA_COMPLETED);
     $additional['manga'] = $db->get_all_manga(0, $filters);
+    $additional['srch'] = LOAD_MODE_MANGA;
 
     foreach ($additional['manga'] as &$m)
     {

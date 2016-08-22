@@ -53,7 +53,7 @@
                             <span class="pull-right">Score: {{ a.score }}</span></p>
                         </div>
                     </div>
-                    {% if loop.index % 3 == 0 %}
+                    {% if not loop.index % 3 or loop.last %}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -64,7 +64,7 @@
                 </div>
 
                 <button class="load_more btn btn-primary btn-lg btn-block"
-                        ng-click="loadCtrl.loadMore(301)">Load More</button>
+                        ng-click="loadCtrl.loadMore({{ srch }})">Load More</button>
             {% endif %}
         </div>
 

@@ -32,6 +32,7 @@ if ($additional['single'] == FALSE)
 {
     $filters = array(ANIME_COMPLETED);
     $additional['anime'] = $db->get_all_anime(0, $filters);
+    $additional['srch'] = LOAD_MODE_ANIME;
 
     foreach ($additional['anime'] as &$a)
     {
