@@ -41,6 +41,11 @@ img {
   text-align: center;
 }
 
+.marketing .col-lg-3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .marketing .col-lg-12 {
   margin-bottom: 20px;
   text-align: center;
@@ -51,6 +56,11 @@ img {
 }
 
 .marketing .col-lg-4 p {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.marketing .col-lg-3 p {
   margin-right: 10px;
   margin-left: 10px;
 }
