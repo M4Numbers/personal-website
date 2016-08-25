@@ -51,87 +51,120 @@ function run_mal_python($home, $anime = true, $title, $id)
 /**
  * @param \m4numbers\Database\DataBase $database
  * @param SimpleXMLElement $anime_page
- * @param SimpleXMLElement $mal_entry
+ * @param string $home_dir
  */
-function process_anime($database, $anime_page, $mal_entry)
+function process_anime($database, $anime_page, $home_dir)
 {
-    if ((int)$mal_entry->id == (int)$anime_page->series_animedb_id)
+
+    if ($database->check_anime_exists_already(
+        $anime_page->series_animedb_id))
     {
-        if ($database->check_anime_exists_already(
-            $anime_page->series_animedb_id))
+        if (!$database->check_freshness_of_anime(
+            (int) $anime_page->series_animedb_id,
+            (int) $anime_page->my_watched_episodes,
+            (int) $anime_page->my_status
+        ))
         {
-            if (!$database->check_freshness_of_anime(
+            $database->update_anime(
                 (int) $anime_page->series_animedb_id,
                 (int) $anime_page->my_watched_episodes,
-                (int) $anime_page->my_status
-            ))
-            {
-                $database->update_anime(
-                    (int) $anime_page->series_animedb_id,
-                    (int) $anime_page->my_watched_episodes,
-                    (int) $anime_page->my_status,
-                    (int) $anime_page->my_score
-                );
-            }
-        }
-        else
-        {
-            $database->add_new_anime(
-                (int) $anime_page->series_animedb_id,
-                (string) $anime_page->series_title,
-                (string) $mal_entry->synopsis,
-                (int) $anime_page->my_watched_episodes,
-                (int) $anime_page->series_episodes,
-                (int) $anime_page->my_score,
                 (int) $anime_page->my_status,
-                (string) $anime_page->series_image
+                (int) $anime_page->my_score
             );
         }
     }
+    else
+    {
+        $got = run_mal_python(
+            $home_dir, true, $anime_page->series_title,
+            $anime_page->series_animedb_id
+        );
+
+        if ($got !== '')
+        {
+            $mal_collection = simplexml_load_string($got);
+
+            foreach ($mal_collection->entry as $mal_entry)
+            {
+                if ((int) $mal_entry->id
+                    == (int) $anime_page->series_animedb_id
+                )
+                {
+                    $database->add_new_anime(
+                        (int) $anime_page->series_animedb_id,
+                        (string) $anime_page->series_title,
+                        (string) $mal_entry->synopsis,
+                        (int) $anime_page->my_watched_episodes,
+                        (int) $anime_page->series_episodes,
+                        (int) $anime_page->my_score,
+                        (int) $anime_page->my_status,
+                        (string) $anime_page->series_image
+                    );
+                }
+            }
+        }
+    }
+
 }
 
 /**
  * @param \m4numbers\Database\DataBase $database
- * @param SimpleXMLElement $anime_page
- * @param SimpleXMLElement $mal_entry
+ * @param SimpleXMLElement $manga_page
+ * @param string $home_dir
  */
-function process_manga($database, $manga_page, $mal_entry)
+function process_manga($database, $manga_page, $home_dir)
 {
-    if ((int)$mal_entry->id == (int)$manga_page->series_mangadb_id)
+    if ($database->check_manga_exists_already(
+        $manga_page->series_mangadb_id))
     {
-        if ($database->check_manga_exists_already(
-            $manga_page->series_mangadb_id))
+        if (!$database->check_freshness_of_manga(
+            (int) $manga_page->series_mangadb_id,
+            (int) $manga_page->my_read_chapters,
+            (int) $manga_page->my_status
+        ))
         {
-            if (!$database->check_freshness_of_manga(
+            $database->update_manga(
                 (int) $manga_page->series_mangadb_id,
-                (int) $manga_page->my_read_chapters,
-                (int) $manga_page->my_status
-            ))
-            {
-                $database->update_manga(
-                    (int) $manga_page->series_mangadb_id,
-                    (int) $manga_page->my_read_volumes,
-                    (int) $manga_page->my_read_chapters,
-                    (int) $manga_page->my_status,
-                    (int) $manga_page->my_score
-                );
-            }
-        }
-        else
-        {
-            $database->add_new_manga(
-                (int) $manga_page->series_mangadb_id,
-                (string) $manga_page->series_title,
-                (string) $mal_entry->synopsis,
-                (int) $manga_page->series_volumes,
-                (int) $manga_page->series_chapters,
                 (int) $manga_page->my_read_volumes,
                 (int) $manga_page->my_read_chapters,
-                (int) $manga_page->my_score,
                 (int) $manga_page->my_status,
-                (string) $manga_page->image
+                (int) $manga_page->my_score
             );
         }
+    }
+    else
+    {
+        $got = run_mal_python(
+            $home_dir, false, $manga_page->series_title,
+            $manga_page->series_mangadb_id
+        );
+
+        if ($got !== '')
+        {
+            $mal_collection = simplexml_load_string($got);
+
+            foreach ($mal_collection->entry as $mal_entry)
+            {
+                if ((int)$mal_entry->id == (int)$manga_page->series_mangadb_id)
+                {
+
+                    $database->add_new_manga(
+                        (int) $manga_page->series_mangadb_id,
+                        (string) $manga_page->series_title,
+                        (string) $mal_entry->synopsis,
+                        (int) $manga_page->series_volumes,
+                        (int) $manga_page->series_chapters,
+                        (int) $manga_page->my_read_volumes,
+                        (int) $manga_page->my_read_chapters,
+                        (int) $manga_page->my_score,
+                        (int) $manga_page->my_status,
+                        (string) $manga_page->image
+                    );
+
+                }
+            }
+        }
+
     }
 }
 

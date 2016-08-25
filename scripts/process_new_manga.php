@@ -12,7 +12,7 @@ use m4numbers\Database\DataBase;
 
 $database = new DataBase($home_dir, DATABASE);
 
-$location = 'http://myanimelist.net/malappinfo.php?u=%s&status=%s&type=%s';
+$location = 'https://myanimelist.net/malappinfo.php?u=%s&status=%s&type=%s';
 
 $xml = simplexml_load_file(
     sprintf($location, 'm4numbers', 'all', 'manga'),
@@ -29,19 +29,7 @@ $i = 0;
 
 foreach ($xml->manga as $manga)
 {
-    $got = run_mal_python(
-        $home_dir, false, $manga->series_title, $manga->series_mangadb_id
-    );
-
-    if ($got !== '')
-    {
-        $ret = simplexml_load_string($got);
-        foreach ($ret->entry as $single)
-        {
-            //var_dump($single);
-            process_manga($database, $manga, $single);
-        }
-    }
+    process_manga($database, $manga, $home_dir);
 
     ++$i;
     printf("%d/%d entries processed\n", $i, $total_count);
