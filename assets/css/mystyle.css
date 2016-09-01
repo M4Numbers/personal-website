@@ -390,7 +390,12 @@ img {
 
 .carousel-caption > h3 > a
 {
+  text-shadow: 1px 1px 10px #000;
   color: #FFF;
+}
+
+.carousel-indicators li {
+  box-shadow: 1px 1px 5px #000;
 }
 
 .anime

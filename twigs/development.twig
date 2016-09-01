@@ -3,7 +3,8 @@
 {% block content %}
   <div class="column">
     <h1>Development</h1>
-    {% if devel is empty %}
+    {% if single == true %}
+    {% elseif devel is empty %}
       <p>
         There is nothing here at the moment. Possibly because there was
         never anything here to begin with, or because everything has gone
@@ -12,6 +13,9 @@
       <p>
         I'll leave it up to you to decide that.
       </p>
+    {% else %}
+      {% for d in devel %}
+      {% endfor %}
     {% endif %}
   </div>
 {% endblock %}
