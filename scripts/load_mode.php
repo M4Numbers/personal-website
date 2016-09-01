@@ -34,15 +34,103 @@ use m4numbers\Database\DataBase;
 
 $database = new DataBase($home_dir, DATABASE);
 
-$an_filters = array(ANIME_COMPLETED);
-$ma_filters = array(MANGA_COMPLETED);
+$filters = array();
+$t_mode = $_GET['mode'];
 
 $return = array();
 
 switch ($_GET['mode'])
 {
+    case LOAD_MODE_ANIME_COMPLETE:
+        $filters = array(ANIME_COMPLETED);
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_ANIME_WATCHING:
+        $filters = array(ANIME_WATCHING);
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_ANIME_DROPPED:
+        $filters = array(ANIME_DROPPED);
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_ANIME_HOLDING:
+        $filters = array(ANIME_HOLDING);
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_ANIME_PLANNED:
+        $filters = array(ANIME_PLANNED);
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_ANIME_SEEN:
+        $filters = array(
+            ANIME_COMPLETED, ANIME_WATCHING,
+            ANIME_DROPPED, ANIME_HOLDING
+        );
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_ANIME_ALL:
+        $filters = array(
+            ANIME_COMPLETED, ANIME_PLANNED, ANIME_DROPPED,
+            ANIME_HOLDING, ANIME_WATCHING
+        );
+        $t_mode = LOAD_MODE_ANIME;
+        break;
+
+    case LOAD_MODE_MANGA_COMPLETE:
+        $filters = array(MANGA_COMPLETED);
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    case LOAD_MODE_MANGA_READING:
+        $filters = array(MANGA_READING);
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    case LOAD_MODE_MANGA_DROPPED:
+        $filters = array(MANGA_DROPPED);
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    case LOAD_MODE_MANGA_HOLDING:
+        $filters = array(MANGA_HOLDING);
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    case LOAD_MODE_MANGA_PLANNED:
+        $filters = array(MANGA_PLANNED);
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    case LOAD_MODE_MANGA_READ:
+        $filters = array(
+            MANGA_COMPLETED, MANGA_READING,
+            MANGA_DROPPED, MANGA_HOLDING
+        );
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    case LOAD_MODE_MANGA_ALL:
+        $filters = array(
+            MANGA_COMPLETED, MANGA_PLANNED, MANGA_DROPPED,
+            MANGA_HOLDING, MANGA_READING
+        );
+        $t_mode = LOAD_MODE_MANGA;
+        break;
+
+    default:
+        break;
+}
+
+switch ($t_mode)
+{
     case LOAD_MODE_ANIME:
-        $return = $database->get_all_anime($_GET['offset'], $an_filters);
+        $return = $database->get_all_anime($_GET['offset'], $filters);
         foreach ($return as &$a)
         {
             $a['status'] = toggle_anime_state((int)$a['status']);
@@ -50,7 +138,7 @@ switch ($_GET['mode'])
         break;
 
     case LOAD_MODE_MANGA:
-        $return = $database->get_all_manga($_GET['offset'], $ma_filters);
+        $return = $database->get_all_manga($_GET['offset'], $filters);
         foreach ($return as &$m)
         {
             $m['status'] = toggle_manga_state((int)$m['status']);

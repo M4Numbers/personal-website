@@ -3,19 +3,18 @@
 {% block content %}
     <div class="column" >
         <h1>Manga</h1>
-        {% if manga is empty %}
-            <p>
-                There is nothing here at the moment. Possibly because there was
-                never anything here to begin with, or because everything has gone
-                and broken into a million pieces.
-            </p>
-            <p>
-                I'll leave it up to you to decide that.
-            </p>
-        {% else %}
-
-            <div class="marketing" ng-controller="LoadingController as loadCtrl">
-                {% if single == true %}
+        <div class="marketing" ng-controller="LoadingController as loadCtrl">
+            {% if single == true %}
+                {% if manga is empty %}
+                    <p>
+                        There is nothing here at the moment. Possibly because there was
+                        never anything here to begin with, or because everything has gone
+                        and broken into a million pieces.
+                    </p>
+                    <p>
+                        I'll leave it up to you to decide that.
+                    </p>
+                {% else %}
                     <div class="row row_fix">
                         <div class="col-lg-4 col-lg-push-8">
                             <div class="anime">
@@ -38,7 +37,32 @@
                             {% endif %}
                         </div>
                     </div>
+                {% endif %}
+            {% else %}
+                <nav>
+                    <ul class="nav nav-justified">
+                        <li><a href="/manga/all">All</a></li>
+                        <li><a href="/manga/read">Read</a></li>
+                        <li><a href="/manga/reading">Reading</a></li>
+                        <li><a href="/manga/held">On Hold</a></li>
+                        <li><a href="/manga/dropped">Dropped</a></li>
+                        <li><a href="/manga/planned">Planned</a></li>
+                    </ul>
+                </nav>
+
+                <div class="booster"></div>
+
+                {% if manga is empty %}
+                    <p>
+                        There is nothing here at the moment. Possibly because there was
+                        never anything here to begin with, or because everything has gone
+                        and broken into a million pieces.
+                    </p>
+                    <p>
+                        I'll leave it up to you to decide that.
+                    </p>
                 {% else %}
+
                     {% for m in manga %}
                         {% if loop.index0 % 3 == 0 %}
                             <div class="row row_fix">
@@ -66,8 +90,7 @@
                     <button class="load_more btn btn-primary btn-lg btn-block"
                             ng-click="loadCtrl.loadMore({{ srch }})">Load More</button>
                 {% endif %}
-            </div>
-
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

@@ -18,7 +18,23 @@ define('MANGA_COMPLETED', 403);
 define('MANGA_DROPPED',   404);
 define('MANGA_HOLDING',   405);
 
-define('LOAD_MODE_ANIME',  301);
-define('LOAD_MODE_VIDEOS', 302);
-define('LOAD_MODE_DEVEL',  303);
-define('LOAD_MODE_MANGA',  304);
+define('LOAD_MODE_ANIME',          311);
+define('LOAD_MODE_ANIME_ALL',      301);
+define('LOAD_MODE_ANIME_SEEN',     305);
+define('LOAD_MODE_ANIME_COMPLETE', 306);
+define('LOAD_MODE_ANIME_WATCHING', 307);
+define('LOAD_MODE_ANIME_DROPPED',  308);
+define('LOAD_MODE_ANIME_HOLDING',  309);
+define('LOAD_MODE_ANIME_PLANNED',  310);
+
+define('LOAD_MODE_VIDEOS',         302);
+define('LOAD_MODE_DEVEL',          303);
+
+define('LOAD_MODE_MANGA',          304);
+define('LOAD_MODE_MANGA_ALL',      312);
+define('LOAD_MODE_MANGA_READ',     313);
+define('LOAD_MODE_MANGA_COMPLETE', 314);
+define('LOAD_MODE_MANGA_READING',  315);
+define('LOAD_MODE_MANGA_DROPPED',  316);
+define('LOAD_MODE_MANGA_HOLDING',  317);
+define('LOAD_MODE_MANGA_PLANNED',  318);
