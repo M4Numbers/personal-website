@@ -42,7 +42,7 @@ if ($_GET['key'] !== '')
     {
         switch ($_GET['key'])
         {
-            case 'complete':
+            case 'completed':
                 $filters = array(MANGA_COMPLETED);
                 $load = LOAD_MODE_MANGA_COMPLETE;
                 break;

@@ -39,7 +39,7 @@ if ($_GET['key'] !== '')
     {
         switch ($_GET['key'])
         {
-            case 'complete':
+            case 'completed':
                 $filters = array(ANIME_COMPLETED);
                 $load = LOAD_MODE_ANIME_COMPLETE;
                 break;
