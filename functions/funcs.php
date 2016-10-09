@@ -158,7 +158,7 @@ function process_manga($database, $manga_page, $home_dir)
                         (int) $manga_page->my_read_chapters,
                         (int) $manga_page->my_score,
                         (int) $manga_page->my_status,
-                        (string) $manga_page->image
+                        (string) $manga_page->series_image
                     );
 
                 }

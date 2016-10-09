@@ -684,6 +684,63 @@ class DataBase extends CentralDatabase
         }
     }
 
+    public function get_all_poll_projects()
+    {
+        $sql = 'SELECT `project_name` FROM `polling_projects`';
+
+        $all_items = array();
+
+        try
+        {
+            $ret = parent::executeStatement(parent::makePreparedStatement($sql));
+            while ($row = $ret->fetch())
+            {
+                array_push($all_items, $row['project_name']);
+            }
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+
+        return $all_items;
+    }
+
+    public function get_all_poll_options($poll_name)
+    {
+        $aov = array(
+            ':projectName' => $poll_name
+        );
+
+        $sql = 'SELECT `option_name`, `votes` FROM `polling_options` AS `po`
+                INNER JOIN `polling_projects` AS `pp` ON `pp`.`id`=`po`.`project_id`
+                WHERE `pp`.`project_name` = :projectName';
+
+        $all_options = array();
+
+        try {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            while ($row = $res->fetch())
+            {
+                array_push($all_options, array(
+                    'name' => $row['option_name'],
+                    'votes' => $row['votes']
+                ));
+            }
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+
+        return $all_options;
+    }
+
+
+
     public function registerUpdate($update_type, $id)
     {
         $dov = array(

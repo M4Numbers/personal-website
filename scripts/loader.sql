@@ -10,6 +10,28 @@ DROP TABLE IF EXISTS `manga_list`;
 DROP TABLE IF EXISTS `art_projects`;
 DROP TABLE IF EXISTS `youtube_videos`;
 DROP TABLE IF EXISTS `devel_projects`;
+DROP TABLE IF EXISTS `file_storage`;
+DROP TABLE IF EXISTS `file_types`;
+
+CREATE TABLE `file_types` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `type_slug` VARCHAR(16) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `file_types` (`type_slug`) VALUES ('PDF'), ('PNG'), ('ZIP'), ('GZ'), ('TAR.GZ'),
+  ('TAR'), ('JPG'), ('JPEG');
+
+CREATE TABLE `file_storage` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `file_slug` VARCHAR(64) NOT NULL,
+  `file_type` INTEGER NOT NULL, /* Enum value */
+  `file_url` VARCHAR(128),
+  `file_hash` VARCHAR(32), /* MD5 Hash */
+  `file_sig` VARCHAR(64),
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`file_type`) REFERENCES `file_types`(`id`)
+);
 
 CREATE TABLE `anime_list` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -76,10 +98,14 @@ CREATE TABLE `art_projects` (
 CREATE TABLE `devel_projects` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
-  `synopsis` TEXT,
+  `synopsis` TEXT, /* In Markdown */
+  `document_file` INTEGER,
+  `code_base_file` INTEGER,
   `link` VARCHAR(128),
   `cover` VARCHAR(255),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`document_file`) REFERENCES `file_storage`(`id`),
+  FOREIGN KEY (`code_base_file`) REFERENCES `file_storage`(`id`)
 );
 
 CREATE TABLE `last_update` (

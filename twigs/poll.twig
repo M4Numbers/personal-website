@@ -1,0 +1,24 @@
+{% extends "master.twig" %}
+
+{% block content %}
+    <div class="column" >
+        {% if single %}
+            <h1>{{ poll_title }}</h1>
+            <ul>
+                {% for o in poll %}
+                    <li>{{ o.name }} :: {{ o.votes }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h1>Polling Page</h1>
+            {% if all_polls is empty %}
+            {% else %}
+                <ul>
+                    {% for p in all_polls %}
+                        <li><a href="./poll/{{ p }}">{{ p }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
