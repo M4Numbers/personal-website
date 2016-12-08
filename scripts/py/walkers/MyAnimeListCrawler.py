@@ -15,7 +15,7 @@
 """
 
 __author__ = 'Matthew Ball'
-__base__ = "http://myanimelist.net/api/"
+__base__ = "https://myanimelist.net/api/"
 __auth__ = "account/verify_credentials.xml"
 __a_search__ = "anime/search.xml"
 __m_search__ = "manga/search.xml"
