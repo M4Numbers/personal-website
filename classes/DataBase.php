@@ -305,6 +305,33 @@ class DataBase extends CentralDatabase
 
     }
 
+    public function refresh_general_anime_details($anime_id, $series_episodes, $series_image, $series_status)
+    {
+        $aov = array(
+            ':animeId' => $anime_id,
+            ':eps' => $series_episodes,
+            ':img' => $series_image,
+            ':state' => $series_status
+        );
+
+        $sql = 'UPDATE `anime_list` SET
+                  `total_eps`=:eps,
+                  `cover`=:img,
+                  `anime_status`=:state
+                WHERE `anime_id`=:animeId';
+
+        try
+        {
+            $ret = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
     public function add_new_manga($manga_id, $manga_title, $manga_synopsis, $total_volumes,
                                     $total_chapters, $volumes_read, $chapters_read, $score,
                                     $status, $image)

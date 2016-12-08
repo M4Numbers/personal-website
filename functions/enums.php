@@ -12,6 +12,10 @@ define('ANIME_COMPLETED', 203);
 define('ANIME_DROPPED',   204);
 define('ANIME_HOLDING',   205);
 
+define('ANIME_FINISHED',         211);
+define('ANIME_CURRENTLY_AIRING', 212);
+define('ANIME_NOT_YET_AIRED',    213);
+
 define('MANGA_PLANNED',   401);
 define('MANGA_READING',   402);
 define('MANGA_COMPLETED', 403);

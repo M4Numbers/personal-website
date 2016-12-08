@@ -36,6 +36,7 @@ CREATE TABLE `file_storage` (
 CREATE TABLE `anime_list` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `anime_id` INTEGER NOT NULL,
+  `anime_status` INTEGER NOT NULL,
   `title` VARCHAR(128) NOT NULL,
   `score` TINYINT NOT NULL,
   `status` INTEGER DEFAULT 201,

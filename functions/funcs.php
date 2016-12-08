@@ -174,21 +174,31 @@ function process_anime_state($state)
     {
         case 1:
             return ANIME_WATCHING;
-            break;
         case 2:
             return ANIME_COMPLETED;
             break;
         case 3:
             return ANIME_HOLDING;
-            break;
         case 4:
             return ANIME_DROPPED;
-            break;
         case 5:
             break;
         case 6:
             return ANIME_PLANNED;
-            break;
+    }
+    return -1;
+}
+
+function process_anime_series_state($state)
+{
+    switch ($state)
+    {
+        case 1:
+            return ANIME_CURRENTLY_AIRING;
+        case 2:
+            return ANIME_FINISHED;
+        case 3:
+            return ANIME_NOT_YET_AIRED;
     }
     return -1;
 }
@@ -199,21 +209,16 @@ function process_manga_state($state)
     {
         case 1:
             return MANGA_READING;
-            break;
         case 2:
             return MANGA_COMPLETED;
-            break;
         case 3:
             return MANGA_HOLDING;
-            break;
         case 4:
             return MANGA_DROPPED;
-            break;
         case 5:
             break;
         case 6:
             return MANGA_PLANNED;
-            break;
     }
     return -1;
 }
@@ -225,38 +230,42 @@ function toggle_anime_state($state)
         switch ($state) {
             case ANIME_COMPLETED:
                 return 'Completed';
-                break;
             case ANIME_DROPPED:
                 return 'Dropped';
-                break;
             case ANIME_HOLDING:
                 return 'On-Hold';
-                break;
             case ANIME_PLANNED:
                 return 'Plan to Watch';
-                break;
             case ANIME_WATCHING:
                 return 'Watching';
-                break;
+
+            case ANIME_NOT_YET_AIRED:
+                return "Not yet aired";
+            case ANIME_FINISHED:
+                return "Finished airing";
+            case ANIME_CURRENTLY_AIRING:
+                return "Currently airing";
         }
     }
     switch ($state)
     {
         case 'Completed':
             return ANIME_COMPLETED;
-            break;
         case 'Dropped':
             return ANIME_DROPPED;
-            break;
         case 'Watching':
             return ANIME_WATCHING;
-            break;
         case 'Plan to Watch':
             return ANIME_PLANNED;
-            break;
         case 'On-Hold':
             return ANIME_HOLDING;
-            break;
+
+        case "Not yet aired":
+            return ANIME_NOT_YET_AIRED;
+        case "Finished airing":
+            return ANIME_FINISHED;
+        case "Currently airing":
+            return ANIME_CURRENTLY_AIRING;
     }
 
     return -1;
@@ -269,38 +278,28 @@ function toggle_manga_state($state)
         switch ($state) {
             case MANGA_COMPLETED:
                 return 'Completed';
-                break;
             case MANGA_DROPPED:
                 return 'Dropped';
-                break;
             case MANGA_HOLDING:
                 return 'On-Hold';
-                break;
             case MANGA_PLANNED:
                 return 'Plan to Read';
-                break;
             case MANGA_READING:
                 return 'Reading';
-                break;
         }
     }
     switch ($state)
     {
         case 'Completed':
             return MANGA_COMPLETED;
-            break;
         case 'Dropped':
             return MANGA_DROPPED;
-            break;
         case 'Reading':
             return MANGA_READING;
-            break;
         case 'Plan to Read':
             return MANGA_PLANNED;
-            break;
         case 'On-Hold':
             return MANGA_HOLDING;
-            break;
     }
 
     return -1;
