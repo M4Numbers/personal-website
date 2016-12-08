@@ -414,21 +414,24 @@ class DataBase extends CentralDatabase
         }
     }
 
-    public function refresh_general_manga_details($manga_id, $series_volumes, $series_chapters, $series_image, $series_status)
+    public function refresh_general_manga_details($manga_id, $series_volumes, $series_chapters, $series_image,
+        $series_status, $series_type)
     {
         $aov = array(
             ':mangaId' => $manga_id,
             ':vols' => $series_volumes,
             ':chaps' => $series_chapters,
             ':img' => $series_image,
-            ':state' => $series_status
+            ':state' => $series_status,
+            ':type' => $series_type
         );
 
         $sql = 'UPDATE `manga_list` SET
                   `total_vols`=:vols,
                   `total_chaps`=:chaps,
                   `cover`=:img,
-                  `manga_status`=:state
+                  `manga_status`=:state,
+                  `story_type`=:type
                 WHERE `manga_id`=:mangaId';
 
         try

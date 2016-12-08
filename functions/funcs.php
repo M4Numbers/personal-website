@@ -130,7 +130,8 @@ function process_manga($database, $manga_page, $home_dir)
             $manga_page->series_volumes,
             $manga_page->series_chapters,
             $manga_page->series_image,
-            process_manga_series_state($manga_page->series_status)
+            process_manga_series_state($manga_page->series_status),
+            process_manga_type($manga_page->series_type)
         );
 
         if (!$database->check_freshness_of_manga(
