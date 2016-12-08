@@ -37,13 +37,14 @@ class DataBase extends CentralDatabase
     }
 
     public function add_new_anime($anime_id, $anime_title, $anime_synopsis, $episodes_watched,
-                                    $total_eps, $score, $status, $image)
+                                    $total_eps, $score, $status, $series_status, $image)
     {
         $aov = array(
             ':anid'=> $anime_id,
             ':antitle' => $anime_title,
             ':anscore' => $score,
             ':anstatus' => process_anime_state($status),
+            ':serstatus' => process_anime_series_state($series_status),
             ':toteps' => $total_eps,
             ':aneps' => $episodes_watched,
             ':ansyn' => $anime_synopsis,
@@ -51,8 +52,8 @@ class DataBase extends CentralDatabase
         );
 
         $sql = 'INSERT INTO `anime_list`
-                (`anime_id`, `title`, `score`, `status`, `total_eps`, `current_ep`,
-                 `synopsis`, `cover`) VALUES (:anid, :antitle, :anscore, :anstatus,
+                (`anime_id`, `title`, `score`, `status`, `anime_status`, `total_eps`, `current_ep`,
+                 `synopsis`, `cover`) VALUES (:anid, :antitle, :anscore, :anstatus, :serstatus,
                   :toteps, :aneps, :ansyn, :animg)';
         
         try
@@ -322,7 +323,7 @@ class DataBase extends CentralDatabase
 
         try
         {
-            $ret = parent::executePreparedStatement(
+            parent::executePreparedStatement(
                 parent::makePreparedStatement($sql), $aov
             );
         }
@@ -334,26 +335,28 @@ class DataBase extends CentralDatabase
 
     public function add_new_manga($manga_id, $manga_title, $manga_synopsis, $total_volumes,
                                     $total_chapters, $volumes_read, $chapters_read, $score,
-                                    $status, $image)
+                                    $status, $series_status, $image, $type)
     {
         $aov = array(
             ':maid'=> $manga_id,
             ':matitle' => $manga_title,
             ':mascore' => $score,
             ':mastatus' => process_manga_state($status),
+            ':serstatus' => process_manga_series_state($series_status),
             ':totvol' => $total_volumes,
             ':totchap' => $total_chapters,
             ':mavol' => $volumes_read,
             ':mach' => $chapters_read,
             ':masyn' => $manga_synopsis,
             ':maimg' => $image,
+            ':matype' => process_manga_type($type)
         );
 
         $sql = 'INSERT INTO `manga_list`
-                (`manga_id`, `title`, `score`, `status`, `total_vols`, `total_chaps`, 
-                `current_vol`, `current_chap`, `synopsis`, `cover`)
-                 VALUES (:maid, :matitle, :mascore, :mastatus, :totvol, :totchap, :mavol,
-                  :mach, :masyn, :maimg)';
+                (`manga_id`, `title`, `score`, `status`, `manga_status`, `total_vols`, `total_chaps`, 
+                `current_vol`, `current_chap`, `synopsis`, `cover`, `story_type`)
+                 VALUES (:maid, :matitle, :mascore, :mastatus, :serstatus, :totvol, :totchap, :mavol,
+                  :mach, :masyn, :maimg, :matype)';
 
         try
         {
@@ -404,6 +407,35 @@ class DataBase extends CentralDatabase
         {
             parent::executePreparedStatement(parent::makePreparedStatement($sql), $aov);
             $this->registerUpdate(UPDATE_MANGA, $this->get_id_of_manga($manga_id));
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    public function refresh_general_manga_details($manga_id, $series_volumes, $series_chapters, $series_image, $series_status)
+    {
+        $aov = array(
+            ':mangaId' => $manga_id,
+            ':vols' => $series_volumes,
+            ':chaps' => $series_chapters,
+            ':img' => $series_image,
+            ':state' => $series_status
+        );
+
+        $sql = 'UPDATE `manga_list` SET
+                  `total_vols`=:vols,
+                  `total_chaps`=:chaps,
+                  `cover`=:img,
+                  `manga_status`=:state
+                WHERE `manga_id`=:mangaId';
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
         }
         catch (PDOException $e)
         {

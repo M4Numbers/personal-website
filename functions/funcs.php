@@ -59,6 +59,13 @@ function process_anime($database, $anime_page, $home_dir)
     if ($database->check_anime_exists_already(
         $anime_page->series_animedb_id))
     {
+        $database->refresh_general_anime_details(
+            $anime_page->series_animedb_id,
+            $anime_page->series_episodes,
+            $anime_page->series_image,
+            process_anime_series_state($anime_page->series_status)
+        );
+
         if (!$database->check_freshness_of_anime(
             (int) $anime_page->series_animedb_id,
             (int) $anime_page->my_watched_episodes,
@@ -98,6 +105,7 @@ function process_anime($database, $anime_page, $home_dir)
                         (int) $anime_page->series_episodes,
                         (int) $anime_page->my_score,
                         (int) $anime_page->my_status,
+                        (int) $anime_page->series_status,
                         (string) $anime_page->series_image
                     );
                 }
@@ -117,6 +125,14 @@ function process_manga($database, $manga_page, $home_dir)
     if ($database->check_manga_exists_already(
         $manga_page->series_mangadb_id))
     {
+        $database->refresh_general_manga_details(
+            $manga_page->series_mangadb_id,
+            $manga_page->series_volumes,
+            $manga_page->series_chapters,
+            $manga_page->series_image,
+            process_manga_series_state($manga_page->series_status)
+        );
+
         if (!$database->check_freshness_of_manga(
             (int) $manga_page->series_mangadb_id,
             (int) $manga_page->my_read_chapters,
@@ -158,7 +174,9 @@ function process_manga($database, $manga_page, $home_dir)
                         (int) $manga_page->my_read_chapters,
                         (int) $manga_page->my_score,
                         (int) $manga_page->my_status,
-                        (string) $manga_page->series_image
+                        (int) $manga_page->series_status,
+                        (string) $manga_page->series_image,
+                        (int) $manga_page->series_type
                     );
 
                 }
@@ -176,7 +194,6 @@ function process_anime_state($state)
             return ANIME_WATCHING;
         case 2:
             return ANIME_COMPLETED;
-            break;
         case 3:
             return ANIME_HOLDING;
         case 4:
@@ -221,6 +238,29 @@ function process_manga_state($state)
             return MANGA_PLANNED;
     }
     return -1;
+}
+
+function process_manga_series_state($state)
+{
+    switch ($state)
+    {
+        case 1:
+            return MANGA_CURRENTLY_PUBLISHING;
+        case 2:
+            return MANGA_PUBLISHED;
+        case 3:
+            return MANGA_NOT_YET_PUBLISHED;
+    }
+    return -1;
+}
+
+function process_manga_type($type)
+{
+    if ($type == 1)
+    {
+        return MANGA_TYPE_MANGA;
+    }
+    return MANGA_TYPE_LIGHT_NOVEL;
 }
 
 function toggle_anime_state($state)

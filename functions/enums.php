@@ -22,6 +22,13 @@ define('MANGA_COMPLETED', 403);
 define('MANGA_DROPPED',   404);
 define('MANGA_HOLDING',   405);
 
+define('MANGA_PUBLISHED',            411);
+define('MANGA_CURRENTLY_PUBLISHING', 412);
+define('MANGA_NOT_YET_PUBLISHED',    413);
+
+define('MANGA_TYPE_MANGA',       421);
+define('MANGA_TYPE_LIGHT_NOVEL', 422);
+
 define('LOAD_MODE_ANIME',          311);
 define('LOAD_MODE_ANIME_ALL',      301);
 define('LOAD_MODE_ANIME_SEEN',     305);
