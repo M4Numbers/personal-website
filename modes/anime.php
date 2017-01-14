@@ -26,6 +26,9 @@ if ($_GET['key'] !== '')
             $additional['anime']['status'] = toggle_anime_state(
                 $additional['anime']['status']
             );
+            $additional['anime']['anime_status'] = toggle_anime_state(
+                $additional['anime']['anime_status']
+            );
             $additional['anime']['comments'] = '';
             $comments = $db->get_comments_for_anime($additional['anime']['id']);
             if ($comments != '')

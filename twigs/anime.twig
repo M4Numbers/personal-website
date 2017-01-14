@@ -20,8 +20,10 @@
                         <div class="anime">
                             <img class="small_cover img-thumbnail" src="{{ anime.cover }}"
                                  alt="{{ anime.title }}" />
+                            <p class="text-right">{{ anime.anime_status }}</p>
                             <p class="text-right">{{ anime.status }}</p>
                             <p class="text-right">Score: {{ anime.score }}/10</p>
+                            <p class="text-right">Seen {{ anime.current_ep }}/{{ anime.total_eps }} episodes</p>
                             <a href="http://myanimelist.net/anime/{{ anime.anime_id }}">
                                 <img class="" src="./assets/images/mal-logo-xsmall.png"
                                      alt="MyAnimeList.net link" />
