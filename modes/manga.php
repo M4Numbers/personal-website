@@ -13,10 +13,9 @@ $additional['description'] = 'When I\'m not watching things or coding things '
 $additional['single'] = FALSE;
 
 $filters = array(
-    MANGA_COMPLETED, MANGA_PLANNED, MANGA_DROPPED,
-    MANGA_HOLDING, MANGA_READING
+    MANGA_COMPLETED
 );
-$load = LOAD_MODE_MANGA_ALL;
+$load = LOAD_MODE_MANGA_COMPLETE;
 
 if ($_GET['key'] !== '')
 {
@@ -70,12 +69,17 @@ if ($_GET['key'] !== '')
                 $load = LOAD_MODE_MANGA_READ;
                 break;
             case 'all':
-            default:
                 $filters = array(
                     MANGA_COMPLETED, MANGA_PLANNED, MANGA_DROPPED,
                     MANGA_HOLDING, MANGA_READING
                 );
                 $load = LOAD_MODE_MANGA_ALL;
+                break;
+            default:
+                $filters = array(
+                    MANGA_COMPLETED
+                );
+                $load = LOAD_MODE_MANGA_COMPLETE;
         }
     }
 }

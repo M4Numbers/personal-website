@@ -11,9 +11,8 @@ $additional['description'] = 'I have a lot of time on my hands and I therefore '
 
 $additional['single'] = FALSE;
 
-$filters = array(ANIME_COMPLETED, ANIME_PLANNED, ANIME_DROPPED,
-                 ANIME_HOLDING, ANIME_WATCHING);
-$load = LOAD_MODE_ANIME_ALL;
+$filters = array(ANIME_COMPLETED);
+$load = LOAD_MODE_ANIME_COMPLETE;
 
 if ($_GET['key'] !== '')
 {
@@ -70,12 +69,17 @@ if ($_GET['key'] !== '')
                 $load = LOAD_MODE_ANIME_SEEN;
                 break;
             case 'all':
-            default:
                 $filters = array(
                     ANIME_COMPLETED, ANIME_PLANNED, ANIME_DROPPED,
                     ANIME_HOLDING, ANIME_WATCHING
                 );
                 $load = LOAD_MODE_ANIME_ALL;
+                break;
+            default:
+                $filters = array(
+                    ANIME_COMPLETED
+                );
+                $load = LOAD_MODE_ANIME_COMPLETE;
         }
     }
 }
