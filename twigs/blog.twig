@@ -22,6 +22,29 @@
                         <p class="text-right">Posted at {{ b.posted }}</p>
                     </div>
                 {% endfor %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-lg fl_rt">
+                        {% for i in 1..pagecount.total %}
+                            {% if loop.first %}
+                                <li {% if pagecount.page == 1 %}class="disabled"{% endif %}>
+                                    <a href="/blog/page/{{ pagecount.page - 1 }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li {% if pagecount.page == i %}class="active"{% endif %}>
+                                <a href="/blog/page/{{ i }}">{{ i }}</a>
+                            </li>
+                            {% if loop.last %}
+                                <li {% if pagecount.page == pagecount.total %}class="disabled"{% endif %}>
+                                    <a href="/blog/page/{{ pagecount.page + 1 }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
             {% endif %}
         </div>
     </div>

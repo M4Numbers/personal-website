@@ -24,6 +24,6 @@ RewriteRule ^(files)/(.*) $1/$2 [L,NC]
 RewriteRule ^(scripts)/(.*) $1/$2 [L,NC]
 #RewriteRule ^.*$ /index.php [L,QSA]
 #RewriteRule ^(.*?)/?$ index.php?mode=$1 [QSA,L]
-RewriteRule ^(.*?)(/(.*?))?/?$ index.php?mode=$1&key=$3 [QSA,L]
+RewriteRule ^(.*?)(/(.*?))?(/(.*?))?$ index.php?mode=$1&key=$3&page=$5 [QSA,L]
 
 deny from 146.0.74.205
