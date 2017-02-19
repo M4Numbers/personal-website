@@ -14,7 +14,7 @@
                 </p>
             {% else %}
                 {% for b in blogs %}
-                    <div class="jumbotron">
+                    <div class="well well-lg">
                         <h1>
                             <a href="/blog/{% if b.search matches '/^[ -]+$/' %}{{ b.id }}{% else %}{{ b.search }}{% endif %}"
                                 >{{ b.title }}</a>

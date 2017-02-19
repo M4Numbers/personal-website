@@ -1231,6 +1231,57 @@ class DataBase extends CentralDatabase
         }
     }
 
+    public function get_all_development_projects()
+    {
+        $sql = "SELECT * FROM `devel_projects` ORDER BY `id` DESC";
+
+        $all_posts = array();
+
+        try
+        {
+            $res = parent::executeStatement(
+                parent::makePreparedStatement($sql)
+            );
+
+            while ($row = $res->fetch())
+            {
+                $row['contents'] = $this->get_comments_from_comment_id($row['comments_id']);
+                array_push($all_posts, $row);
+            }
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+
+        return $all_posts;
+    }
+
+    public function get_development_project_from_id($id)
+    {
+        $aov = array(
+            ":id" => $id
+        );
+
+        $sql = "SELECT * FROM `devel_projects`
+                WHERE `id`=:id";
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            $row['contents'] = $this->get_comments_from_comment_id($row['comments_id']);
+            return array($row);
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
     public function add_new_development_project($title, $cover, $comments)
     {
         $comment_id = $this->insert_new_comment($comments);

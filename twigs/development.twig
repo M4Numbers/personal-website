@@ -15,6 +15,20 @@
       </p>
     {% else %}
       {% for d in devel %}
+        {% if loop.index0 % 3 == 0 %}
+          <div class="row row_fix">
+        {% endif %}
+        <div class="col-lg-4">
+          <div class="devel">
+            <a href="./development/{{ d.id }}">
+              <img class="small_cover img-thumbnail" src="{{ d.cover }}" alt="{{ d.title }}" />
+              <p class="devel_title text-center h3">{{ d.title }}</p>
+            </a>
+          </div>
+        </div>
+        {% if not loop.index % 3 or loop.last %}
+          </div>
+        {% endif %}
       {% endfor %}
     {% endif %}
   </div>

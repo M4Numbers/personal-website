@@ -420,6 +420,12 @@ a.hidden_link:hover
   text-align: left;
 }
 
+.devel
+{
+  margin: 0 auto;
+  width: 235px;
+}
+
 .manga
 {
   margin: 0 auto;
