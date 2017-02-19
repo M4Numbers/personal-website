@@ -1001,6 +1001,31 @@ class DataBase extends CentralDatabase
         return $all_posts;
     }
 
+    public function get_blog_from_id($id)
+    {
+        $aov = array(
+            ":id" => $id
+        );
+
+        $sql = "SELECT * FROM `blog_posts`
+                WHERE `id`=:id";
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            $row['contents'] = $this->get_comments_from_comment_id($row['comments_id']);
+            return array($row);
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
     public function get_blog_from_title($title)
     {
         $aov = array(

@@ -10,7 +10,15 @@ $additional['single'] = FALSE;
 
 if ($_GET['key'] !== '')
 {
-    $blog = $db->get_blog_from_title($_GET['key']);
+    if (is_numeric($_GET['key']))
+    {
+        $blog = $db->get_blog_from_id($_GET['key']);
+    }
+    else
+    {
+        $blog = $db->get_blog_from_title($_GET['key']);
+    }
+
     if ($blog[0]['contents'] == null)
     {
         $blog = $db->get_all_blogs();
