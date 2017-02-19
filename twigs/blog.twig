@@ -24,24 +24,40 @@
                     </div>
                 {% endfor %}
                 <nav aria-label="Page navigation">
-                    <ul class="pagination pagination-lg fl_rt">
+                    <ul class="pagination pagination-lg pull-right">
                         {% for i in 1..pagecount.total %}
                             {% if loop.first %}
-                                <li {% if pagecount.page == 1 %}class="disabled"{% endif %}>
-                                    <a href="/blog/page/{{ pagecount.page - 1 }}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
+                                {% if pagecount.page == 1 %}
+                                    <li class="disabled">
+                                        <span>
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </span>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="/blog/page/{{ pagecount.page - 1 }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
                             <li {% if pagecount.page == i %}class="active"{% endif %}>
                                 <a href="/blog/page/{{ i }}">{{ i }}</a>
                             </li>
                             {% if loop.last %}
-                                <li {% if pagecount.page == pagecount.total %}class="disabled"{% endif %}>
-                                    <a href="/blog/page/{{ pagecount.page + 1 }}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
+                                {% if pagecount.page == pagecount.total %}
+                                    <li class="disabled">
+                                        <span>
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </span>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="/blog/page/{{ pagecount.page + 1 }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </ul>
