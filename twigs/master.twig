@@ -97,12 +97,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand no_underline {{ forms.page_test(general.page, "index") }}" href="./" >M4Numbers</a>
+        <a class="navbar-brand no_underline" href="./" >M4Numbers</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
+          <li class="{{ forms.page_test(general.page, "index") }}"><a href="./">Home</a></li>
           <li class="{{ forms.page_test(general.page, "blog") }}"><a href="./blog/">Blog</a></li>
           <li class="{{ forms.page_test(general.page, "videos") }}"><a href="./videos">Videos</a></li>
           <li class="{{ forms.page_test(general.page, "development") }}"><a href="./development">Coding</a></li>
