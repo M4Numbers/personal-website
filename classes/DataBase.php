@@ -1,4 +1,19 @@
 <?php
+/**
+ * Copyright 2017 Matthew D. Ball (m.d.ball2@ncl.ac.uk)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace m4numbers\Database;
 
@@ -973,6 +988,61 @@ class DataBase extends CentralDatabase
     {
         $comments_id = $this->check_comment_id_for_blog($blog_id);
         $this->update_comment($comments_id, $contents);
+    }
+
+    public function get_blog_pages($divisor)
+    {
+        $sql = "SELECT COUNT(*) AS `total` FROM `blog_posts`";
+
+        try
+        {
+            $res = parent::executeStatement(
+                parent::makePreparedStatement($sql)
+            );
+            $row = $res->fetch();
+            return ceil((float)$row['total'] / (float)$divisor);
+        }
+        catch (PDOException $e)
+        {
+            return null;
+        }
+    }
+
+    public function get_limited_blogs($limit, $offset)
+    {
+        $aov = array(
+            ":limit" => array(
+                'type' => PDO::PARAM_INT,
+                'value' => $limit
+            ),
+            ":offset" => array(
+                'type' => PDO::PARAM_INT,
+                'value' => $limit * ($offset - 1)
+            )
+        );
+
+        $sql = "SELECT * FROM `blog_posts` ORDER BY `posted` DESC LIMIT :offset, :limit";
+
+        $all_posts = array();
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            while ($row = $res->fetch())
+            {
+                $row['contents'] = $this->get_comments_from_comment_id($row['comments_id']);
+                array_push($all_posts, $row);
+            }
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+
+        return $all_posts;
     }
 
     public function get_all_blogs()
