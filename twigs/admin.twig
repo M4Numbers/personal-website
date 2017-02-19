@@ -39,13 +39,13 @@
                 <h2>Edit Blog Post</h2>
                 <form method="post" class="" action="./scripts/edit_blog.php">
                     <div class="form-group">
-                        <label for="inputBlogChoice" class="sr-only">Blog Choice</label>
-                        <select class="form-control" name="inputBlogChoice" id="inputBlogChoice">
+                        <label for="editBlogChoice" class="sr-only">Blog Choice</label>
+                        <select class="form-control" name="editBlogChoice" id="editBlogChoice">
                             <option value="0" selected="selected">Choose an Entry</option>
                             {% for b in blogs %}
                                 <option value="{{ b.id }}"
                                         onclick="loadComment({{ b.comments_id }}, '#editBlogContents')"
-                                >{{ b.blog_title }}</option>
+                                >{{ b.title }}</option>
                             {% endfor %}
                         </select>
                     </div>

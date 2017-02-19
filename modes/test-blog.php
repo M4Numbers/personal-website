@@ -23,8 +23,8 @@ else
 
 foreach ($blog as &$b)
 {
-    $b['blog_contents'] = \Michelf\MarkdownExtra::defaultTransform($b['blog_contents']);
-    $b['blog_posted'] = date("h:iA, jS F Y", $b['blog_posted']);
+    $b['contents'] = \Michelf\MarkdownExtra::defaultTransform($b['contents']);
+    $b['posted'] = date("h:iA, jS F Y", $b['posted']);
 }
 
 if ($additional['single'] == FALSE)

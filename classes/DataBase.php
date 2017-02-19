@@ -911,9 +911,73 @@ class DataBase extends CentralDatabase
         return $all_options;
     }
 
+    public function check_comment_id_for_blog($id)
+    {
+        $aov = array(':id' => $id);
+
+        $sql = "SELECT `comments_id` FROM `blog_posts`
+                WHERE `id`=:id";
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            return $row['comments_id'];
+        }
+        catch (PDOException $e)
+        {
+            return null;
+        }
+    }
+
+    public function add_new_blog($title, $contents)
+    {
+        $content_id = $this->insert_new_comment($contents);
+
+        if ($content_id == null)
+        {
+            return null;
+        }
+
+        $sanitised = strtolower($title);
+        $sanitised = preg_replace('/[ ]+/', '-', $sanitised);
+        $sanitised = preg_replace('/[^a-z0-9-]+/', '', $sanitised);
+
+        $aov = array(
+            ':title' => $title,
+            ':search' => $sanitised,
+            ':posted' => time(),
+            ':comments_id' => $content_id
+        );
+
+        $sql = "INSERT INTO `blog_posts` (`title`, `search`, `posted`, `comments_id`) VALUE (:title, :search,
+                :posted, :comments_id)";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+            return parent::getLastInsertId();
+        }
+        catch (PDOException $e)
+        {
+            return null;
+        }
+    }
+
+    public function edit_blog($blog_id, $contents)
+    {
+        $comments_id = $this->check_comment_id_for_blog($blog_id);
+        $this->update_comment($comments_id, $contents);
+    }
+
     public function get_all_blogs()
     {
-        $sql = "SELECT * FROM `blog_posts`";
+        $sql = "SELECT * FROM `blog_posts` ORDER BY `posted` DESC";
 
         $all_posts = array();
 
@@ -925,7 +989,7 @@ class DataBase extends CentralDatabase
 
             while ($row = $res->fetch())
             {
-                $row['blog_contents'] = $this->get_comments_from_comment_id($row['blog_comments']);
+                $row['contents'] = $this->get_comments_from_comment_id($row['comments_id']);
                 array_push($all_posts, $row);
             }
         }
@@ -953,7 +1017,7 @@ class DataBase extends CentralDatabase
             );
 
             $row = $res->fetch();
-            $row['blog_contents'] = $this->get_blog_contents_from_title($title);
+            $row['contents'] = $this->get_blog_contents_from_title($title);
             return array($row);
         }
         catch (PDOException $e)
