@@ -1231,6 +1231,31 @@ class DataBase extends CentralDatabase
         }
     }
 
+    public function add_new_development_project($title, $cover, $comments)
+    {
+        $comment_id = $this->insert_new_comment($comments);
+
+        $aov = array(
+            ':title' => $title,
+            ':cover' => $cover,
+            ':commentId' => $comment_id
+        );
+
+        $sql = "INSERT INTO `devel_projects` (`title`, `cover`, `comments_id`) VALUE (:title, :cover, :commentId)";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+            return parent::getLastInsertId();
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
     public function registerUpdate($update_type, $id)
     {
         $dov = array(
@@ -1339,9 +1364,9 @@ class DataBase extends CentralDatabase
                     case UPDATE_DEVEL:
                         $rql = 'SELECT `d`.`id` AS `id`, `d`.`title`, `d`.`cover` AS `image`
                                 FROM `last_update` AS `lu`
-                                INNER JOIN `devel_projects` AS `d` ON `lu`.`anime_id`=`d`.`id`
+                                INNER JOIN `devel_projects` AS `d` ON `lu`.`devel_id`=`d`.`id`
                                 WHERE `lu`.`id`=:id';
-                        $pre = './devel/';
+                        $pre = './development/';
                         break;
                     case UPDATE_VIDEO:
                         $rql = 'SELECT `v`.`video_key` AS `id`, `v`.`title`, `v`.`thumb` AS `image`
