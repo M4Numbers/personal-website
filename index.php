@@ -54,6 +54,7 @@ if ($fileNo != false)
     //We can serve that file through twig
     $twig = new TwigFile($avail[$fileNo], $home_dir);
     $act = $_GET['mode'];
+    $page_name = strtolower($_GET['mode']);
 }
 //If no file was set at all...
 else if ($_GET['mode'] == '')
@@ -62,6 +63,7 @@ else if ($_GET['mode'] == '')
     $twig = new TwigFile('index.twig', $home_dir);
     $act = 'index';
     $p = 'Index';
+    $page_name = 'index';
 }
 //And if they tried to access a page which didn't exist at all...
 else
@@ -70,6 +72,7 @@ else
     $twig = new TwigFile('404.twig', $home_dir);
     $act = '404';
     $p = '404 - File Not Found';
+    $page_name = '404';
     $fnf = true;
 }
 
@@ -91,6 +94,7 @@ $general = array(
     'location' => 'https://m4numbers.co.uk/',
     'base_location' => 'https://m4numbers.co.uk/',
     'time' => round(timer($t), 3),
+    'page' => $page_name
 );
 
 $twig->addRenderable('general', $general);

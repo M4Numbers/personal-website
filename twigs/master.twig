@@ -1,3 +1,5 @@
+{% import "forms.twig" as forms %}
+
 <!DOCTYPE html>
 <html ng-app="m4numbers">
 <head>
@@ -95,17 +97,17 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand no_underline" href="./" >M4Numbers</a>
+        <a class="navbar-brand no_underline {{ forms.page_test(general.page, "index") }}" href="./" >M4Numbers</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="./blog/" class="no_underline">Blog</a></li>
-          <li><a href="./videos" class="no_underline">Videos</a></li>
-          <li><a href="./development" class="no_underline">Coding</a></li>
-          <li><a href="./anime" class="no_underline">Anime</a></li>
-          <li><a href="./manga" class="no_underline">Manga</a></li>
+          <li class="{{ forms.page_test(general.page, "blog") }}"><a href="./blog/">Blog</a></li>
+          <li class="{{ forms.page_test(general.page, "videos") }}"><a href="./videos">Videos</a></li>
+          <li class="{{ forms.page_test(general.page, "development") }}"><a href="./development">Coding</a></li>
+          <li class="{{ forms.page_test(general.page, "anime") }}"><a href="./anime">Anime</a></li>
+          <li class="{{ forms.page_test(general.page, "manga") }}"><a href="./manga">Manga</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

@@ -11,6 +11,16 @@ $additional['description'] = 'I have a lot of time on my hands and I therefore '
 
 $additional['single'] = FALSE;
 
+$viewing = array(
+    "all" => "",
+    "seen" => "",
+    "watching" => "",
+    "completed" => "",
+    "held" => "",
+    "dropped" => "",
+    "planned" => ""
+);
+
 $filters = array(ANIME_COMPLETED);
 $load = LOAD_MODE_ANIME_COMPLETE;
 
@@ -44,22 +54,27 @@ if ($_GET['key'] !== '')
             case 'completed':
                 $filters = array(ANIME_COMPLETED);
                 $load = LOAD_MODE_ANIME_COMPLETE;
+                $viewing['completed'] = 'active';
                 break;
             case 'watching':
                 $filters = array(ANIME_WATCHING);
                 $load = LOAD_MODE_ANIME_WATCHING;
+                $viewing['watching'] = 'active';
                 break;
             case 'dropped':
                 $filters = array(ANIME_DROPPED);
                 $load = LOAD_MODE_ANIME_DROPPED;
+                $viewing['dropped'] = 'active';
                 break;
             case 'held':
                 $filters = array(ANIME_HOLDING);
                 $load = LOAD_MODE_ANIME_HOLDING;
+                $viewing['held'] = 'active';
                 break;
             case 'planned':
                 $filters = array(ANIME_PLANNED);
                 $load = LOAD_MODE_ANIME_PLANNED;
+                $viewing['planned'] = 'active';
                 break;
             case 'seen':
                 $filters = array(
@@ -67,6 +82,7 @@ if ($_GET['key'] !== '')
                     ANIME_DROPPED, ANIME_HOLDING
                 );
                 $load = LOAD_MODE_ANIME_SEEN;
+                $viewing['seen'] = 'active';
                 break;
             case 'all':
                 $filters = array(
@@ -74,20 +90,27 @@ if ($_GET['key'] !== '')
                     ANIME_HOLDING, ANIME_WATCHING
                 );
                 $load = LOAD_MODE_ANIME_ALL;
+                $viewing['all'] = 'active';
                 break;
             default:
                 $filters = array(
                     ANIME_COMPLETED
                 );
                 $load = LOAD_MODE_ANIME_COMPLETE;
+                $viewing['completed'] = 'active';
         }
     }
+}
+else
+{
+    $viewing['completed'] = 'active';
 }
 
 if ($additional['single'] == FALSE)
 {
     $additional['anime'] = $db->get_all_anime(0, $filters);
     $additional['srch'] = $load;
+    $additional['viewing'] = $viewing;
 
     foreach ($additional['anime'] as &$a)
     {
