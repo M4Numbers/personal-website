@@ -78,14 +78,12 @@
             <div class="form-box">
                 <h2>Add New Anime</h2>
                 <form method="post" class="row" action="./scripts/add.php">
-                    <div class="col-xs-10">
+                    <div class="form-group">
                         <label for="inputAnimeId" class="sr-only">Anime Id</label>
                         <input type="text" id="inputAnimeId" class="form-control"
                                name="inputAnimeId" placeholder="Anime Id" required="required" />
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-default btn-primary btn-block" type="submit">Submit</button>
-                    </div>
+                    <button class="btn btn-default btn-primary btn-block" type="submit">Submit</button>
                 </form>
             </div>
 
@@ -103,30 +101,28 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-xs-2">
-                            <label for="inputEpisodes" class="sr-only">Episodes Watched</label>
-                            <input type="text" id="inputEpisodes" name="inputEpisodes"
-                                   placeholder="Episodes Watched" class="form-control"/>
-                        </div>
-                        <div class="col-xs-2">
-                            <label for="inputScore" class="sr-only">Anime Score</label>
-                            <select class="form-control" name="inputScore" id="inputScore" >
-                                {% for i in range(1, 10) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-xs-8">
-                            <label for="inputStatus" class="sr-only" >Status</label>
-                            <select class="form-control" name="inputStatus" id="inputStatus">
-                                <option value="201">Plan to Watch</option>
-                                <option value="202">Watching</option>
-                                <option value="203">Completed</option>
-                                <option value="204">Dropped</option>
-                                <option value="205">On Hold</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="inputEpisodes" class="sr-only">Episodes Watched</label>
+                        <input type="text" id="inputEpisodes" name="inputEpisodes"
+                               placeholder="Episodes Watched" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputScore" class="sr-only">Anime Score</label>
+                        <select class="form-control" name="inputScore" id="inputScore" >
+                            {% for i in range(1, 10) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStatus" class="sr-only" >Status</label>
+                        <select class="form-control" name="inputStatus" id="inputStatus">
+                            <option value="201">Plan to Watch</option>
+                            <option value="202">Watching</option>
+                            <option value="203">Completed</option>
+                            <option value="204">Dropped</option>
+                            <option value="205">On Hold</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="inputAnimeComments" class="sr-only">Comments</label>
@@ -175,7 +171,7 @@
                     <div class="form-group">
                         <label for="inputDevelCover" class="sr-only">Cover Image</label>
                         <input type="file" name="inputDevelCover" id="inputDevelCover"
-                               placeholder="Cover_Image.png" />
+                               placeholder="Cover_Image.png" style="width:100%"/>
                     </div>
                     <div class="form-group">
                         <label for="inputDevelComments" class="sr-only">Description</label>

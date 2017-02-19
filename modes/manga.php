@@ -101,6 +101,10 @@ if ($_GET['key'] !== '')
         }
     }
 }
+else
+{
+    $viewing['completed'] = 'active';
+}
 
 if ($additional['single'] == FALSE)
 {

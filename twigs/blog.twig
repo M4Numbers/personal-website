@@ -2,7 +2,8 @@
 
 {% block content %}
     <div class="column" >
-        <div class="container">
+        <h1>Blog</h1>
+        <div class="marketing">
             {% if blogs is empty %}
                 <p>
                     There is nothing here at the moment. Possibly because there was
@@ -15,10 +16,10 @@
             {% else %}
                 {% for b in blogs %}
                     <div class="well well-lg">
-                        <h1>
+                        <h2>
                             <a href="/blog/{% if b.search matches '/^[ -]+$/' %}{{ b.id }}{% else %}{{ b.search }}{% endif %}"
                                 >{{ b.title }}</a>
-                        </h1>
+                        </h2>
                         {{ b.contents|raw }}
                         <p class="text-right">Posted at {{ b.posted }}</p>
                     </div>
