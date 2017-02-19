@@ -11,7 +11,7 @@ $additional['single'] = FALSE;
 if ($_GET['key'] !== '')
 {
     $blog = $db->get_blog_from_title($_GET['key']);
-    if (sizeof($blog) == 0)
+    if ($blog[0]['contents'] == null)
     {
         $blog = $db->get_all_blogs();
     }

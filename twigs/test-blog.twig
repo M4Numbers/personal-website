@@ -3,15 +3,26 @@
 {% block content %}
     <div class="column" >
         <div class="container">
-            {% for b in blogs %}
-                <div class="jumbotron">
-                    <h1>
-                        <a href="/test-blog/{{ b.search }}">{{ b.title }}</a>
-                    </h1>
-                    {{ b.contents|raw }}
-                    <p class="text-right">Posted at {{ b.posted }}</p>
-                </div>
-            {% endfor %}
+            {% if blogs is empty %}
+                <p>
+                    There is nothing here at the moment. Possibly because there was
+                    never anything here to begin with, or because everything has gone
+                    and broken into a million pieces.
+                </p>
+                <p>
+                    I'll leave it up to you to decide that.
+                </p>
+            {% else %}
+                {% for b in blogs %}
+                    <div class="jumbotron">
+                        <h1>
+                            <a href="/test-blog/{{ b.search }}">{{ b.title }}</a>
+                        </h1>
+                        {{ b.contents|raw }}
+                        <p class="text-right">Posted at {{ b.posted }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
