@@ -16,7 +16,7 @@
                 {% for b in blogs %}
                     <div class="jumbotron">
                         <h1>
-                            <a href="/test-blog/{{ b.search }}">{{ b.title }}</a>
+                            <a href="/blog/{{ b.search }}">{{ b.title }}</a>
                         </h1>
                         {{ b.contents|raw }}
                         <p class="text-right">Posted at {{ b.posted }}</p>
