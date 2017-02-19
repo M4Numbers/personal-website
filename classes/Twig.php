@@ -36,7 +36,7 @@ class Twig {
      * This is the environment that we're working in. We only really need
      * one of these, so I could work on sharing it about a bit more
      *
-     * @var Twig_Environment
+     * @var \Twig_Environment
      */
     private $loader;
 
@@ -45,7 +45,7 @@ class Twig {
      * from our children that allows for both file and raw input to be treated
      * more-or-less the same in the eyes of the developer.
      *
-     * @var Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $template;
 
@@ -63,8 +63,8 @@ class Twig {
      * the twig template and mostly initialises all of our variables so that we're
      * ready to lock and load.
      *
-     * @param Twig_TemplateInterface $template
-     * @param Twig_Environment $loader
+     * @param \Twig_TemplateWrapper $template
+     * @param \Twig_Environment $loader
      * @throws Exception
      */
     protected function __construct($template, $loader) {
@@ -126,7 +126,7 @@ class Twig {
     /**
      * Get the template from us for some reason or another
      *
-     * @return Twig_TemplateInterface
+     * @return \Twig_TemplateWrapper
      */
     public function getTemplate() {
         return $this->template;

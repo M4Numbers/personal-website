@@ -49,10 +49,9 @@ class TwigFile extends Twig {
      * @param String $home_dir The root directory that we're working from
      */
     public function __construct($file, $home_dir) {
-        Twig_Autoloader::register();
         $loader = new Twig_Loader_Filesystem($home_dir . '/twigs/');
         $twig = new Twig_Environment($loader);
-        $template = $twig->loadTemplate($file);
+        $template = $twig->load($file);
         parent::__construct($template, $twig);
     }
 
