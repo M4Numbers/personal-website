@@ -2,9 +2,16 @@
 
 {% block content %}
     <div class="column" >
-        <h1>Blog</h1>
-        <div class="marketing">
-            Hi
+        <div class="container">
+            {% for b in blogs %}
+                <div class="jumbotron">
+                    <h1>
+                        <a href="/test-blog/{{ b.blog_search }}">{{ b.blog_title }}</a>
+                    </h1>
+                    {{ b.blog_contents|raw }}
+                    <p class="text-right">Posted at {{ b.blog_posted }}</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

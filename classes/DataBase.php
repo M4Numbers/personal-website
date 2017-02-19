@@ -801,6 +801,105 @@ class DataBase extends CentralDatabase
         return $all_options;
     }
 
+    public function get_all_blogs()
+    {
+        $sql = "SELECT * FROM `blog_posts`";
+
+        $all_posts = array();
+
+        try
+        {
+            $res = parent::executeStatement(
+                parent::makePreparedStatement($sql)
+            );
+
+            while ($row = $res->fetch())
+            {
+                $row['blog_contents'] = $this->get_comments_from_comment_id($row['blog_comments']);
+                array_push($all_posts, $row);
+            }
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+
+        return $all_posts;
+    }
+
+    public function get_blog_from_title($title)
+    {
+        $aov = array(
+            ':title' => $title
+        );
+
+        $sql = "SELECT * FROM `blog_posts`
+                WHERE `blog_search` = :title";
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            $row['blog_contents'] = $this->get_blog_contents_from_title($title);
+            return array($row);
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    public function get_blog_contents_from_title($title)
+    {
+        $aov = array(
+            ':title' => $title
+        );
+
+        $sql = 'SELECT `cont`.`comments` FROM `general_comments` AS `cont`
+                INNER JOIN `blog_posts` AS `blog` ON `blog`.`blog_comments`=`cont`.`id`
+                WHERE `blog`.`blog_search`=:title';
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            return $row['comments'];
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    public function get_comments_from_comment_id($id)
+    {
+        $aov = array(
+            ':id' => $id
+        );
+
+        $sql = 'SELECT `comments` FROM `general_comments`
+                WHERE `id`=:id';
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            return $row['comments'];
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
 
 
     public function registerUpdate($update_type, $id)
