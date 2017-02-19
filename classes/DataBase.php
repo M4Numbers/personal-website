@@ -115,6 +115,24 @@ class DataBase extends CentralDatabase
         }
     }
 
+    public function delete_comment($id)
+    {
+        $aov = array(':id' => $id);
+
+        $sql = "DELETE FROM `general_comments` WHERE `id`=:id";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
     public function add_new_anime($anime_id, $anime_title, $anime_synopsis, $episodes_watched,
                                     $total_eps, $score, $status, $series_status, $image)
     {
@@ -988,6 +1006,53 @@ class DataBase extends CentralDatabase
     {
         $comments_id = $this->check_comment_id_for_blog($blog_id);
         $this->update_comment($comments_id, $contents);
+    }
+
+    private function delete_blog_post_update($blog_id)
+    {
+        $aov = array(':id' => $blog_id);
+
+        $sql = "DELETE FROM `last_update` WHERE `blog_id`=:id";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    private function delete_blog_post_metadata($blog_id)
+    {
+        $aov = array(':id' => $blog_id);
+
+        $sql = "DELETE FROM `blog_posts` WHERE `id`=:id";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    public function delete_blog_post($blog_id)
+    {
+        $content = $this->check_comment_id_for_blog($blog_id);
+        $this->delete_blog_post_update($blog_id);
+        $this->delete_blog_post_metadata($blog_id);
+        if ($content != null)
+        {
+            $this->delete_comment($content);
+        }
     }
 
     public function get_blog_pages($divisor)

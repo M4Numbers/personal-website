@@ -60,6 +60,22 @@
             </div>
 
             <div class="form-box">
+                <h2>Delete Blog Post</h2>
+                <form method="post" class="" action="./scripts/remove_blog.php">
+                    <div class="form-group">
+                        <label for="deleteBlogChoice" class="sr-only">Blog Choice</label>
+                        <select class="form-control" name="deleteBlogChoice" id="deleteBlogChoice">
+                            <option value="0" selected="selected">Choose an Entry</option>
+                            {% for b in blogs %}
+                                <option value="{{ b.id }}">{{ b.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button class="btn btn-lg btn-block btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <div class="form-box">
                 <h2>Add New Anime</h2>
                 <form method="post" class="row" action="./scripts/add.php">
                     <div class="col-xs-10">
