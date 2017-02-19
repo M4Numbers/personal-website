@@ -29,7 +29,7 @@ if ($_GET['key'] !== '')
                 $additional['manga']['status']
             );
             $additional['manga']['comments'] = '';
-            $comments = $db->get_comments_for_manga($additional['manga']['id']);
+            $comments = $db->get_comments_for_manga($additional['manga']['manga_id']);
             if ($comments != '')
             {
                 $additional['manga']['comments'] =

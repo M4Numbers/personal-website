@@ -43,8 +43,8 @@
                         <select class="form-control" name="inputBlogChoice" id="inputBlogChoice">
                             <option value="0" selected="selected">Choose an Entry</option>
                             {% for b in blogs %}
-                                <option value="{{ b.blog_id }}"
-                                        onclick="loadComment({{ b.blog_comments }}, '#editBlogContents')"
+                                <option value="{{ b.id }}"
+                                        onclick="loadComment({{ b.comments_id }}, '#editBlogContents')"
                                 >{{ b.blog_title }}</option>
                             {% endfor %}
                         </select>
@@ -82,7 +82,7 @@
                             <option value="0" selected="selected">Choose an Anime</option>
                             {% for a in anime %}
                                 <option value="{{ a.anime_id }}"
-                                        onclick="loadComment({{ a.anime_comments }}, '#inputAnimeComments')"
+                                        onclick="loadComment({{ a.comments_id }}, '#inputAnimeComments')"
                                         >{{ a.title }}</option>
                             {% endfor %}
                         </select>
@@ -132,7 +132,7 @@
                             <option value="0" selected="selected">Choose an Manga</option>
                             {% for m in manga %}
                                 <option value="{{ m.manga_id }}"
-                                        onclick="loadComment({{ m.manga_comments }}, '#inputMangaComments')"
+                                        onclick="loadComment({{ m.comments_id }}, '#inputMangaComments')"
                                         >{{ m.title }}</option>
                             {% endfor %}
                         </select>

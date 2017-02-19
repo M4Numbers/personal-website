@@ -39,7 +39,7 @@ if ($_GET['key'] !== '')
                 $additional['anime']['anime_status']
             );
             $additional['anime']['comments'] = '';
-            $comments = $db->get_comments_for_anime($additional['anime']['id']);
+            $comments = $db->get_comments_for_anime($additional['anime']['anime_id']);
             if ($comments != '')
             {
                 $additional['anime']['comments'] =

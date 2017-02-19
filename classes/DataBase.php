@@ -36,6 +36,70 @@ class DataBase extends CentralDatabase
         parent::__construct($home, $database, "");
     }
 
+    public function get_comments_from_comment_id($id)
+    {
+        $aov = array(
+            ':id' => $id
+        );
+
+        $sql = 'SELECT `comments` FROM `general_comments`
+                WHERE `id`=:id';
+
+        try
+        {
+            $res = parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            $row = $res->fetch();
+            return $row['comments'];
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    public function insert_new_comment($comment)
+    {
+        $aov = array(':comment'=>$comment);
+        $sql = "INSERT INTO `general_comments` (`comments`) VALUE (:comment)";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+
+            return parent::getLastInsertId();
+        }
+        catch (PDOException $e)
+        {
+            return null;
+        }
+    }
+
+    public function update_comment($id, $comment)
+    {
+        $aov = array(
+            ':id' => $id,
+            ':comment' => $comment
+        );
+
+        $sql = "UPDATE `general_comments` SET `comments`=:comment WHERE `id`=:id";
+
+        try
+        {
+            parent::executePreparedStatement(
+                parent::makePreparedStatement($sql), $aov
+            );
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
     public function add_new_anime($anime_id, $anime_title, $anime_synopsis, $episodes_watched,
                                     $total_eps, $score, $status, $series_status, $image)
     {
@@ -137,7 +201,7 @@ class DataBase extends CentralDatabase
 
     public function get_all_anime_slugs()
     {
-        $sql = 'SELECT `anime_id`, `title`
+        $sql = 'SELECT `anime_id`, `title`, `comments_id`
                 FROM `anime_list`
                 ORDER BY `title`';
 
@@ -157,15 +221,25 @@ class DataBase extends CentralDatabase
 
     public function add_comment_to_anime($anime_id, $comment)
     {
+        $comment_id = $this->check_comment_id_for_anime($anime_id);
+
+        if ($comment_id != null)
+        {
+            $this->update_comment($comment_id, $comment);
+        }
+        else
+        {
+            $comment_id = $this->insert_new_comment($comment);
+        }
+
         $aov = array(
-            ':animeId' => $this->get_id_of_anime($anime_id),
-            ':comment' => $comment,
-            ':updateComment' => $comment
+            ':id' => $anime_id,
+            ':commentId' => $comment_id
         );
         
-        $sql = "INSERT INTO `anime_comments` (`anime_id`, `comments`)
-                VALUES (:animeId, :comment)
-                ON DUPLICATE KEY UPDATE `comments`=:updateComment";
+        $sql = "UPDATE `anime_list` SET
+                `comments_id`=:commentId
+                WHERE `anime_id`=:id";
 
         try
         {
@@ -204,14 +278,13 @@ class DataBase extends CentralDatabase
         }
     }
 
-    public function get_comments_for_anime($anime_id)
+    private function check_comment_id_for_anime($anime_id)
     {
         $aov = array(
-            ":animeId" => $anime_id
+            ':anime_id' => $anime_id
         );
 
-        $sql = 'SELECT `comments` FROM `anime_comments`
-                WHERE `anime_id`=:animeId';
+        $sql = "SELECT `comments_id` FROM `anime_list` WHERE `anime_id`=:anime_id";
 
         try
         {
@@ -222,14 +295,28 @@ class DataBase extends CentralDatabase
             if ($res->rowCount() > 0)
             {
                 $row = $res->fetch();
-                return $row['comments'];
+                if ($row['comments_id'] != null)
+                {
+                    return $row['comments_id'];
+                }
             }
             return null;
         }
         catch (PDOException $e)
         {
-            throw $e;
+            return null;
         }
+    }
+
+    public function get_comments_for_anime($anime_id)
+    {
+        $comment_id = $this->check_comment_id_for_anime($anime_id);
+        if ($comment_id == null)
+        {
+            return null;
+        }
+
+        return $this->get_comments_from_comment_id($comment_id);
     }
 
     public function get_anime($anime_id)
@@ -478,7 +565,7 @@ class DataBase extends CentralDatabase
 
     public function get_all_manga_slugs()
     {
-        $sql = 'SELECT `manga_id`, `title`
+        $sql = 'SELECT `manga_id`, `title`, `comments_id`
                 FROM `manga_list`
                 ORDER BY `title`';
 
@@ -498,15 +585,25 @@ class DataBase extends CentralDatabase
 
     public function add_comment_to_manga($manga_id, $comment)
     {
+        $comment_id = $this->check_comment_id_for_manga($manga_id);
+
+        if ($comment_id != null)
+        {
+            $this->update_comment($comment_id, $comment);
+        }
+        else
+        {
+            $comment_id = $this->insert_new_comment($comment);
+        }
+
         $aov = array(
-            ':mangaId' => $this->get_id_of_manga($manga_id),
-            ':comment' => $comment,
-            ':updateComment' => $comment
+            ':id' => $manga_id,
+            ':commentId' => $comment_id
         );
 
-        $sql = "INSERT INTO `manga_comments` (`manga_id`, `comments`)
-                VALUES (:mangaId, :comment)
-                ON DUPLICATE KEY UPDATE `comments`=:updateComment";
+        $sql = "UPDATE `manga_list` SET
+                `comments_id`=:commentId
+                WHERE `manga_id`=:id";
 
         try
         {
@@ -545,14 +642,13 @@ class DataBase extends CentralDatabase
         }
     }
 
-    public function get_comments_for_manga($manga_id)
+    private function check_comment_id_for_manga($manga_id)
     {
         $aov = array(
-            ":mangaId" => $manga_id
+            ':manga_id' => $manga_id
         );
 
-        $sql = 'SELECT `comments` FROM `manga_comments`
-                WHERE `manga_id`=:mangaId';
+        $sql = "SELECT `comments_id` FROM `manga_list` WHERE `manga_id`=:manga_id";
 
         try
         {
@@ -563,14 +659,28 @@ class DataBase extends CentralDatabase
             if ($res->rowCount() > 0)
             {
                 $row = $res->fetch();
-                return $row['comments'];
+                if ($row['comments_id'] != null)
+                {
+                    return $row['comments_id'];
+                }
             }
             return null;
         }
         catch (PDOException $e)
         {
-            throw $e;
+            return null;
         }
+    }
+
+    public function get_comments_for_manga($manga_id)
+    {
+        $comment_id = $this->check_comment_id_for_manga($manga_id);
+        if ($comment_id == null)
+        {
+            return null;
+        }
+
+        return $this->get_comments_from_comment_id($comment_id);
     }
 
     public function get_manga($manga_id)
@@ -879,8 +989,8 @@ class DataBase extends CentralDatabase
         );
 
         $sql = 'SELECT `cont`.`comments` FROM `general_comments` AS `cont`
-                INNER JOIN `blog_posts` AS `blog` ON `blog`.`blog_comments`=`cont`.`id`
-                WHERE `blog`.`blog_search`=:title';
+                INNER JOIN `blog_posts` AS `blog` ON `blog`.`comments_id`=`cont`.`id`
+                WHERE `blog`.`search`=:title';
 
         try
         {
@@ -896,31 +1006,6 @@ class DataBase extends CentralDatabase
             throw $e;
         }
     }
-
-    public function get_comments_from_comment_id($id)
-    {
-        $aov = array(
-            ':id' => $id
-        );
-
-        $sql = 'SELECT `comments` FROM `general_comments`
-                WHERE `id`=:id';
-
-        try
-        {
-            $res = parent::executePreparedStatement(
-                parent::makePreparedStatement($sql), $aov
-            );
-
-            $row = $res->fetch();
-            return $row['comments'];
-        }
-        catch (PDOException $e)
-        {
-            throw $e;
-        }
-    }
-
 
     public function registerUpdate($update_type, $id)
     {
@@ -1021,11 +1106,11 @@ class DataBase extends CentralDatabase
                         $pre = './manga/';
                         break;
                     case UPDATE_BLOG:
-                        $rql = 'SELECT `b`.`ID` AS `id`, `b`.`post_title`, "" AS `image`
+                        $rql = 'SELECT `b`.`id` AS `id`, `b`.`title`, "" AS `image`
                                 FROM `last_update` AS `lu`
-                                INNER JOIN `wp_posts` AS `b` ON `lu`.`blog_id`=`b`.`ID`
+                                INNER JOIN `blog_posts` AS `b` ON `lu`.`blog_id`=`b`.`id`
                                 WHERE `lu`.`id`=:id';
-                        $pre = 'https://m4numbers.co.uk/blog/?p=';
+                        $pre = 'https://m4numbers.co.uk/blog/';
                         break;
                     case UPDATE_DEVEL:
                         $rql = 'SELECT `d`.`id` AS `id`, `d`.`title`, `d`.`cover` AS `image`
