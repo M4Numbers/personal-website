@@ -382,6 +382,16 @@ img {
   border-bottom: 1px #fff solid;
 }
 
+a.hidden_link {
+  color:white;
+  text-decoration: none;
+}
+
+a.hidden_link:hover
+{
+  color:lightgrey;
+}
+
 .ad_under_page {
   clear: both;
   width: 730px;
