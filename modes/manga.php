@@ -17,6 +17,16 @@ $filters = array(
 );
 $load = LOAD_MODE_MANGA_COMPLETE;
 
+$viewing = array(
+    "all" => "",
+    "read" => "",
+    "reading" => "",
+    "completed" => "",
+    "held" => "",
+    "dropped" => "",
+    "planned" => ""
+);
+
 if ($_GET['key'] !== '')
 {
     if (is_numeric($_GET['key']))
@@ -44,22 +54,27 @@ if ($_GET['key'] !== '')
             case 'completed':
                 $filters = array(MANGA_COMPLETED);
                 $load = LOAD_MODE_MANGA_COMPLETE;
+                $viewing['completed'] = 'active';
                 break;
             case 'reading':
                 $filters = array(MANGA_READING);
                 $load = LOAD_MODE_MANGA_READING;
+                $viewing['reading'] = 'active';
                 break;
             case 'dropped':
                 $filters = array(MANGA_DROPPED);
                 $load = LOAD_MODE_MANGA_DROPPED;
+                $viewing['dropped'] = 'active';
                 break;
             case 'held':
                 $filters = array(MANGA_HOLDING);
                 $load = LOAD_MODE_MANGA_HOLDING;
+                $viewing['held'] = 'active';
                 break;
             case 'planned':
                 $filters = array(MANGA_PLANNED);
                 $load = LOAD_MODE_MANGA_PLANNED;
+                $viewing['planned'] = 'active';
                 break;
             case 'read':
                 $filters = array(
@@ -67,6 +82,7 @@ if ($_GET['key'] !== '')
                     MANGA_DROPPED, MANGA_HOLDING
                 );
                 $load = LOAD_MODE_MANGA_READ;
+                $viewing['read'] =  'active';
                 break;
             case 'all':
                 $filters = array(
@@ -74,12 +90,14 @@ if ($_GET['key'] !== '')
                     MANGA_HOLDING, MANGA_READING
                 );
                 $load = LOAD_MODE_MANGA_ALL;
+                $viewing['all'] = 'active';
                 break;
             default:
                 $filters = array(
                     MANGA_COMPLETED
                 );
                 $load = LOAD_MODE_MANGA_COMPLETE;
+                $viewing['completed'] = 'active';
         }
     }
 }
@@ -88,6 +106,7 @@ if ($additional['single'] == FALSE)
 {
     $additional['manga'] = $db->get_all_manga(0, $filters);
     $additional['srch'] = $load;
+    $additional['viewing'] = $viewing;
 
     foreach ($additional['manga'] as &$m)
     {

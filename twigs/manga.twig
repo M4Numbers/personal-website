@@ -41,13 +41,13 @@
             {% else %}
                 <nav>
                     <ul class="nav nav-justified">
-                        <li><a href="/manga/all">All</a></li>
-                        <li><a href="/manga/read">Read</a></li>
-                        <li><a href="/manga/completed">Completed</a></li>
-                        <li><a href="/manga/reading">Reading</a></li>
-                        <li><a href="/manga/held">On Hold</a></li>
-                        <li><a href="/manga/dropped">Dropped</a></li>
-                        <li><a href="/manga/planned">Planned</a></li>
+                        <li class="{{ viewing.all }}"><a href="/manga/all">All</a></li>
+                        <li class="{{ viewing.read }}"><a href="/manga/read">Read</a></li>
+                        <li class="{{ viewing.completed }}"><a href="/manga/completed">Completed</a></li>
+                        <li class="{{ viewing.reading }}"><a href="/manga/reading">Reading</a></li>
+                        <li class="{{ viewing.held }}"><a href="/manga/held">On Hold</a></li>
+                        <li class="{{ viewing.dropped }}"><a href="/manga/dropped">Dropped</a></li>
+                        <li class="{{ viewing.planned }}"><a href="/manga/planned">Planned</a></li>
                     </ul>
                 </nav>
 
