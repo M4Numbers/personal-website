@@ -3,15 +3,21 @@
 -- ---------------------------------
 
 DROP TABLE IF EXISTS `last_update`;
-DROP TABLE IF EXISTS `anime_comments`;
 DROP TABLE IF EXISTS `anime_list`;
-DROP TABLE IF EXISTS `manga_comments`;
 DROP TABLE IF EXISTS `manga_list`;
 DROP TABLE IF EXISTS `art_projects`;
 DROP TABLE IF EXISTS `youtube_videos`;
 DROP TABLE IF EXISTS `devel_projects`;
+DROP TABLE IF EXISTS `blog_posts`;
 DROP TABLE IF EXISTS `file_storage`;
 DROP TABLE IF EXISTS `file_types`;
+DROP TABLE IF EXISTS `general_comments`;
+
+CREATE TABLE `general_comments` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `comments` TEXT,
+  PRIMARY KEY (`id`)
+);
 
 CREATE TABLE `file_types` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -33,6 +39,15 @@ CREATE TABLE `file_storage` (
   FOREIGN KEY (`file_type`) REFERENCES `file_types`(`id`)
 );
 
+CREATE TABLE `blog_posts` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `blog_title` VARCHAR(128) NOT NULL,
+  `blog_posted` INTEGER NOT NULL,
+  `blog_comments` INTEGER,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`blog_comments`) REFERENCES `general_comments`(`id`)
+);
+
 CREATE TABLE `anime_list` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `anime_id` INTEGER NOT NULL,
@@ -44,14 +59,9 @@ CREATE TABLE `anime_list` (
   `current_ep` INTEGER DEFAULT 0,
   `synopsis` TEXT,
   `cover` VARCHAR(255),
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `anime_comments` (
-  `anime_id` INTEGER NOT NULL,
-  `comments` TEXT,
-  FOREIGN KEY (`anime_id`) REFERENCES `anime_list`(`id`),
-  UNIQUE KEY `unique_anime` (`anime_id`)
+  `comments_id` INTEGER,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`comments_id`) REFERENCES `general_comments`(`id`)
 );
 
 CREATE TABLE `manga_list` (
@@ -66,14 +76,9 @@ CREATE TABLE `manga_list` (
   `current_chap` INTEGER DEFAULT 0,
   `synopsis` TEXT,
   `cover` VARCHAR(255),
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `manga_comments` (
-  `manga_id` INTEGER NOT NULL,
-  `comments` TEXT,
-  FOREIGN KEY (`manga_id`) REFERENCES `manga_list`(`id`),
-  UNIQUE KEY `unique_manga` (`manga_id`)
+  `comments_id` INTEGER,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`comments_id`) REFERENCES `general_comments`(`id`)
 );
 
 CREATE TABLE `youtube_videos` (
@@ -99,14 +104,10 @@ CREATE TABLE `art_projects` (
 CREATE TABLE `devel_projects` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
-  `synopsis` TEXT, /* In Markdown */
-  `document_file` INTEGER,
-  `code_base_file` INTEGER,
-  `link` VARCHAR(128),
   `cover` VARCHAR(255),
+  `comments_id` INTEGER,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`document_file`) REFERENCES `file_storage`(`id`),
-  FOREIGN KEY (`code_base_file`) REFERENCES `file_storage`(`id`)
+  FOREIGN KEY (`comments_id`) REFERENCES `general_comments`(`id`)
 );
 
 CREATE TABLE `last_update` (
@@ -119,7 +120,7 @@ CREATE TABLE `last_update` (
   `anime_id` INTEGER NULL,
   `manga_id` INTEGER NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`blog_id`) REFERENCES `wp_posts`(`ID`),
+  FOREIGN KEY (`blog_id`) REFERENCES `blog_posts`(`id`),
   FOREIGN KEY (`video_id`) REFERENCES `youtube_videos`(`id`),
   FOREIGN KEY (`art_id`) REFERENCES `art_projects`(`id`),
   FOREIGN KEY (`devel_id`) REFERENCES `devel_projects`(`id`),
