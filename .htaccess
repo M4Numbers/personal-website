@@ -4,7 +4,8 @@
 
 # Options that JustHost is quite opinionated about. That is to say, in the opinion
 # of JustHost, these two options need to exist. I would disagree.
-DirectoryIndex index.php
+# DirectoryIndex index.php
+DirectoryIndex lock.html
 
 # Rewrite options for removing all of the nasty .php extensions from stuff. Will
 # probably need to alter this at some point so that direct access to a directory
@@ -24,6 +25,6 @@ RewriteRule ^(files)/(.*) $1/$2 [L,NC]
 RewriteRule ^(scripts)/(.*) $1/$2 [L,NC]
 #RewriteRule ^.*$ /index.php [L,QSA]
 #RewriteRule ^(.*?)/?$ index.php?mode=$1 [QSA,L]
-RewriteRule ^(.*?)(/(.*?))?/?$ index.php?mode=$1&key=$3 [QSA,L]
+# RewriteRule ^(.*?)(/(.*?))?/?$ index.php?mode=$1&key=$3 [QSA,L]
 
 deny from 146.0.74.205

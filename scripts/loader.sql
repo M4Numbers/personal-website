@@ -19,33 +19,14 @@ CREATE TABLE `general_comments` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `file_types` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `type_slug` VARCHAR(16) NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
-INSERT INTO `file_types` (`type_slug`) VALUES ('PDF'), ('PNG'), ('ZIP'), ('GZ'), ('TAR.GZ'),
-  ('TAR'), ('JPG'), ('JPEG');
-
-CREATE TABLE `file_storage` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `file_slug` VARCHAR(64) NOT NULL,
-  `file_type` INTEGER NOT NULL, /* Enum value */
-  `file_url` VARCHAR(128),
-  `file_hash` VARCHAR(32), /* MD5 Hash */
-  `file_sig` VARCHAR(64),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`file_type`) REFERENCES `file_types`(`id`)
-);
-
 CREATE TABLE `blog_posts` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `blog_title` VARCHAR(128) NOT NULL,
-  `blog_posted` INTEGER NOT NULL,
-  `blog_comments` INTEGER,
+  `title` VARCHAR(128) NOT NULL,
+  `search` VARCHAR(128) NOT NULL,
+  `posted` INTEGER NOT NULL,
+  `comments_id` INTEGER,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`blog_comments`) REFERENCES `general_comments`(`id`)
+  FOREIGN KEY (`comments_id`) REFERENCES `general_comments`(`id`)
 );
 
 CREATE TABLE `anime_list` (
@@ -67,6 +48,8 @@ CREATE TABLE `anime_list` (
 CREATE TABLE `manga_list` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `manga_id` INTEGER NOT NULL,
+  `manga_status` INTEGER NOT NULL DEFAULT 412,
+  `story_type` INTEGER NOT NULL DEFAULT 421,
   `title` VARCHAR(128) NOT NULL,
   `score` TINYINT NOT NULL,
   `status` INTEGER DEFAULT 201,
@@ -95,10 +78,11 @@ CREATE TABLE `youtube_videos` (
 CREATE TABLE `art_projects` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
+  `search` VARCHAR(128) NOT NULL,
   `released_on` INTEGER NOT NULL,
-  `desc` TEXT,
-  `slug` VARCHAR(32) NOT NULL,
-  PRIMARY KEY (`id`)
+  `comments_id` INTEGER,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`comments_id`) REFERENCES `general_comments`(`id`)
 );
 
 CREATE TABLE `devel_projects` (
@@ -113,7 +97,7 @@ CREATE TABLE `devel_projects` (
 CREATE TABLE `last_update` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `update_type` TINYINT NOT NULL,
-  `blog_id` BIGINT(20) UNSIGNED NULL,
+  `blog_id` INTEGER NULL,
   `video_id` INTEGER NULL,
   `art_id` INTEGER NULL,
   `devel_id` INTEGER NULL,

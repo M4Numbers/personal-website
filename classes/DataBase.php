@@ -834,7 +834,7 @@ class DataBase extends CentralDatabase
         );
 
         $sql = "SELECT * FROM `blog_posts`
-                WHERE `blog_search` = :title";
+                WHERE `search` = :title";
 
         try
         {
@@ -845,6 +845,26 @@ class DataBase extends CentralDatabase
             $row = $res->fetch();
             $row['blog_contents'] = $this->get_blog_contents_from_title($title);
             return array($row);
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+    }
+
+    public function get_all_blog_slugs()
+    {
+        $sql = 'SELECT `id`, `title`, `comments_id`
+                FROM `blog_posts`
+                ORDER BY `title`';
+
+        try
+        {
+            $res = parent::executeStatement(
+                parent::makePreparedStatement($sql)
+            );
+
+            return $res->fetchAll();
         }
         catch (PDOException $e)
         {

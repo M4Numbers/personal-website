@@ -29,6 +29,7 @@ if (isset($_SESSION['logged_in']))
     $additional['description'] = 'Admin panel.';
     $additional['logged_in'] = true;
 
+    $additional['blogs'] = $db->get_all_blog_slugs();
     $additional['anime'] = $db->get_all_anime_slugs();
     $additional['manga'] = $db->get_all_manga_slugs();
 }

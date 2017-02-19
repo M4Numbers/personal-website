@@ -29,19 +29,6 @@ $database = new DataBase($home_dir, DATABASE);
 
 $return = array();
 
-if ($_GET['mode'] == true)
-{
-    //Anime
-    $true_id = $database->get_id_of_anime($_GET['item_id']);
-    $return['comments'] = $database->get_comments_for_anime($true_id);
-}
-else
-{
-    //Manga
-    $true_id = $database->get_id_of_manga($_GET['item_id']);
-    //$return['debug'] = sprintf("Searching for id %d (true id: %d)",
-    //    $_GET['item_id'], $true_id);
-    $return['comments'] = $database->get_comments_for_manga($true_id);
-}
+$return['comments'] = $database->get_comments_from_comment_id($_GET['item_id']);
 
 echo json_encode($return);

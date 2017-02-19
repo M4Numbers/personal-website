@@ -5,6 +5,7 @@ define('UPDATE_VIDEO', 102);
 define('UPDATE_DEVEL', 103);
 define('UPDATE_ANIME', 104);
 define('UPDATE_MANGA', 105);
+define('UPDATE_ART',   106);
 
 define('ANIME_PLANNED',   201);
 define('ANIME_WATCHING',  202);
