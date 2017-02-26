@@ -11,3 +11,4 @@ define('GOOGSECRET', 'GoogleSecretCode');
 define('GOOGCHANID', 'YoutubeChannelId');
 
 define('PASSWORD', 'AdminMD5Hash');
+define('BLOG_PASSWORD', 'BlogSHA512Hash');

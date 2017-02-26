@@ -2,68 +2,80 @@
 
 {% block content %}
     <div class="column" >
-        <h1>Blog</h1>
-        <div class="marketing">
-            {% if blogs is empty %}
-                <p>
-                    There is nothing here at the moment. Possibly because there was
-                    never anything here to begin with, or because everything has gone
-                    and broken into a million pieces.
-                </p>
-                <p>
-                    I'll leave it up to you to decide that.
-                </p>
-            {% else %}
-                {% for b in blogs %}
-                    <div class="well well-lg">
-                        <h2>
-                            <a href="/blog/{% if b.search matches '/^[ -]+$/' %}{{ b.id }}{% else %}{{ b.search }}{% endif %}"
-                                >{{ b.title }}</a>
-                        </h2>
-                        {{ b.contents|raw }}
-                        <p class="text-right">Posted at {{ b.posted }}</p>
-                    </div>
-                {% endfor %}
-                <nav aria-label="Page navigation">
-                    <ul class="pagination pagination-lg pull-right">
-                        {% for i in 1..pagecount.total %}
-                            {% if loop.first %}
-                                {% if pagecount.page == 1 %}
-                                    <li class="disabled">
-                                        <span>
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </span>
-                                    </li>
-                                {% else %}
-                                    <li>
-                                        <a href="/blog/page/{{ pagecount.page - 1 }}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
+        {% if logged_in is empty %}
+            <form class="form-signin" method="post" action="./blog/">
+                <h1 class="form-signin-heading">Sign In</h1>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control"
+                       name="inputPassword" placeholder="Password" required="required"
+                       autocomplete="off" />
+                <input type="hidden" name="attempted" id="attempt" value="1" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+            </form>
+        {% else %}
+            <h1>Blog</h1>
+            <div class="marketing">
+                {% if blogs is empty %}
+                    <p>
+                        There is nothing here at the moment. Possibly because there was
+                        never anything here to begin with, or because everything has gone
+                        and broken into a million pieces.
+                    </p>
+                    <p>
+                        I'll leave it up to you to decide that.
+                    </p>
+                {% else %}
+                    {% for b in blogs %}
+                        <div class="well well-lg">
+                            <h2>
+                                <a href="/blog/{% if b.search matches '/^[ -]+$/' %}{{ b.id }}{% else %}{{ b.search }}{% endif %}"
+                                    >{{ b.title }}</a>
+                            </h2>
+                            {{ b.contents|raw }}
+                            <p class="text-right">Posted at {{ b.posted }}</p>
+                        </div>
+                    {% endfor %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-lg pull-right">
+                            {% for i in 1..pagecount.total %}
+                                {% if loop.first %}
+                                    {% if pagecount.page == 1 %}
+                                        <li class="disabled">
+                                            <span>
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </span>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="/blog/page/{{ pagecount.page - 1 }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            <li {% if pagecount.page == i %}class="active"{% endif %}>
-                                <a href="/blog/page/{{ i }}">{{ i }}</a>
-                            </li>
-                            {% if loop.last %}
-                                {% if pagecount.page == pagecount.total %}
-                                    <li class="disabled">
-                                        <span>
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </span>
-                                    </li>
-                                {% else %}
-                                    <li>
-                                        <a href="/blog/page/{{ pagecount.page + 1 }}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
+                                <li {% if pagecount.page == i %}class="active"{% endif %}>
+                                    <a href="/blog/page/{{ i }}">{{ i }}</a>
+                                </li>
+                                {% if loop.last %}
+                                    {% if pagecount.page == pagecount.total %}
+                                        <li class="disabled">
+                                            <span>
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </span>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="/blog/page/{{ pagecount.page + 1 }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </nav>
-            {% endif %}
-        </div>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

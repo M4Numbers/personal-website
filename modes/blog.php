@@ -2,47 +2,79 @@
 
 $additional = array();
 
-$additional['title'] = 'Proposing Weird Thoughts';
+session_start();
 
-$additional['description'] = 'Bleh';
-
-$additional['single'] = FALSE;
-
-if ($_GET['key'] !== '')
+if (!isset($_SESSION['logged_in']))
 {
-    if (is_numeric($_GET['key']))
+
+    if (isset($_POST['attempted']))
     {
-        $blog = $db->get_blog_from_id($_GET['key']);
+
+        if (hash('sha512', $_POST['inputPassword'], false) == BLOG_PASSWORD)
+        {
+            $_SESSION['logged_in'] = true;
+        }
+        else
+        {
+            $redirect = true;
+        }
+
     }
-    else if ($_GET['key'] == 'page')
+
+}
+
+if (isset($_SESSION['logged_in']))
+{
+    $additional['title'] = 'Proposing Weird Thoughts';
+
+    $additional['description'] = 'Bleh';
+    $additional['logged_in'] = true;
+
+    $additional['single'] = FALSE;
+
+    if ($_GET['key'] !== '')
     {
-        $blog = $db->get_limited_blogs(5, $_GET['page']);
+        if (is_numeric($_GET['key']))
+        {
+            $blog = $db->get_blog_from_id($_GET['key']);
+        }
+        else if ($_GET['key'] == 'page')
+        {
+            $blog = $db->get_limited_blogs(5, $_GET['page']);
+        }
+        else
+        {
+            $blog = $db->get_blog_from_title($_GET['key']);
+        }
+
+        if ($blog[0]['contents'] == null)
+        {
+            $blog = $db->get_limited_blogs(5, 1);
+        }
     }
     else
     {
-        $blog = $db->get_blog_from_title($_GET['key']);
-    }
-
-    if ($blog[0]['contents'] == null)
-    {
         $blog = $db->get_limited_blogs(5, 1);
     }
+
+    $pagecount = array(
+        'page' => ($_GET['page'] != '') ? $_GET['page'] : 1,
+        'total' => $db->get_blog_pages(5)
+    );
+
+    foreach ($blog as &$b)
+    {
+        $b['contents'] = \Michelf\MarkdownExtra::defaultTransform($b['contents']);
+        $b['posted'] = date("h:iA, jS F Y", $b['posted']);
+    }
+
+    $additional['blogs'] = $blog;
+    $additional['pagecount'] = $pagecount;
+
 }
 else
 {
-    $blog = $db->get_limited_blogs(5, 1);
+    $additional['title'] = 'Administration Log In';
+    $additional['description'] = 'Admin Log In page.';
 }
 
-$pagecount = array(
-    'page' => ($_GET['page'] != '') ? $_GET['page'] : 1,
-    'total' => $db->get_blog_pages(5)
-);
-
-foreach ($blog as &$b)
-{
-    $b['contents'] = \Michelf\MarkdownExtra::defaultTransform($b['contents']);
-    $b['posted'] = date("h:iA, jS F Y", $b['posted']);
-}
-
-$additional['blogs'] = $blog;
-$additional['pagecount'] = $pagecount;
