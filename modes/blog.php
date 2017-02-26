@@ -4,7 +4,7 @@ $additional = array();
 
 session_start();
 
-if (!isset($_SESSION['logged_in']))
+if (!isset($_SESSION['blogged_in']))
 {
 
     if (isset($_POST['attempted']))
@@ -12,7 +12,7 @@ if (!isset($_SESSION['logged_in']))
 
         if (hash('sha512', $_POST['inputPassword'], false) == BLOG_PASSWORD)
         {
-            $_SESSION['logged_in'] = true;
+            $_SESSION['blogged_in'] = true;
         }
         else
         {
@@ -23,11 +23,12 @@ if (!isset($_SESSION['logged_in']))
 
 }
 
-if (isset($_SESSION['logged_in']))
+if (isset($_SESSION['blogged_in']))
 {
     $additional['title'] = 'Proposing Weird Thoughts';
 
-    $additional['description'] = 'Bleh';
+    $additional['description'] = 'This is all my views about whatever. A lot of them are self-destructive and '
+        .'wrong, but I\'m sure some of them will at least offer some partial entertainment for a little while...';
     $additional['logged_in'] = true;
 
     $additional['single'] = FALSE;
@@ -74,7 +75,7 @@ if (isset($_SESSION['logged_in']))
 }
 else
 {
-    $additional['title'] = 'Administration Log In';
-    $additional['description'] = 'Admin Log In page.';
+    $additional['title'] = 'Blog Log In';
+    $additional['description'] = 'Blog Log In page.';
 }
 
