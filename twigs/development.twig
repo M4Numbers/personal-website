@@ -4,6 +4,16 @@
   <div class="column">
     <h1>Development</h1>
     {% if single == true %}
+      <div class="row row_fix">
+        <div class="col-lg-4 col-lg-push-8">
+          <img src="{{ devel.cover }}" alt="{{ devel.title }}" 
+            style="width:100%" />
+        </div>
+        <div class="col-lg-8 col-lg-pull-4">
+          <h2>{{ devel.title }}</h2>
+          {{ devel.contents | raw }}
+        </div>
+      </div>
     {% elseif devel is empty %}
       <p>
         There is nothing here at the moment. Possibly because there was
