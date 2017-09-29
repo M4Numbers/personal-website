@@ -1,7 +1,7 @@
 {% import "forms.twig" as forms %}
 
 <!DOCTYPE html>
-<html ng-app="m4numbers">
+<html>
 <head>
   <title>M4Numbers - {% if title is empty %}{{ general.title }}{% else %}{{ title }}{% endif %}</title>
   <meta charset="utf-8">
@@ -13,26 +13,6 @@
   <base href="{{ general.base_location }}" />
 
   <!-- ****** faviconit.com favicons ****** -->
-  <link rel="shortcut icon" href="./assets/images/icons/favicon.ico">
-  <link rel="icon" sizes="16x16 32x32 64x64" href="./assets/images/icons/favicon.ico">
-  <link rel="icon" type="image/png" sizes="196x196" href="./assets/images/icons/favicon-192.png">
-  <link rel="icon" type="image/png" sizes="160x160" href="./assets/images/icons/favicon-160.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="./assets/images/icons/favicon-96.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="./assets/images/icons/favicon-64.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/icons/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/icons/favicon-16.png">
-  <link rel="apple-touch-icon" href="./assets/images/icons/favicon-57.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="./assets/images/icons/favicon-114.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="./assets/images/icons/favicon-72.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="./assets/images/icons/favicon-144.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="./assets/images/icons/favicon-60.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="./assets/images/icons/favicon-120.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="./assets/images/icons/favicon-76.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="./assets/images/icons/favicon-152.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/icons/favicon-180.png">
-  <meta name="msapplication-TileColor" content="#FFFFFF">
-  <meta name="msapplication-TileImage" content="./assets/images/icons/favicon-144.png">
-  <meta name="msapplication-config" content="./assets/images/icons/browserconfig.xml">
   <!-- ****** faviconit.com favicons ****** -->
   
   <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css" />
@@ -51,40 +31,9 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-  <!-- Google Tag Manager -->
-  <noscript>
-    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-W9QGMD"
-      height="0" width="0" style="display:none;visibility:hidden">
-    </iframe>
-  </noscript>
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-W9QGMD');
-  </script>
-  <!-- End Google Tag Manager -->
-
-  <!-- Google Analytics -->
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-40961707-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  <!-- End Google Analytics -->
-
   {% block style %}{% endblock %}
 </head>
 <body>
-
-  <div class="header" >
-    <div class="logo" id="dial" onclick="toTheTop()"></div>
-  </div>
 
   <nav class="{% block navbar_carousel %}navbar{% endblock %} navbar-static-top navbar-inverse slots" >
     <div class="container-fluid">
@@ -140,21 +89,6 @@
           <a href="https://youtube.com/c/M4NumbersUK" class="social_link yt_button"
             style="display: inline-block; width:0;"></a>
         </p>
-      </div>
-    {% endblock %}
-
-    {% block ads %}
-      <div class="ad_under_page" >
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- M4Numbers_under_page -->
-        <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-1618482815358407"
-           data-ad-slot="8350670970"
-           data-ad-format="auto"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
       </div>
     {% endblock %}
 
