@@ -1,32 +1,26 @@
 {
   "name": "personal-website",
-  "version": "1.0.0",
-  "main": "src/app.js",
+  "description": "This is the personal website of Matthew D. Ball (otherwise known as M4Numbers",
+  "author": "Matthew D. Ball <m4numbers@gmail.com>",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
   "dependencies": {
-    "express-generator": "^4.15.5"
+    "body-parser": "~1.18.2",
+    "bootstrap": "^3.3.7",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "font-awesome": "^4.7.0",
+    "morgan": "~1.9.0",
+    "node-compass": "0.2.3",
+    "nunjucks": "^3.0.1",
+    "serve-favicon": "~2.4.5"
   },
-  "repository": {
-    "type": "",
-    "url": ""
-  },
-  "license": "MIT",
-  "description": "Personal website for Matthew D. Ball (aka: M4Numbers)",
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.16.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
     "eslint": "^4.12.1",
-    "eslint-config-loopback": "^4.0.0",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-clean": "^0.3.2",
-    "gulp-copy": "^1.0.0",
-    "gulp-eslint": "^3.0.1",
-    "gulp-ignore": "^2.0.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-shell": "^0.5.2"
+    "gulp": "^3.9.1"
   }
 }
