@@ -69,6 +69,8 @@
     <!-- End Google Analytics -->
   </head>
   <body>
+    {% block navbar %}{% endblock %}
     {% block body %}{% endblock %}
+    {% block footer %}{% endblock %}
   </body>
 </html>

@@ -1,0 +1,59 @@
+<div class="fake_booster" ></div>
+
+<div class="big_footer">
+
+  {% block social_content %}
+    <div id="social_links" class="center-block social_content">
+      <p class="face_button_max right_button">
+        <a href="https://facebook.com/M4Numbers" class="social_link face_button"
+           style="display: inline-block; width:0;" ></a>
+      </p>
+      <p class="twit_button_max right_button">
+        <a href="https://twitter.com/M4Numbers" class="social_link twit_button"
+           style="display: inline-block; width:0;"></a>
+      </p>
+      <p class="twitch_button_max right_button">
+        <a href="https://twitch.tv/m4numbers" class="social_link twitch_button"
+           style="display: inline-block; width:0;"></a>
+      </p>
+      <p class="yt_button_max right_button">
+        <a href="https://youtube.com/c/M4NumbersUK" class="social_link yt_button"
+           style="display: inline-block; width:0;"></a>
+      </p>
+    </div>
+  {% endblock %}
+
+  <div class="fake_booster"></div>
+
+  <!--<div class="ending" ></div>-->
+
+  <footer class="footer" >
+    <div class="container marketing" >
+      <div class="row">
+        <div class="col-lg-4 outer_left footer_col" >
+          General Pages
+          <ul>
+            <li><a href="/contact" title="Contact Me">Contact Me</a></li>
+            <li><a href="/about" title="About Me" >About Me</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4  footer_col" >
+          Other Info
+          <ul>
+            <li>Created by M4Numbers (&copy; 2014-2017)</li>
+            <li>Page Generated in {{ general.time }} seconds</li>
+          </ul>
+        </div>
+        <div class="col-lg-4 outer_right footer_col">
+          Site Info
+          <ul>
+            <li><a href="/admin" title="Admin">Admin</a></li>
+            <li><a href="/stats" title="Statistics">Site Statistics</a></li>
+            <li><a href="/map" title="Sitemap">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>

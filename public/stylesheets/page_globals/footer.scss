@@ -1,0 +1,74 @@
+.footer {
+  background:#323232 url("/images/stylistics/top_dark_to_tran.png") repeat-x top;
+  color:#fff;
+  font:18px Veranda, sans_serif;
+  /*box-shadow: 0 -2px 5px 2px #585858;*/
+}
+
+.outer_left {
+  border-left: 0 !important;
+}
+
+.outer_right {
+  border-right: 0 !important;
+}
+
+.footer > .container > .row {
+  padding:10px;
+  margin: 0;
+  list-style-type:none;
+}
+
+.footer > .container > .row > .col-lg-4 {
+  text-align: left;
+}
+
+.footer_col {
+  vertical-align: top;
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  font-size: 20px;
+  border-right: 1px solid #a3a3a3;
+}
+
+.footer_col > ul {
+  padding-top: 10px;
+  list-style-type:none;
+}
+
+.footer_col > ul > li {
+  padding-top: 5px;
+  font-size: 16px;
+}
+
+.footer_col > ul > li > a {
+  color:white;
+  text-decoration:none;
+  border-bottom: 1px #fff dotted;
+}
+
+.footer_col > ul > li > a:hover {
+  color:white;
+  border-bottom: 1px #fff solid;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 250px;
+}
+
+.big_footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  /*height: 250px;*/
+}

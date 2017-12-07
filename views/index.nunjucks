@@ -1,6 +1,6 @@
-{% extends "layout.nunjucks" %}
+{% extends "partials/generic.nunjucks" %}
 
-{% block body %}
+{% block content %}
   <h1>{{title}}</h1>
   <p>Welcome to {{title}} <i aria-hidden="true" class="fa fa-address-book" ></i> </p>
 {% endblock %}

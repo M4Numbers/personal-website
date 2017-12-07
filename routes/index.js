@@ -9,7 +9,8 @@ router.get("/", function(req, res, next) {
       description: "Somewhere that hosts a site"
     },
     title: "Express",
-    description: "Home to the wild things"
+    description: "Home to the wild things",
+    page: "index"
   });
 });
 
