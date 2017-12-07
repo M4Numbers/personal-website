@@ -1,0 +1,32 @@
+{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "dependencies": {
+    "express-generator": "^4.15.5"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "MIT",
+  "description": "Personal website for Matthew D. Ball (aka: M4Numbers)",
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.12.1",
+    "eslint-config-loopback": "^4.0.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-copy": "^1.0.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-ignore": "^2.0.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-shell": "^0.5.2"
+  }
+}
