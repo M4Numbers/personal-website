@@ -1,4 +1,4 @@
-{% extends 'layout.nunjucks' %}
+{% extends "layout.nunjucks" %}
 
 {% block body %}
   <h1>{{title}}</h1>

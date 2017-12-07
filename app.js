@@ -1,34 +1,48 @@
-var express = require("express");
-var nunjucks = require("nunjucks");
-var path = require("path");
-var favicon = require("serve-favicon");
-var logger = require("morgan");
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
-var compass = require("node-compass");
+const express = require("express");
+const nunjucks = require("nunjucks");
+const path = require("path");
+const favicon = require("serve-favicon");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const compass = require("node-compass");
 
-var index = require("./routes/index");
-var users = require("./routes/users");
+let index = require("./routes/index");
+let users = require("./routes/users");
 
-var app = express();
+let app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "nunjucks");
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, "public", "images", "icons", "favicon.ico")));
+
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compass({ mode: "expanded" }));
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
 app.use("/", index);
 app.use("/users", users);
+
+// Static pages to be served
+// app.use("/sitemap", null);
+// app.use("/about", null);
+// app.use("/contact", null);
+// app.use("/stats", null);
+
+// Content pages
+// app.use("/blog", null);
+// app.use("/development", null);
+// app.use("/creative", null);
+// app.use("/media", null);
 
 nunjucks.configure("views", {
   autoescape: true,
@@ -38,7 +52,7 @@ nunjucks.configure("views", {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error("Not Found");
+  let err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
