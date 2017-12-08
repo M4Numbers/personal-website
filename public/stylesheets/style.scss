@@ -3,7 +3,9 @@
 @import "page_globals/standard.scss";
 @import "page_globals/navbar.scss";
 @import "page_globals/forms.scss";
-@import "page_globals/footer";
+@import "page_globals/footer.scss";
+
+@import "page_globals/page_specifics.scss";
 
 .thumb_box {
   background: #222;

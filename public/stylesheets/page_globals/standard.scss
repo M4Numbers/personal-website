@@ -18,3 +18,13 @@ body {
   color: #FFF;
   padding: 20px 0;
 }
+
+.page {
+  min-height: 100vh;
+}
+
+.no-edge-row {
+  @extend .row;
+  margin-right: 0;
+  margin-left: 0;
+}
