@@ -3,14 +3,12 @@ const router = express.Router();
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-  res.render("./index", {
-    general: {
-      title: "Somewhere",
-      description: "Somewhere that hosts a site"
-    },
+  console.log(res.additionalData);
+  res.render("./pages/index", {
+    general: res.additionalData.general,
+
     title: "Express",
-    description: "Home to the wild things",
-    page: "index"
+    description: "Home to the wild things"
   });
 });
 

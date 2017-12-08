@@ -56,3 +56,9 @@ setInterval(function() {
         bumpIt();
     }
 }, 250);
+
+function toggleMenu() {
+    document.getElementById("showLeftPush").classList.toggle("active");
+    document.body.classList.toggle("cbp-spmenu-push-toright");
+    document.getElementById("cbp-spmenu-s1").classList.toggle("cbp-spmenu-open");
+}

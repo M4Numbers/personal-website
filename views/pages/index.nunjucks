@@ -1,4 +1,4 @@
-{% extends "partials/generic.nunjucks" %}
+{% extends "./../partials/generic.nunjucks" %}
 
 {% block content %}
   <h1>{{title}}</h1>

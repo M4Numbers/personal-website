@@ -1,3 +1,5 @@
+"use strict"
+
 const express = require("express");
 const nunjucks = require("nunjucks");
 const path = require("path");
@@ -29,8 +31,17 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
-app.use("/", index);
-app.use("/users", users);
+const generateGenerics = function(req, res, next) {
+  res.additionalData = {general: {
+    title: "Somewhere",
+    description: "Somewhere that hosts a site",
+    page: "index"
+  }};
+  next();
+};
+
+app.use("/", [generateGenerics, index]);
+app.use("/users", [generateGenerics, users]);
 
 // Static pages to be served
 // app.use("/map", null);
@@ -65,7 +76,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("./error");
+  res.render("./pages/error");
 });
 
 module.exports = app;
