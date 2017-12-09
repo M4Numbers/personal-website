@@ -6,9 +6,9 @@ var bumpIt = function() {
     },
     didResize = false;
 
-window.onload = function() {
-    bumpIt();
-};
+//window.onload = function() {
+//    bumpIt();
+//};
 
 window.onscroll = function() {
     if (document.body.scrollTop > 50 && page_top)
@@ -50,15 +50,16 @@ $(window).resize(function() {
     didResize = true;
 });
 
-setInterval(function() {
-    if(didResize) {
-        didResize = false;
-        bumpIt();
-    }
-}, 250);
+//setInterval(function() {
+//    if(didResize) {
+//        didResize = false;
+//        bumpIt();
+//    }
+//}, 250);
 
 function toggleMenu() {
     document.getElementById("showLeftPush").classList.toggle("active");
+    document.getElementById("showLeftPush").classList.toggle("cbs-spmenu-push-toright");
     document.body.classList.toggle("cbp-spmenu-push-toright");
     document.getElementById("cbp-spmenu-s1").classList.toggle("cbp-spmenu-open");
 }

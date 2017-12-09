@@ -1,15 +1,15 @@
 .navbar-open {
   background-color: #002c33;
-  position: absolute;
-  margin-top: 20px;
-  margin-left: 20px;
-  width: 50px;
-  height: 50px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
   border-radius: 15px;
-}
 
-.navbar-open:hover {
-  background-color: #006c7e;
+  z-index: 999999;
+
+  //&:hover {
+  //  background-color: #006c7e;
+  //}
 }
 
 /* Transition */
@@ -21,42 +21,34 @@
   transition: all 0.3s;
 }
 
-.navbar-open {
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-}
-
 .cbp-spmenu {
   background: rgb(0, 44, 51);
   position: fixed;
-}
 
-.cbp-spmenu h3 {
-  color: #d4d4d4;
-  font-size: 1.9em;
-  padding: 20px;
-  margin: 0;
-  font-weight: 300;
-  background: #0d2b24;
-}
+  h3 {
+    color: #d4d4d4;
+    font-size: 1.9em;
+    padding: 20px;
+    margin: 0;
+    font-weight: 300;
+    background: #0d2b24;
+  }
 
-.cbp-spmenu a {
-  display: block;
-  color: #d4d4d4;
-  font-size: 1.1em;
-  font-weight: 300;
-}
+  a {
+    display: block;
+    color: #d4d4d4;
+    font-size: 1.1em;
+    font-weight: 300;
 
-.cbp-spmenu a:hover {
-  background: #0d4910;
-}
+    &:hover {
+      background: #0d4910;
+    }
 
-.cbp-spmenu a:active {
-  background: #0d4910;
-  color: #d4d4d4;
+    &:active {
+      background: #0d4910;
+      color: #d4d4d4;
+    }
+  }
 }
 
 /* Orientation-dependent styles for the content of the menu */
@@ -93,6 +85,10 @@
 
 .cbp-spmenu-push-toright {
   left: 240px;
+
+  .navbar-open {
+    left: 260px;
+  }
 }
 
 /* Transitions */

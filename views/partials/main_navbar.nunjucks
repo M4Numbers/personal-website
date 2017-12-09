@@ -10,7 +10,6 @@
   <a href="#">Manga</a>
 </nav>
 
-<a id="showLeftPush" class="navbar-open" onclick="toggleMenu()" >
-  <i class="fa fa-bars fa-inverse fa-3x auto_cen" style="vertical-align: middle"></i>
-  <!--<button id="showLeftPush" class="btn btn-primary" onclick="toggleMenu()">Menu</button>-->
+<a id="showLeftPush" class="navbar-open btn btn-primary" onclick="toggleMenu()" >
+  <i class="fa fa-bars fa-inverse fa-3x" style="vertical-align: middle"></i>
 </a>

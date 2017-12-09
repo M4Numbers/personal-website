@@ -23,8 +23,25 @@ body {
   min-height: 100vh;
 }
 
+.clear {
+  clear: both;
+}
+
 .no-edge-row {
   @extend .row;
   margin-right: 0;
   margin-left: 0;
+}
+
+.vertical-center {
+  margin-top: 25%;
+}
+
+.icon-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.circle-box-50px {
+  border-radius: 25px;
 }
