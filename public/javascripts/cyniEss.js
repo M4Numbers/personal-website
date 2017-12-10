@@ -37,6 +37,13 @@ function toTheTop() {
     resetDial();
 }
 
+function goto(id) {
+    $('html, body').animate(
+        {
+            scrollTop: $(id).offset().top
+        }, 'slow');
+}
+
 function loadComment(item_id, result_field)
 {
     $.get('/scripts/load_comments.php', {item_id: item_id},
@@ -59,7 +66,7 @@ $(window).resize(function() {
 
 function toggleMenu() {
     document.getElementById("showLeftPush").classList.toggle("active");
-    document.getElementById("showLeftPush").classList.toggle("cbs-spmenu-push-toright");
-    document.body.classList.toggle("cbp-spmenu-push-toright");
+    document.getElementById("showLeftPush").classList.toggle("cbs-spmenu-push-toleft");
+    document.body.classList.toggle("cbp-spmenu-push-toleft");
     document.getElementById("cbp-spmenu-s1").classList.toggle("cbp-spmenu-open");
 }

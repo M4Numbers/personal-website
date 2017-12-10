@@ -2,7 +2,8 @@
   background-color: #002c33;
   position: fixed;
   top: 20px;
-  left: 20px;
+  //left: 20px;
+  right: 20px;
   border-radius: 15px;
 
   z-index: 999999;
@@ -75,12 +76,19 @@
   left: 0px;
 }
 
+.cbp-spmenu-right {
+  right: -240px;
+}
+
+.cbp-spmenu-right.cbp-spmenu-open {
+  right: 0px;
+}
+
 /* Push classes applied to the body */
 
 .cbp-spmenu-push {
   overflow-x: hidden;
   position: relative;
-  left: 0;
 }
 
 .cbp-spmenu-push-toright {
@@ -88,6 +96,14 @@
 
   .navbar-open {
     left: 260px;
+  }
+}
+
+.cbp-spmenu-push-toleft {
+  right: 240px;
+
+  .navbar-open {
+    right: 260px;
   }
 }
 
