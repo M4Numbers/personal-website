@@ -37,8 +37,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js" ></script>
-    <script type="text/javascript" src="/javascripts/QTransform.js" ></script>
-    <script type="text/javascript" src="/javascripts/cyniEss.js" ></script>
+    <script type="text/javascript" src="/javascripts/page.js" ></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="/css/font-awesome.min.css" />
