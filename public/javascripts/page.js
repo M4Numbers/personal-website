@@ -1,5 +1,5 @@
 const toTheTop = () => {
-    $("html, body").animate({ scrollTop: 0}, "slow");
+    $("html, body").animate({scrollTop: 0}, "slow");
 };
 
 const goto = (id) => {

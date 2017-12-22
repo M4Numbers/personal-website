@@ -1,7 +1,7 @@
 .footer {
-  background:#323232 url("/images/stylistics/top_dark_to_tran.png") repeat-x top;
-  color:#fff;
-  font:18px Veranda, sans_serif;
+  background: #323232 url("/images/stylistics/top_dark_to_tran.png") repeat-x top;
+  color: #fff;
+  font: 18px Veranda, sans_serif;
   /*box-shadow: 0 -2px 5px 2px #585858;*/
 }
 
@@ -14,9 +14,9 @@
 }
 
 .footer > .container > .row {
-  padding:10px;
+  padding: 10px;
   margin: 0;
-  list-style-type:none;
+  list-style-type: none;
 }
 
 .footer > .container > .row > .col-lg-4 {
@@ -34,7 +34,7 @@
 
 .footer_col > ul {
   padding-top: 10px;
-  list-style-type:none;
+  list-style-type: none;
 }
 
 .footer_col > ul > li {
@@ -43,13 +43,13 @@
 }
 
 .footer_col > ul > li > a {
-  color:white;
-  text-decoration:none;
+  color: white;
+  text-decoration: none;
   border-bottom: 1px #fff dotted;
 }
 
 .footer_col > ul > li > a:hover {
-  color:white;
+  color: white;
   border-bottom: 1px #fff solid;
 }
 

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>M4Numbers - {% if title === undefined %}{{ general.title }}{% else %}{{ title }}{% endif %}</title>
+<head>
+    <title>M4Numbers - [% if title === undefined %][[ general.title ]][% else %][[ title ]][% endif %]</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="{% if description === undefined %}{{ general.description }}{% else %}{{ description }}{% endif %}" />
+    <meta name="description"
+          content="[% if description === undefined %][[ general.description ]][% else %][[ description ]][% endif %]"/>
 
     <!-- ****** faviconit.com favicons ****** -->
     <link rel="shortcut icon" href="/images/icons/favicon.ico">
@@ -31,16 +32,16 @@
     <meta name="msapplication-config" content="/images/icons/browserconfig.xml">
     <!-- ****** faviconit.com favicons ****** -->
 
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css"/>
 
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css"/>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js" ></script>
-    <script type="text/javascript" src="/javascripts/page.js" ></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="/javascripts/page.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css"/>
 
     <!-- Google Tag Manager --
     <noscript>
@@ -66,10 +67,10 @@
       ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
-  </head>
-  <body class="cbp-spmenu-push page">
-    {% block navbar %}{% endblock %}
-    {% block body %}{% endblock %}
-    {% block footer %}{% endblock %}
-  </body>
+</head>
+<body class="cbp-spmenu-push page">
+    [% block navbar %][% endblock %]
+    [% block body %][% endblock %]
+    [% block footer %][% endblock %]
+</body>
 </html>

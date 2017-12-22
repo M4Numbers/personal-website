@@ -1,10 +1,8 @@
 @import "compass/css3";
-
 @import "page_globals/standard.scss";
 @import "page_globals/navbar.scss";
 @import "page_globals/forms.scss";
 @import "page_globals/footer.scss";
-
 @import "page_globals/page_specifics.scss";
 
 .thumb_box {
@@ -83,19 +81,18 @@
   height: 64px;
   width: 64px;
   border-radius: 32px;
-  background:#fafafa url("/images/images/Handle_icon.png") no-repeat;
+  background: #fafafa url("/images/images/Handle_icon.png") no-repeat;
   background-size: 64px;
   box-shadow: 2px 2px 5px #2c2c2c;
 }
 
 .header {
-  width:100%;
-  min-height:100px;
-  overflow-x:hidden;
-  background:
-    url("/images/stylistics/bottom_tran_to_light.png") bottom repeat-x,
-    url("/images/images/m4_logo.png") center bottom no-repeat #afafaf;
-  background-size:auto, 300px;
+  width: 100%;
+  min-height: 100px;
+  overflow-x: hidden;
+  background: url("/images/stylistics/bottom_tran_to_light.png") bottom repeat-x,
+  url("/images/images/m4_logo.png") center bottom no-repeat #afafaf;
+  background-size: auto, 300px;
   box-shadow: 0 2px 5px 2px #585858;
 }
 
@@ -104,14 +101,14 @@
 }
 
 .menu_contents > p {
-  display:inline-block;
-  margin:0;
+  display: inline-block;
+  margin: 0;
   font-size: 32px;
 }
 
 .menu_contents > p > a {
-  text-decoration:none;
-  color:#bcbcbc;
+  text-decoration: none;
+  color: #bcbcbc;
 }
 
 .social_link {
@@ -127,8 +124,8 @@
 }
 
 .right_button {
-  float:right;
-  padding-left:10px;
+  float: right;
+  padding-left: 10px;
 }
 
 .icon_host {
@@ -148,12 +145,12 @@
 
 .twit_button {
   background: #5ea9dd url("/images/content_logos/Twitter_logo_white.png") no-repeat center left 4px;
-  background-size:32px;
+  background-size: 32px;
 }
 
 .face_button {
   background: #3b579d url("/images/content_logos/facebook/FB-f-Logo__white_512.png") no-repeat center left 4px;
-  background-size:32px;
+  background-size: 32px;
 }
 
 .yt_button {
@@ -166,17 +163,17 @@
     -moz-linear-gradient(#e52d27 0%, #b31217 100%);
   background: url("icons/youtube_light_logo.png") no-repeat center left 3px,
     linear-gradient(#e52d27 0%, #b31217 100%) ;*/
-  background-size:34px;
+  background-size: 34px;
 }
 
 .twitch_button {
-  background:#6441A5 url("/images/content_logos/twitch_logo.png") no-repeat center left 3px;
-  background-size:34px;
+  background: #6441A5 url("/images/content_logos/twitch_logo.png") no-repeat center left 3px;
+  background-size: 34px;
 }
 
 .ask_button {
-  background:#04c url("/images/content_logos/ask_fm-button.png") no-repeat center left 3px;
-  background-size:34px;
+  background: #04c url("/images/content_logos/ask_fm-button.png") no-repeat center left 3px;
+  background-size: 34px;
 }
 
 .social_content {
@@ -189,18 +186,18 @@
 }
 
 .fake_booster {
-  height:15px;
+  height: 15px;
   clear: both;
 }
 
 .column {
   /* 900px */
   width: 80%;
-  margin:0 auto;
+  margin: 0 auto;
 }
 
 .cyni_box {
-  min-width:300px;
+  min-width: 300px;
   background-color: #fdfdfd;
   border: 2px solid #666;
   box-shadow: 4px 4px 4px #585858;
@@ -219,7 +216,7 @@
 }
 
 .viewing {
-  display:none;
+  display: none;
 }
 
 .allVideos {
@@ -235,11 +232,11 @@
 
 .allVideos > li > a {
   color: #505050;
-  text-decoration:none;
+  text-decoration: none;
 }
 
 .allVideos > li > a:hover {
-  text-decoration:underline;
+  text-decoration: underline;
 }
 
 .allVideos > li > a > img {
@@ -253,13 +250,12 @@
 }
 
 a.hidden_link {
-  color:white;
+  color: white;
   text-decoration: none;
 }
 
-a.hidden_link:hover
-{
-  color:lightgrey;
+a.hidden_link:hover {
+  color: lightgrey;
 }
 
 .ad_under_page {
@@ -268,8 +264,7 @@ a.hidden_link:hover
   margin: 0 auto;
 }
 
-.carousel-caption > h3 > a
-{
+.carousel-caption > h3 > a {
   text-shadow: 1px 1px 10px #000;
   color: #FFF;
 }
@@ -278,44 +273,37 @@ a.hidden_link:hover
   box-shadow: 1px 1px 5px #000;
 }
 
-.anime
-{
+.anime {
   margin: 0 auto;
   width: 235px;
 }
 
-.anime_status
-{
+.anime_status {
   font-size: 10pt;
   text-align: left;
 }
 
-.devel
-{
+.devel {
   margin: 0 auto;
   width: 235px;
 }
 
-.manga
-{
+.manga {
   margin: 0 auto;
   width: 235px;
 }
 
-.manga_status
-{
+.manga_status {
   font-size: 10pt;
   text-align: left;
 }
 
-.video
-{
+.video {
   margin: 0 auto;
   max-width: 500px;
 }
 
-.video_status
-{
+.video_status {
   font-size: 10pt;
   text-align: left;
 }
@@ -353,37 +341,37 @@ a.hidden_link:hover
   }
 
   #social_links > p {
-    min-width:100%;
+    min-width: 100%;
     width: 100%;
-    clear:both;
+    clear: both;
     text-align: center;
     display: -webkit-flex;
     display: flex;
-    padding-top:0;
-    margin:0;
+    padding-top: 0;
+    margin: 0;
     font-size: 32px;
     border: 1px solid #fff;
-    border-right:0;
-    border-left:0;
+    border-right: 0;
+    border-left: 0;
   }
 
   .social_link {
     min-width: 100%;
     width: 100%;
-    position:static;
+    position: static;
     /*right: -50px;*/
     height: 48px;
     border: 0;
-    border-radius:0;
+    border-radius: 0;
     padding-left: 0;
     padding-right: 0;
 
-    background:none;
-    box-shadow:none;
+    background: none;
+    box-shadow: none;
   }
 
   .header {
-    box-shadow:none;
+    box-shadow: none;
   }
 
   .slots {
@@ -391,46 +379,46 @@ a.hidden_link:hover
   }
 
   .column {
-    width:100%;
+    width: 100%;
     padding: 0 10px;
   }
 
   .column > ul > li {
-    padding:10px 0;
-    border-right:0;
+    padding: 10px 0;
+    border-right: 0;
   }
 
   .twit_button_max {
-    background:#5ea9dd url("/images/content_logos/Twitter_logo_white.png") no-repeat center;
-    background-size:32px;
+    background: #5ea9dd url("/images/content_logos/Twitter_logo_white.png") no-repeat center;
+    background-size: 32px;
   }
 
   .face_button_max {
-    background:#3b579d url("/images/content_logos/facebook/FB-f-Logo__white_512.png") no-repeat center;
-    background-size:32px;
+    background: #3b579d url("/images/content_logos/facebook/FB-f-Logo__white_512.png") no-repeat center;
+    background-size: 32px;
   }
 
   .yt_button_max {
     background: #e52d27 url("/images/content_logos/youtube_light_logo.png") no-repeat center;
-    background-size:32px;
+    background-size: 32px;
   }
 
   .twitch_button_max {
-    background:#6441A5 url("/images/content_logos/twitch_logo.png") no-repeat center;
-    background-size:32px;
+    background: #6441A5 url("/images/content_logos/twitch_logo.png") no-repeat center;
+    background-size: 32px;
   }
 
   .ask_button_max {
-    background:#04c url("/images/content_logos/ask_fm-button.png") no-repeat center;
-    background-size:32px;
+    background: #04c url("/images/content_logos/ask_fm-button.png") no-repeat center;
+    background-size: 32px;
   }
 
   .chosen_fic {
-    width:100%;
+    width: 100%;
   }
 
   .ad_under_page {
-    width:100%;
+    width: 100%;
   }
 
   .footer_col {
@@ -455,6 +443,7 @@ a.hidden_link:hover
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
 .nav-justified > li > a {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -465,23 +454,26 @@ a.hidden_link:hover
   background-color: #e5e5e5; /* Old browsers */
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#e5e5e5));
   background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #e5e5e5 100%);
-  background-image:      -o-linear-gradient(top, #f5f5f5 0%, #e5e5e5 100%);
-  background-image:         linear-gradient(to bottom, #f5f5f5 0%,#e5e5e5 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+  background-image: -o-linear-gradient(top, #f5f5f5 0%, #e5e5e5 100%);
+  background-image: linear-gradient(to bottom, #f5f5f5 0%, #e5e5e5 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#e5e5e5', GradientType=0); /* IE6-9 */
   background-repeat: repeat-x; /* Repeat the gradient */
   border-bottom: 1px solid #d5d5d5;
 }
+
 .nav-justified > .active > a,
 .nav-justified > .active > a:hover,
 .nav-justified > .active > a:focus {
   background-color: #ddd;
   background-image: none;
-  -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.15);
-  box-shadow: inset 0 3px 7px rgba(0,0,0,.15);
+  -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, .15);
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, .15);
 }
+
 .nav-justified > li:first-child > a {
   border-radius: 5px 5px 0 0;
 }
+
 .nav-justified > li:last-child > a {
   border-bottom: 0;
   border-radius: 0 0 5px 5px;

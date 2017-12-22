@@ -1,0 +1,15 @@
+[% extends "./layout.nunjucks" %]
+
+[% block navbar %]
+    [% include "./main_navbar.nunjucks" %]
+[% endblock %]
+
+[% block body %]
+    <div class="column">
+        [% block content %][% endblock %]
+    </div>
+[% endblock %]
+
+[% block footer %]
+    [% include "./main_footer.nunjucks" %]
+[% endblock %]
