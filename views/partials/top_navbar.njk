@@ -1,4 +1,4 @@
-[% import "./../macros/navigation.njk" as forms %]
+{% import "./../macros/navigation.njk" as forms %}
 
 <nav class="[% block navbar_carousel %]navbar[% endblock %] navbar-static-top navbar-inverse slots">
     <div class="container-fluid">
@@ -17,12 +17,12 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="[[ forms.page_test(general.page, 'index') ]]"><a href="/">Home</a></li>
-                <li class="[[ forms.page_test(general.page, 'blog') ]]"><a href="/blog">Blog</a></li>
-                <li class="[[ forms.page_test(general.page, 'videos') ]]"><a href="/videos">Videos</a></li>
-                <li class="[[ forms.page_test(general.page, 'development') ]]"><a href="/development">Coding</a></li>
-                <li class="[[ forms.page_test(general.page, 'anime') ]]"><a href="/anime">Anime</a></li>
-                <li class="[[ forms.page_test(general.page, 'manga') ]]"><a href="/manga">Manga</a></li>
+                <li class="{{ forms.page_test(general.page, 'index') }}"><a href="/">Home</a></li>
+                <li class="{{ forms.page_test(general.page, 'blog') }}"><a href="/blog">Blog</a></li>
+                <li class="{{ forms.page_test(general.page, 'videos') }}"><a href="/videos">Videos</a></li>
+                <li class="{{ forms.page_test(general.page, 'development') }}"><a href="/development">Coding</a></li>
+                <li class="{{ forms.page_test(general.page, 'anime') }}"><a href="/anime">Anime</a></li>
+                <li class="{{ forms.page_test(general.page, 'manga') }}"><a href="/manga">Manga</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

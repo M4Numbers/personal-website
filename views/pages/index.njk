@@ -1,12 +1,12 @@
-[% extends "./../partials/generic.njk" %]
+{% extends "./../partials/generic.njk" %}
 
-[% block body %]
+{% block body %}
 <div id="splash" class="page splash-page">
     <div class="container-fluid">
         <div class="row">
             <div class="offset-6 col-md-4 jumbotron">
-                <h1>[[title]]</h1>
-                <p>Welcome to [[title]] <i aria-hidden="true" class="fa fa-address-book"></i></p>
+                <h1>{{ title }}</h1>
+                <p>Welcome to {{ title }} <i aria-hidden="true" class="fa fa-address-book"></i></p>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -22,7 +22,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center dark">
             <div class="col-md-10">
-                <div id="home"></div>
                 <h2>About Me</h2>
                 <p>This is a box filled with stuff about me.</p>
             </div>
@@ -45,4 +44,4 @@
         </div>
     </div>
 </div>
-[% endblock %]
+{% endblock %}

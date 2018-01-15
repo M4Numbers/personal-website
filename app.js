@@ -86,12 +86,12 @@ nunjucks.configure("views", {
     express: app,
     watch: true,
     tags: {
-        blockStart: "[%",
-        blockEnd: "%]",
-        variableStart: "[[",
-        variableEnd: "]]",
-        commentStart: "[#",
-        commentEnd: "#]"
+        blockStart: "{%",
+        blockEnd: "%}",
+        variableStart: "{{",
+        variableEnd: "}}",
+        commentStart: "{#",
+        commentEnd: "#}"
     }
 });
 

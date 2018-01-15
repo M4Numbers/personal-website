@@ -3,15 +3,18 @@
 const gulp = require("gulp");
 const npath = require("path");
 const spawn = require("child_process").spawn;
-const vueify = require("gulp-vueify");
+const babel = require("gulp-babel");
 
-gulp.task("vueify", function () {
-    return gulp.src("views/components/**/*.vue")
-        .pipe(vueify())
-        .pipe(gulp.dest("./public/vues"));
+gulp.task("babel", [], () => {
+    return gulp.src("babel/**/*.js")
+        .pipe(babel({
+            plugins: ["transform-runtime"],
+            presets: ["env"],
+        }))
+        .pipe(gulp.dest("./public/compiled"));
 });
 
-gulp.task("run", ["vueify"], () => {
+gulp.task("run", ["babel"], () => {
     spawn("node", [npath.resolve(__dirname, "bin/www")], {stdio: "inherit"});
 });
 
