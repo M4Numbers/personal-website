@@ -1,8 +1,8 @@
 "use strict";
 
 const gulp = require("gulp");
-const npath = require("path");
-const spawn = require("child_process").spawn;
+//const npath = require("path");
+const exec = require("child_process").exec;
 const babel = require("gulp-babel");
 
 gulp.task("babel", [], () => {
@@ -15,7 +15,17 @@ gulp.task("babel", [], () => {
 });
 
 gulp.task("run", ["babel"], () => {
-    spawn("node", [npath.resolve(__dirname, "bin/www")], {stdio: "inherit"});
+    exec("npm run start", function(err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+    });
+});
+
+gulp.task("test:eslint", [], () => {
+    exec("npm run quality:eslint", function(err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+    });
 });
 
 gulp.task("default", ["run"], () => {

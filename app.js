@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-"use strict"
+"use strict";
 
 const express = require("express");
 const nunjucks = require("nunjucks");
