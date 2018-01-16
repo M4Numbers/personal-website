@@ -11,7 +11,7 @@ const goto = (id) => {
 
 const toggleMenu = () => {
     document.getElementById("showLeftPush").classList.toggle("active");
-    document.getElementById("showLeftPush").classList.toggle("cbs-spmenu-push-toleft");
+    document.getElementById("showLeftPush").classList.toggle("cbp-spmenu-button-push-toleft");
     document.body.classList.toggle("cbp-spmenu-push-toleft");
     document.getElementById("cbp-spmenu-s1").classList.toggle("cbp-spmenu-open");
 };

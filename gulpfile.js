@@ -1,7 +1,7 @@
 "use strict";
 
 const gulp = require("gulp");
-//const npath = require("path");
+// const npath = require("path");
 const exec = require("child_process").exec;
 const babel = require("gulp-babel");
 
