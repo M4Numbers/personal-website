@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="CompassSettings">
-    <option name="compassExecutableFilePath" value="$USER_HOME$/.rvm/rubies/ruby-2.4.2/bin/compass" />
+    <option name="compassConfigPath" value="D:\GitHub\personal-website\compass.rb" />
+    <option name="compassExecutableFilePath" value="C:\Ruby24-x64\bin\compass.bat" />
     <option name="compassSupportEnabled" value="true" />
     <option name="importPaths">
       <list>
-        <option value="$USER_HOME$/.rvm/gems/ruby-2.4.2@global/gems/compass-core-1.0.3/stylesheets" />
+        <option value="C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/compass-core-1.0.3/stylesheets" />
       </list>
     </option>
   </component>
@@ -18,7 +19,7 @@
     <orderEntry type="library" name="express-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="gulp-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="compass-library" level="project" />
     <orderEntry type="library" name="jquery-latest" level="application" />
+    <orderEntry type="library" name="compass-library" level="project" />
   </component>
 </module>
