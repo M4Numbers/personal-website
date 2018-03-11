@@ -4,11 +4,6 @@
     <option name="compassConfigPath" value="D:\GitHub\personal-website\compass.rb" />
     <option name="compassExecutableFilePath" value="C:\Ruby24-x64\bin\compass.bat" />
     <option name="compassSupportEnabled" value="true" />
-    <option name="importPaths">
-      <list>
-        <option value="C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/compass-core-1.0.3/stylesheets" />
-      </list>
-    </option>
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
