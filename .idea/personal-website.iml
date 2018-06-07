@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="CompassSettings">
-    <option name="compassConfigPath" value="D:\GitHub\personal-website\compass.rb" />
-    <option name="compassExecutableFilePath" value="C:\Ruby24-x64\bin\compass.bat" />
-    <option name="compassSupportEnabled" value="true" />
+    <option name="compassConfigPath" value="C:\Users\M4Numbers\Documents\GitHub\personal-website\config.rb" />
+    <option name="compassExecutableFilePath" value="C:\Ruby22-x64\bin\compass" />
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
