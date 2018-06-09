@@ -60,7 +60,6 @@ app.use("/", [index, statics]);
 app.use("/users", [users]);
 
 // Static pages to be served
-// app.use("/about", null);
 // app.use("/contact", null);
 // app.use("/stats", null);
 

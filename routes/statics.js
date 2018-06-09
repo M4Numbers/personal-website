@@ -43,4 +43,21 @@ router.get("/map", function (req, res, next) {
     });
 });
 
+router.get("/about", function (req, res, next) {
+    res.render("./pages/about", {
+        top_page: {
+            title: "About Me",
+            tagline: "If you were looking for a general overview about yours truly, you've come to the right place!",
+            image_src: "images/handle_logo.png",
+            image_alt: "My logo that I use to represent myself"
+        },
+
+        head: {
+            title: "M4Numbers :: About Me",
+            description: "Home to the wild things",
+            current_page: "about"
+        }
+    });
+});
+
 module.exports = router;
