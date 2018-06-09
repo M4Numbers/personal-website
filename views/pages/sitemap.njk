@@ -1,0 +1,17 @@
+{% extends "base_layouts/homepage_base.njk" %}
+
+{% block top_page_banner %}
+    {% include "partials/top_page_banner_fa.njk" %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Site links:</h2>
+        <ul>
+            <li><a href="/">Homepage</a></li>
+            <li><a href="#">Blog</a></li>
+        </ul>
+    </div>
+
+    <hr class="mb-4"/>
+{% endblock %}

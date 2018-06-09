@@ -3,7 +3,6 @@
 const gulp = require("gulp");
 const exec = require("child_process").exec;
 const babel = require("gulp-babel");
-const compass = require("gulp-compass");
 const sass = require("gulp-sass");
 const tildeImporter = require("node-sass-tilde-importer");
 

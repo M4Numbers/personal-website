@@ -4,7 +4,6 @@ const router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
     res.render("./pages/index", {
-        general: res.additionalData.general,
         top_page: {
             title: "Hello World",
             tagline: "This is a site that contains information about the person on your left.",
@@ -14,7 +13,8 @@ router.get("/", function (req, res, next) {
 
         head: {
             title: "M4Numbers",
-            description: "Home to the wild things"
+            description: "Home to the wild things",
+            current_page: "index"
         }
     });
 });

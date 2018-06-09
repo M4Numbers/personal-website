@@ -33,6 +33,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 let index = require("./routes/index");
+let statics = require("./routes/statics");
 let users = require("./routes/users");
 
 let app = express();
@@ -55,22 +56,10 @@ app.use(express.static(path.join(__dirname, "node_modules/jquery/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/popper.js/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
-const generateGenerics = function (req, res, next) {
-    res.additionalData = {
-        general: {
-            title: "Somewhere",
-            description: "Somewhere that hosts a site",
-            page: "index"
-        }
-    };
-    next();
-};
-
-app.use("/", [generateGenerics, index]);
-app.use("/users", [generateGenerics, users]);
+app.use("/", [index, statics]);
+app.use("/users", [users]);
 
 // Static pages to be served
-// app.use("/map", null);
 // app.use("/about", null);
 // app.use("/contact", null);
 // app.use("/stats", null);
@@ -108,7 +97,6 @@ app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
 
-    console.log(err);
     // render the error page
     res.status(err.status || 500);
     res.render("pages/error", {
