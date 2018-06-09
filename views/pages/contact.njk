@@ -1,0 +1,43 @@
+{% extends "base_layouts/homepage_base.njk" %}
+
+{% import "macros/content.njk" as c %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                {{ c.contact_option("YouTube", "fab", "fa-youtube", "#") }}
+            </div>
+            <div class="col-lg-4">
+                {{ c.contact_option("Twitter", "fab", "fa-twitter", "#") }}
+            </div>
+            <div class="col-lg-4">
+                {{ c.contact_option("Email", "fas", "fa-at", "#") }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                {{ c.contact_option("Facebook", "fab", "fa-facebook-f", "#") }}
+            </div>
+            <div class="col-lg-4">
+                {{ c.contact_option("Steam", "fab", "fa-steam-symbol", "#") }}
+            </div>
+            <div class="col-lg-4">
+                {{ c.contact_option("GitHub", "fab", "fa-github", "#") }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                {{ c.contact_option("Twitch", "fab", "fa-twitch", "#") }}
+            </div>
+        </div>
+
+        <p>
+            If your preferred method of communication was not mentioned, then too bad. If you want to talk to
+            me through something like Steam, I'd prefer you to give me a heads up via e-mail or Twitter first,
+            thanks.
+        </p>
+    </div>
+
+    <hr class="mb-4" />
+{% endblock %}

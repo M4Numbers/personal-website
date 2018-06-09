@@ -60,4 +60,22 @@ router.get("/about", function (req, res, next) {
     });
 });
 
+router.get("/contact", function (req, res, next) {
+    res.render("./pages/contact", {
+        top_page: {
+            title: "Contact Me",
+            tagline: "If, for whatever reason, you want to get in touch with me, use the links below to find my other" +
+                     " hidey-holes.",
+            image_src: "images/handle_logo.png",
+            image_alt: "My logo that I use to represent myself"
+        },
+
+        head: {
+            title: "M4Numbers :: Contact Me",
+            description: "Home to the wild things",
+            current_page: "contact"
+        }
+    });
+});
+
 module.exports = router;
