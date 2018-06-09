@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    {% block header %}
+        {% include "partials/main_header.njk" %}
+    {% endblock %}
+</head>
+<body>
+
+{% block navbar %}
+    {% include "partials/main_navbar.njk" %}
+{% endblock %}
+
+<main>
+    {% block root_content %}
+    {% endblock %}
+</main>
+
+{% block footer %}
+    {% include "partials/main_footer.njk" %}
+{% endblock %}
+
+{% block js_includes %}
+    {% include "partials/main_js_libraries.njk" %}
+{% endblock %}
+</body>
+</html>

@@ -1,15 +1,28 @@
-{% import "../macros/navigation.njk" as forms %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">M4Numbers</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s1">
-    <h3>M4Numbers</h3>
-    <a href="#">Home</a>
-    <a href="#">Blog</a>
-    <a href="#">Videos</a>
-    <a href="#">Coding</a>
-    <a href="#">Anime</a>
-    <a href="#">Manga</a>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Development</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Hobbies</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
 </nav>
-
-<a id="showLeftPush" class="navbar-open btn btn-primary" onclick="toggleMenu()">
-    <i class="fa fa-bars fa-inverse fa-2x" style="vertical-align: middle"></i>
-</a>

@@ -5,9 +5,17 @@ const router = express.Router();
 router.get("/", function (req, res, next) {
     res.render("./pages/index", {
         general: res.additionalData.general,
+        top_page: {
+            title: "Hello World",
+            tagline: "This is a site that contains information about the person on your left.",
+            image_src: "images/handle_logo.png",
+            image_alt: "Main face of the site"
+        },
 
-        title: "Express",
-        description: "Home to the wild things"
+        head: {
+            title: "M4Numbers",
+            description: "Home to the wild things"
+        }
     });
 });
 

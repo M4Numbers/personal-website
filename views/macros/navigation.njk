@@ -1,5 +1,5 @@
-{% macro page_test(current, test) %}
+{% macro page_test(current, test, insert_class) %}
     {% if current == test %}
-        active
+        {{ insert_class }}
     {% endif %}
 {% endmacro %}

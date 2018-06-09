@@ -42,7 +42,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "njk");
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, "public", "images", "icons", "favicon.ico")));
+app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ico")));
 
 app.use(logger("dev"));
 app.use(bodyParser.json());
@@ -108,9 +108,21 @@ app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
 
+    console.log(err);
     // render the error page
     res.status(err.status || 500);
-    res.render("pages/error");
+    res.render("pages/error", {
+        head: {
+            title: `${err.status} :: ${err.message}`,
+            description: "Home to the wild things"
+        },
+
+        error: {
+            message: err.message,
+            status: err.status,
+            stack: err.stack
+        }
+    });
 });
 
 module.exports = app;
