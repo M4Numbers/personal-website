@@ -2,6 +2,10 @@
 
 {% import "macros/content.njk" as c %}
 
+{% block banner_icon %}
+    {{ c.fa_banner(top_page.fa_type, top_page.fa_choice) }}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">

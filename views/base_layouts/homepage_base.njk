@@ -1,9 +1,20 @@
 {% extends "base_layouts/root_base.njk" %}
 
 {% block root_content %}
-    {% block top_page_banner %}
-        {% include "partials/top_page_banner_img.njk" %}
-    {% endblock %}
+    <div class="jumbotron bg-dark-lighter lift-dark-shadow no-gutters text-light">
+        <div class="container row">
+            <div class="offset-md-1 col-md-4">
+                {% block banner_icon %}
+                {% endblock %}
+            </div>
+            <div class="col-md-7">
+                <h1 class="display-3">{{ top_page.title }}</h1>
+                {% block banner_tagline %}
+                    <p>{{ top_page.tagline }}</p>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
 
     {% block content %}
     {% endblock %}

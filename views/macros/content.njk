@@ -8,3 +8,16 @@
     </a>
     <h3 class="text-center">{{ name }}</h3>
 {% endmacro %}
+
+{% macro fa_banner(fa_type, fa_choice) %}
+    <div class="img-thumbnail rounded-circle icon-host mx-auto row text-dark">
+        <div class="mx-auto my-auto">
+            <i class="{{ fa_type }} {{ fa_choice }} fa-7x"></i>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro img_banner(img_location, img_alt) %}
+    <img src="{{ img_location }}" class="rounded-circle img-thumbnail icon-host"
+         alt="{{ img_alt }}" />
+{% endmacro %}

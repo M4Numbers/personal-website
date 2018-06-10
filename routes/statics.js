@@ -66,8 +66,8 @@ router.get("/contact", function (req, res, next) {
             title: "Contact Me",
             tagline: "If, for whatever reason, you want to get in touch with me, use the links below to find my other" +
                      " hidey-holes.",
-            image_src: "images/handle_logo.png",
-            image_alt: "My logo that I use to represent myself"
+            fa_type: "fas",
+            fa_choice: "fa-phone"
         },
 
         head: {

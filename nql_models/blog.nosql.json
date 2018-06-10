@@ -1,6 +1,5 @@
 {
   "_id": ObjectId("abc123"),
-  "lexical_id": 1,
   "short_title": "blog-the-first",
   "long_title": "Blog the First!",
   "public": true,

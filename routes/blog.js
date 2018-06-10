@@ -62,9 +62,9 @@ router.get("/:blogId", function (req, res, next) {
             res.render("./pages/blog_single", {
                 top_page: {
                     title: blogPost.long_title,
-                    tagline: "",
+                    blog_tags: blogPost.tags,
                     image_src: "/images/handle_logo.png",
-                    image_alt: "Main face of the site"
+                    image_alt: "Main face of the site",
                 },
 
                 content: {

@@ -1,4 +1,9 @@
 {% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
 
 {% block content %}
     <div class="container">

@@ -26,22 +26,32 @@
 
 const express = require("express");
 const nunjucks = require("nunjucks");
+const nunjucksDate = require("nunjucks-date");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
-let index = require("./routes/index");
-let statics = require("./routes/statics");
-let blog = require("./routes/blog");
-let users = require("./routes/users");
+const index = require("./routes/index");
+const statics = require("./routes/statics");
+const blog = require("./routes/blog");
+const users = require("./routes/users");
 
-let app = express();
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "njk");
+
+const njk = new nunjucks.Environment(
+    new nunjucks.FileSystemLoader(app.get("views"), {
+        autoescape: true,
+        watch: true
+    })
+);
+njk.express(app);
+njk.addFilter("date", nunjucksDate);
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ico")));
@@ -65,24 +75,9 @@ app.use("/users", [users]);
 // app.use("/stats", null);
 
 // Content pages
-// app.use("/blog", null);
 // app.use("/development", null);
 // app.use("/creative", null);
 // app.use("/media", null);
-
-nunjucks.configure("views", {
-    autoescape: true,
-    express: app,
-    watch: true,
-    tags: {
-        blockStart: "{%",
-        blockEnd: "%}",
-        variableStart: "{{",
-        variableEnd: "}}",
-        commentStart: "{#",
-        commentEnd: "#}"
-    }
-});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
