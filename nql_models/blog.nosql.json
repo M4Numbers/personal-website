@@ -1,0 +1,24 @@
+{
+  "_id": ObjectId("abc123"),
+  "lexical_id": 1,
+  "short_title": "blog-the-first",
+  "long_title": "Blog the First!",
+  "public": true,
+  "full_text": "Lopus ipsum dolor met amet sin bar quotum veri.",
+  "time_posted": ISODate("2018-06-07T05:09:01.222Z"),
+  "time_updated": ISODate("2018-06-07T07:09:08.000Z"),
+  "tags": [
+    "a",
+    "b",
+    "c"
+  ],
+  "comments": [
+    {
+      "comment_id": 1,
+      "author_nick": "Mr. Jeff",
+      "author_ip": "19.52.64.88",
+      "comment_time": ISODate("2018-06-07T15:11:20.521Z"),
+      "comment_text": "Hi there."
+    }
+  ]
+}

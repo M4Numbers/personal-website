@@ -34,6 +34,7 @@ const bodyParser = require("body-parser");
 
 let index = require("./routes/index");
 let statics = require("./routes/statics");
+let blog = require("./routes/blog");
 let users = require("./routes/users");
 
 let app = express();
@@ -57,10 +58,10 @@ app.use(express.static(path.join(__dirname, "node_modules/popper.js/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
 app.use("/", [index, statics]);
+app.use("/blog", [blog]);
 app.use("/users", [users]);
 
 // Static pages to be served
-// app.use("/contact", null);
 // app.use("/stats", null);
 
 // Content pages

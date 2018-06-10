@@ -1,0 +1,9 @@
+{% extends "base_layouts/homepage_base.njk" %}
+
+{% block content %}
+    <div class="container">
+        {% for blog in content.blogs %}
+            <h2><a href="/blog/{{ blog._id }}" >{{ blog.long_title }}</a></h2>
+        {% endfor %}
+    </div>
+{% endblock %}
