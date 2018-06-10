@@ -30,7 +30,7 @@ const mongoInstance = MongoDbHandler.getMongo();
 
 /* GET all blog posts */
 router.get("/", function (req, res, next) {
-    mongoInstance.findBlogs(0, 10, "_id")
+    mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, "_id")
         .then(posts => {
             res.render("./pages/blog_all", {
                 top_page: {
@@ -42,6 +42,12 @@ router.get("/", function (req, res, next) {
 
                 content: {
                     blogs: posts
+                },
+
+                pagination: {
+                    base: "/blog",
+                    total: 75,
+                    page: Math.max((req.query["page"] || 1), 1),
                 },
 
                 head: {
