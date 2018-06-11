@@ -30,35 +30,39 @@ const mongoInstance = MongoDbHandler.getMongo();
 
 /* GET all blog posts */
 router.get("/", function (req, res, next) {
-    mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, "_id")
-        .then(posts => {
-            res.render("./pages/blog_all", {
-                top_page: {
-                    title: "My Blog",
-                    tagline: "A list of scribbled things that have been made over the years.",
-                    image_src: "/images/handle_logo.png",
-                    image_alt: "Main face of the site"
-                },
+    Promise.all(
+        [
+            mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, "_id"),
+            mongoInstance.getTotalBlogCount()
+        ]
+    ).then(([blogs, totalCount]) => {
+        res.render("./pages/blog_all", {
+            top_page: {
+                title: "My Blog",
+                tagline: "A list of scribbled things that have been made over the years.",
+                image_src: "/images/handle_logo.png",
+                image_alt: "Main face of the site"
+            },
 
-                content: {
-                    blogs: posts
-                },
+            content: {
+                blogs: blogs
+            },
 
-                pagination: {
-                    base: "/blog",
-                    total: 75,
-                    page: Math.max((req.query["page"] || 1), 1),
-                },
+            pagination: {
+                base: "/blog",
+                total: totalCount,
+                page: Math.max((req.query["page"] || 1), 1),
+            },
 
-                head: {
-                    title: "M4Numbers :: Blog",
-                    description: "Home to the wild things",
-                    current_page: "blog"
-                }
-            });
-        }, rejection => {
-            next(rejection);
+            head: {
+                title: "M4Numbers :: Blog",
+                description: "Home to the wild things",
+                current_page: "blog"
+            }
         });
+    }, rejection => {
+        next(rejection);
+    });
 });
 
 /* GET single blog post page. */
