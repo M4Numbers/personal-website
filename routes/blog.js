@@ -32,7 +32,7 @@ const mongoInstance = MongoDbHandler.getMongo();
 router.get("/", function (req, res, next) {
     Promise.all(
         [
-            mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, "_id"),
+            mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}),
             mongoInstance.getTotalBlogCount()
         ]
     ).then(([blogs, totalCount]) => {
