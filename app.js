@@ -68,6 +68,13 @@ app.use(express.static(path.join(__dirname, "node_modules/jquery/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/popper.js/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
+app.use(function(req, res, next) {
+    if (req.signedCookies.logged_in) {
+        res.cookie("logged_in", 1, {signed: true, maxAge: 100000});
+    }
+    next();
+});
+
 app.use("/", [index, auth, statics]);
 app.use("/admin", [admin]);
 app.use("/blog", [blog]);
