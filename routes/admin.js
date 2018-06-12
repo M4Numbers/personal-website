@@ -23,39 +23,36 @@
  */
 
 const express = require("express");
-const crypto = require("crypto");
 const router = express.Router();
 
-/* GET home page. */
-router.get("/login", function (req, res, next) {
-    if (req.signedCookies.logged_in) {
-        res.redirect(303, "/admin");
+router.get("/", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
     } else {
-        res.render("./pages/login", {
+        res.redirect(303, "/admin/blog");
+    }
+});
+
+router.get("/blog", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        res.render("./pages/admin_blog_view", {
             top_page: {
-                title: "Log in",
-                tagline: "Log into the site as an administrator",
+                title: "Administrator Toolkit",
+                tagline: "All the functions that the administrator of the site has available to them",
                 fa_type: "fas",
-                fa_choice: "fa-key"
+                fa_choice: "fa-toolbox"
             },
 
             head: {
                 title: "M4Numbers",
                 description: "Home to the wild things",
-                current_page: "login"
+                current_page: "admin",
+                current_sub_page: "blog-view"
             }
         });
     }
-});
-
-router.post("/login", function (req, res, next) {
-    if (req.body["admin_password"] && !req.signedCookies.logged_in) {
-        let hash = crypto.createHash("sha256").update(req.body["admin_password"]).digest("hex");
-        if (hash === "c4d4c7cd46704006b40586ad7b9f5cc64e519641aae57f201c2d7d119d1bf9f9") {
-            res.cookie("logged_in", 1, {signed: true, maxAge: 100000});
-        }
-    }
-    res.redirect(303, "/login");
 });
 
 module.exports = router;
