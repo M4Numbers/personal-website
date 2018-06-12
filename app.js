@@ -34,9 +34,9 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const index = require("./routes/index");
+const auth = require("./routes/auth");
 const statics = require("./routes/statics");
 const blog = require("./routes/blog");
-const users = require("./routes/users");
 
 const app = express();
 
@@ -59,7 +59,7 @@ app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ic
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
+app.use(cookieParser("secret-goes-here"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist")));
@@ -67,9 +67,8 @@ app.use(express.static(path.join(__dirname, "node_modules/jquery/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/popper.js/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
-app.use("/", [index, statics]);
+app.use("/", [index, auth, statics]);
 app.use("/blog", [blog]);
-app.use("/users", [users]);
 
 // Static pages to be served
 // app.use("/stats", null);
