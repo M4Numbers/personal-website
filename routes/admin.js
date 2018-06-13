@@ -25,6 +25,9 @@
 const express = require("express");
 const router = express.Router();
 
+const MongoDbHandler = require("../lib/MongoDbHandler");
+const mongoInstance = MongoDbHandler.getMongo();
+
 router.get("/", function (req, res, next) {
     if (!req.signedCookies.logged_in) {
         res.redirect(303, "/login");
@@ -37,20 +40,37 @@ router.get("/blog", function (req, res, next) {
     if (!req.signedCookies.logged_in) {
         res.redirect(303, "/login");
     } else {
-        res.render("./pages/admin_blog_view", {
-            top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
-            },
+        Promise.all(
+            [
+                mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}),
+                mongoInstance.getTotalBlogCount()
+            ]
+        ).then(([blogs, totalCount]) => {
+            res.render("./pages/admin_blog_view", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
 
-            head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "blog-view"
-            }
+                content: {
+                    blogs: blogs
+                },
+
+                pagination: {
+                    base: "/admin/blog",
+                    total: totalCount,
+                    page: Math.max((req.query["page"] || 1), 1),
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "blog-view"
+                }
+            });
         });
     }
 });
