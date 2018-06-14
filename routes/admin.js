@@ -98,7 +98,7 @@ router.get("/blog/:blogId", function (req, res, next) {
                     title: "M4Numbers",
                     description: "Home to the wild things",
                     current_page: "admin",
-                    current_sub_page: "blog-edit"
+                    current_sub_page: "blog-view"
                 }
             });
         });
@@ -145,6 +145,47 @@ router.post("/blog/:blogId/edit", function (req, res, next) {
             res.redirect(302, `/admin/blog/${req.params["blogId"]}`);
         }, rejection => {
             res.cookie("blog-update-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(302, `/admin/blog/${req.params["blogId"]}`);
+        });
+    }
+});
+
+router.get("/blog/:blogId/delete", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
+            res.render("./pages/admin_blog_delete_single", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    blog: blog
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "blog-delete"
+                }
+            });
+        });
+    }
+});
+
+router.post("/blog/:blogId/delete", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        mongoInstance.deleteBlog(req.params["blogId"]).then(() => {
+            res.redirect(302, "/admin/blog/");
+        }, rejection => {
+            res.cookie("blog-delete-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
             res.redirect(302, `/admin/blog/${req.params["blogId"]}`);
         });
     }
