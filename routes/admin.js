@@ -25,6 +25,7 @@
 const express = require("express");
 const router = express.Router();
 
+const markdown = require("markdown-it")();
 const MongoDbHandler = require("../lib/MongoDbHandler");
 const mongoInstance = MongoDbHandler.getMongo();
 
@@ -42,8 +43,8 @@ router.get("/blog", function (req, res, next) {
     } else {
         Promise.all(
             [
-                mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}),
-                mongoInstance.getTotalBlogCount()
+                mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}, false),
+                mongoInstance.getTotalBlogCount(false)
             ]
         ).then(([blogs, totalCount]) => {
             res.render("./pages/admin_blog_view", {
@@ -71,6 +72,80 @@ router.get("/blog", function (req, res, next) {
                     current_sub_page: "blog-view"
                 }
             });
+        });
+    }
+});
+
+router.get("/blog/:blogId", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
+            res.render("./pages/admin_blog_view_single", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    blog: blog,
+                    blog_text: markdown.render(blog.full_text)
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "blog-edit"
+                }
+            });
+        });
+    }
+});
+
+router.get("/blog/:blogId/edit", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
+            res.render("./pages/admin_blog_edit_single", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    blog: blog
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "blog-edit"
+                }
+            });
+        });
+    }
+});
+
+router.post("/blog/:blogId/edit", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        mongoInstance.editBlog(
+            req.params["blogId"], req.body["blog-title"],
+            req.body["blog-text"], req.body["blog-visible"] === "Y",
+            req.body["blog-tags"]
+        ).then(() => {
+            res.redirect(302, `/admin/blog/${req.params["blogId"]}`);
+        }, rejection => {
+            res.cookie("blog-update-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(302, `/admin/blog/${req.params["blogId"]}`);
         });
     }
 });
