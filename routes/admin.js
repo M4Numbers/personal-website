@@ -76,6 +76,44 @@ router.get("/blog", function (req, res, next) {
     }
 });
 
+router.get("/blog/new", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        res.render("./pages/admin/admin_blog_create", {
+            top_page: {
+                title: "Administrator Toolkit",
+                tagline: "All the functions that the administrator of the site has available to them",
+                fa_type: "fas",
+                fa_choice: "fa-toolbox"
+            },
+
+            head: {
+                title: "M4Numbers",
+                description: "Home to the wild things",
+                current_page: "admin",
+                current_sub_page: "blog-edit"
+            }
+        });
+    }
+});
+
+router.post("/blog/new", function (req, res, next) {
+    if (!req.signedCookies.logged_in) {
+        res.redirect(303, "/login");
+    } else {
+        mongoInstance.insertBlog(
+            req.body["blog-title"], req.body["blog-text"],
+            req.body["blog-visible"] === "Y", req.body["blog-tags"].split(/, ?/)
+        ).then((savedBlog) => {
+            res.redirect(302, `/admin/blog/${savedBlog._id}`);
+        }, rejection => {
+            res.cookie("blog-create-error", {error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(302, "/admin/blog/new");
+        });
+    }
+});
+
 router.get("/blog/:blogId", function (req, res, next) {
     if (!req.signedCookies.logged_in) {
         res.redirect(303, "/login");
@@ -140,7 +178,7 @@ router.post("/blog/:blogId/edit", function (req, res, next) {
         mongoInstance.editBlog(
             req.params["blogId"], req.body["blog-title"],
             req.body["blog-text"], req.body["blog-visible"] === "Y",
-            req.body["blog-tags"]
+            req.body["blog-tags"].split(/, ?/)
         ).then(() => {
             res.redirect(302, `/admin/blog/${req.params["blogId"]}`);
         }, rejection => {

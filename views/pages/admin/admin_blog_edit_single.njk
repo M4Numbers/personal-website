@@ -8,11 +8,8 @@
             <input type="text" class="form-control" id="blog-title" name="blog-title" value="{{ content.blog.long_title }}" />
             <label for="blog-text">Blog Text</label>
             <textarea class="form-control" id="blog-text" name="blog-text">{{ content.blog.full_text }}</textarea>
-            <p class="mb-4">
-                {% for tag in content.blog.tags %}
-                    <span class="btn btn-dark">{{ tag }}</span>
-                {% endfor %}
-            </p>
+            <label for="blog-tags">Blog Tags</label>
+            <input type="text" class="form-control" id="blog-tags" name="blog-tags" value="{{ content.blog.tags | join(", ") }}" />
             <p class="mb-4">
                 <label for="blog-visible">Blog is publicly findable:</label>
                 <input id="blog-visible" name="blog-visible" type="checkbox" {{ "checked=\"checked\"" if content.blog.public }} value="Y" />
