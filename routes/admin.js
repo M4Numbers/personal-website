@@ -47,7 +47,7 @@ router.get("/blog", function (req, res, next) {
                 mongoInstance.getTotalBlogCount(false)
             ]
         ).then(([blogs, totalCount]) => {
-            res.render("./pages/admin_blog_view", {
+            res.render("./pages/admin/admin_blog_view", {
                 top_page: {
                     title: "Administrator Toolkit",
                     tagline: "All the functions that the administrator of the site has available to them",
@@ -81,7 +81,7 @@ router.get("/blog/:blogId", function (req, res, next) {
         res.redirect(303, "/login");
     } else {
         mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
-            res.render("./pages/admin_blog_view_single", {
+            res.render("./pages/admin/admin_blog_view_single", {
                 top_page: {
                     title: "Administrator Toolkit",
                     tagline: "All the functions that the administrator of the site has available to them",
@@ -110,7 +110,7 @@ router.get("/blog/:blogId/edit", function (req, res, next) {
         res.redirect(303, "/login");
     } else {
         mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
-            res.render("./pages/admin_blog_edit_single", {
+            res.render("./pages/admin/admin_blog_edit_single", {
                 top_page: {
                     title: "Administrator Toolkit",
                     tagline: "All the functions that the administrator of the site has available to them",
@@ -155,7 +155,7 @@ router.get("/blog/:blogId/delete", function (req, res, next) {
         res.redirect(303, "/login");
     } else {
         mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
-            res.render("./pages/admin_blog_delete_single", {
+            res.render("./pages/admin/admin_blog_delete_single", {
                 top_page: {
                     title: "Administrator Toolkit",
                     tagline: "All the functions that the administrator of the site has available to them",
