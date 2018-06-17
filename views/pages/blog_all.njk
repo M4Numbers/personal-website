@@ -24,11 +24,20 @@
                     </p>
                 </div>
             </div>
-        {% endfor %}
-        <div class="row">
-            <div class="col-lg-12 text-right">
-                {% include "partials/pagination.njk" %}
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    {% include "partials/pagination.njk" %}
+                </div>
             </div>
-        </div>
+        {% else %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>
+                        There is nothing here at the moment. That usually means that there will be at some point in
+                        the future, but I promise nothing.
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
