@@ -38,6 +38,7 @@ const auth = require("./routes/auth");
 const statics = require("./routes/statics");
 const admin = require("./routes/admin");
 const blog = require("./routes/blog");
+const projects = require("./routes/projects");
 
 const app = express();
 
@@ -78,6 +79,7 @@ app.use(function(req, res, next) {
 app.use("/", [index, auth, statics]);
 app.use("/admin", [admin]);
 app.use("/blog", [blog]);
+app.use("/projects", [projects]);
 
 // Static pages to be served
 // app.use("/stats", null);
