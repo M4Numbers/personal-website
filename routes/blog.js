@@ -25,15 +25,15 @@
 const express = require("express");
 const router = express.Router();
 const markdown = require("markdown-it")();
-const MongoDbHandler = require("../lib/MongoDbHandler");
-const mongoInstance = MongoDbHandler.getMongo();
+const BlogHandler = require("../lib/BlogHandler");
+const blogHandlerInstance = BlogHandler.getHandler();
 
 /* GET all blog posts */
 router.get("/", function (req, res, next) {
     Promise.all(
         [
-            mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}),
-            mongoInstance.getTotalBlogCount()
+            blogHandlerInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}),
+            blogHandlerInstance.getTotalBlogCount()
         ]
     ).then(([blogs, totalCount]) => {
         res.render("./pages/blog_all", {
@@ -67,7 +67,7 @@ router.get("/", function (req, res, next) {
 
 /* GET single blog post page. */
 router.get("/:blogId", function (req, res, next) {
-    mongoInstance.findBlog(req.params["blogId"])
+    blogHandlerInstance.findBlog(req.params["blogId"])
         .then(blogPost => {
             res.render("./pages/blog_single", {
                 top_page: {

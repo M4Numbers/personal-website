@@ -26,14 +26,14 @@ const express = require("express");
 const router = express.Router();
 
 const markdown = require("markdown-it")();
-const MongoDbHandler = require("../lib/MongoDbHandler");
-const mongoInstance = MongoDbHandler.getMongo();
+const BlogHandler = require("../lib/BlogHandler");
+const blogHandlerInstance = BlogHandler.getHandler();
 
 router.get("/", function (req, res) {
     Promise.all(
         [
-            mongoInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}, false),
-            mongoInstance.getTotalBlogCount(false)
+            blogHandlerInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}, false),
+            blogHandlerInstance.getTotalBlogCount(false)
         ]
     ).then(([blogs, totalCount]) => {
         res.render("./pages/admin/admin_blog_view", {
@@ -83,7 +83,7 @@ router.get("/new", function (req, res) {
 });
 
 router.post("/new", function (req, res) {
-    mongoInstance.insertBlog(
+    blogHandlerInstance.insertBlog(
         req.body["blog-title"], req.body["blog-text"],
         req.body["blog-visible"] === "Y", req.body["blog-tags"].split(/, ?/)
     ).then((savedBlog) => {
@@ -95,7 +95,7 @@ router.post("/new", function (req, res) {
 });
 
 router.get("/:blogId", function (req, res) {
-    mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
+    blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
         res.render("./pages/admin/admin_blog_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
@@ -120,7 +120,7 @@ router.get("/:blogId", function (req, res) {
 });
 
 router.get("/:blogId/edit", function (req, res) {
-    mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
+    blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
         res.render("./pages/admin/admin_blog_edit_single", {
             top_page: {
                 title: "Administrator Toolkit",
@@ -144,7 +144,7 @@ router.get("/:blogId/edit", function (req, res) {
 });
 
 router.post("/:blogId/edit", function (req, res) {
-    mongoInstance.editBlog(
+    blogHandlerInstance.editBlog(
         req.params["blogId"], req.body["blog-title"],
         req.body["blog-text"], req.body["blog-visible"] === "Y",
         req.body["blog-tags"].split(/, ?/)
@@ -157,7 +157,7 @@ router.post("/:blogId/edit", function (req, res) {
 });
 
 router.get("/:blogId/delete", function (req, res) {
-    mongoInstance.findBlog(req.params["blogId"]).then((blog) => {
+    blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
         res.render("./pages/admin/admin_blog_delete_single", {
             top_page: {
                 title: "Administrator Toolkit",
@@ -181,7 +181,7 @@ router.get("/:blogId/delete", function (req, res) {
 });
 
 router.post("/:blogId/delete", function (req, res) {
-    mongoInstance.deleteBlog(req.params["blogId"]).then(() => {
+    blogHandlerInstance.deleteBlog(req.params["blogId"]).then(() => {
         res.redirect(303, "/admin/blog/");
     }, rejection => {
         res.cookie("blog-delete-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
