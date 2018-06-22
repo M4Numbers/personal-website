@@ -1,0 +1,16 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Projects</h2>
+    {% for project in content.projects %}
+        <div class="blog-post">
+            <h3><a href="/admin/blog/{{ project._id }}">{{ project.long_title }}</a></h3>
+        </div>
+        <hr />
+    {% endfor %}
+
+    <div class="admin-toolbar mb-4">
+        <a class="btn btn-block btn-primary" href="/admin/projects/new" >Add New Blog Post</a>
+    </div>
+    {% include "partials/pagination.njk" %}
+{% endblock %}

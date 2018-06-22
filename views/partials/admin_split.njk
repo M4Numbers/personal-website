@@ -1,5 +1,6 @@
 {% extends "base_layouts/homepage_base.njk" %}
 {% import "macros/content.njk" as c %}
+{% import "macros/navigation.njk" as f %}
 
 {% block banner_icon %}
     {{ c.fa_banner(top_page.fa_type, top_page.fa_choice) }}
@@ -10,7 +11,8 @@
         <div class="row">
             <div class="col-md-4">
                 <ul class="list-unstyled">
-                    <li><a href="/admin/blog" class="btn btn-block btn-dark active" >Blogs</a></li>
+                    <li><a href="/admin/blog" class="btn btn-block btn-dark" >Blogs</a></li>
+                    <li><a href="/admin/projects" class="btn btn-block btn-dark">Projects</a></li>
                 </ul>
             </div>
             <div class="col-md-8">
