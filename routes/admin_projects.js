@@ -36,7 +36,7 @@ router.get("/", function (req, res) {
             projectHandlerInstance.getTotalProjectCount(false)
         ]
     ).then(([projects, totalCount]) => {
-        res.render("./pages/admin/admin_blog_view", {
+        res.render("./pages/admin/admin_project_view", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -83,7 +83,7 @@ router.get("/new", function (req, res) {
 });
 
 router.post("/new", function (req, res) {
-    projectHandlerInstance.insertBlog(
+    projectHandlerInstance.insertProject(
         req.body["project-title"], req.body["project-text"],
         req.body["project-visible"] === "Y", req.body["project-tags"].split(/, */)
     ).then((savedProject) => {
@@ -106,7 +106,7 @@ router.get("/:projectId", function (req, res) {
 
             content: {
                 project: project,
-                project_text: markdown.render(project.full_text)
+                project_text: markdown.render(project.description)
             },
 
             head: {
@@ -144,7 +144,7 @@ router.get("/:projectId/edit", function (req, res) {
 });
 
 router.post("/:projectId/edit", function (req, res) {
-    projectHandlerInstance.editBlog(
+    projectHandlerInstance.editProject(
         req.params["projectId"], req.body["project-title"],
         req.body["project-text"], req.body["project-visible"] === "Y",
         req.body["project-tags"].split(/, */)

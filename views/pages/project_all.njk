@@ -10,7 +10,7 @@
         {% for project in content.projects %}
             <div class="blog-item row">
                 <div class="col-lg-12">
-                    <h2 class="blog-title"><a href="/blog/{{ project._id }}" >{{ project.long_title }}</a></h2>
+                    <h2 class="blog-title"><a href="/projects/{{ project._id }}" >{{ project.long_title }}</a></h2>
                 </div>
                 <div class="col-lg-6">
                     <p>Posted: {{ project.time_posted | date("Do MMMM YYYY") }}</p>

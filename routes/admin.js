@@ -26,6 +26,7 @@ const express = require("express");
 const router = express.Router();
 
 const blogAdmin = require("./admin_blog");
+const projectAdmin = require("./admin_projects");
 
 router.use((req, res, next) => {
     if (!req.signedCookies.logged_in) {
@@ -36,6 +37,7 @@ router.use((req, res, next) => {
 });
 
 router.use("/blog", [blogAdmin]);
+router.use("/projects", [projectAdmin]);
 
 router.get("/", function (req, res, next) {
     res.redirect(303, "/admin/blog");

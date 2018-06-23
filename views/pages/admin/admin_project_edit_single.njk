@@ -1,7 +1,7 @@
 {% extends "partials/admin_split.njk" %}
 
 {% block admin_content %}
-    <h2>Edit Project<0/h2>
+    <h2>Edit Project</h2>
     <div class="project-post">
         <form method="post" enctype="application/json" action="">
             <label for="project-title">Project Title</label>
@@ -9,7 +9,7 @@
             <label for="project-text">Project Description</label>
             <textarea class="form-control" id="project-text" name="project-text">{{ content.project.description }}</textarea>
             <label for="project-tags">Project Tags</label>
-            <input type="text" class="form-control" id="project-tags" name="project-tags" value="{{ content.blog.tags | join(", ") }}" />
+            <input type="text" class="form-control" id="project-tags" name="project-tags" value="{{ content.project.tags | join(", ") }}" />
             <p class="mb-4">
                 <label for="project-visible">Project is publicly findable:</label>
                 <input id="project-visible" name="project-visible" type="checkbox" {{ "checked=\"checked\"" if content.project.public }} value="Y" />
