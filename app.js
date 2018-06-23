@@ -40,6 +40,8 @@ const admin = require("./routes/admin");
 const blog = require("./routes/blog");
 const projects = require("./routes/projects");
 
+const SiteError = require("./lib/SiteError");
+
 const app = express();
 
 // view engine setup
@@ -85,15 +87,12 @@ app.use("/projects", [projects]);
 // app.use("/stats", null);
 
 // Content pages
-// app.use("/development", null);
 // app.use("/creative", null);
 // app.use("/media", null);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    let err = new Error("Not Found");
-    err.status = 404;
-    next(err);
+    next(new SiteError(404, "Not Found"));
 });
 
 // error handler

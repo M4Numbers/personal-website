@@ -25,6 +25,7 @@
 const express = require("express");
 const router = express.Router();
 const markdown = require("markdown-it")();
+const SiteError = require("../lib/SiteError");
 const ProjectHandler = require("../lib/ProjectHandler");
 const projectHandlerInstance = ProjectHandler.getHandler();
 
@@ -69,24 +70,28 @@ router.get("/", function (req, res, next) {
 router.get("/:projectId", function (req, res, next) {
     projectHandlerInstance.findProject(req.params["projectId"])
         .then(project => {
-            res.render("./pages/project_single", {
-                top_page: {
-                    title: project.long_title,
-                    project_tags: project.tags,
-                    image_src: "/images/handle_logo.png",
-                    image_alt: "Main face of the site",
-                },
+            if (project !== null) {
+                res.render("./pages/project_single", {
+                    top_page: {
+                        title: project.long_title,
+                        project_tags: project.tags,
+                        image_src: "/images/handle_logo.png",
+                        image_alt: "Main face of the site",
+                    },
 
-                content: {
-                    project_text: markdown.render(project.description)
-                },
+                    content: {
+                        project_text: markdown.render(project.description)
+                    },
 
-                head: {
-                    title: `M4Numbers :: ${project.long_title}`,
-                    description: "Home to the wild things",
-                    current_page: "projects"
-                }
-            });
+                    head: {
+                        title: `M4Numbers :: ${project.long_title}`,
+                        description: "Home to the wild things",
+                        current_page: "projects"
+                    }
+                });
+            } else {
+                next(new SiteError(404, "Not Found"));
+            }
         }, rejection => {
             next(rejection);
         });

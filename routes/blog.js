@@ -25,6 +25,7 @@
 const express = require("express");
 const router = express.Router();
 const markdown = require("markdown-it")();
+const SiteError = require("../lib/SiteError");
 const BlogHandler = require("../lib/BlogHandler");
 const blogHandlerInstance = BlogHandler.getHandler();
 
@@ -69,24 +70,28 @@ router.get("/", function (req, res, next) {
 router.get("/:blogId", function (req, res, next) {
     blogHandlerInstance.findBlog(req.params["blogId"])
         .then(blogPost => {
-            res.render("./pages/blog_single", {
-                top_page: {
-                    title: blogPost.long_title,
-                    blog_tags: blogPost.tags,
-                    image_src: "/images/handle_logo.png",
-                    image_alt: "Main face of the site",
-                },
+            if (blogPost !== null) {
+                res.render("./pages/blog_single", {
+                    top_page: {
+                        title: blogPost.long_title,
+                        blog_tags: blogPost.tags,
+                        image_src: "/images/handle_logo.png",
+                        image_alt: "Main face of the site",
+                    },
 
-                content: {
-                    blog_text: markdown.render(blogPost.full_text)
-                },
+                    content: {
+                        blog_text: markdown.render(blogPost.full_text)
+                    },
 
-                head: {
-                    title: `M4Numbers :: ${blogPost.long_title}`,
-                    description: "Home to the wild things",
-                    current_page: "blog"
-                }
-            });
+                    head: {
+                        title: `M4Numbers :: ${blogPost.long_title}`,
+                        description: "Home to the wild things",
+                        current_page: "blog"
+                    }
+                });
+            } else {
+                next(new SiteError(404, "Not Found"));
+            }
         }, rejection => {
             next(rejection);
         });
