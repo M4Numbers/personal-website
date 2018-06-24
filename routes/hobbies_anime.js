@@ -25,25 +25,40 @@
 const express = require("express");
 const router = express.Router();
 
-const anime = require("./hobbies_anime");
+const markdown = require("markdown-it")();
+const SiteError = require("../lib/SiteError");
+const AnimeHandler = require("../lib/AnimeHandler");
+const animeHandlerInstance = AnimeHandler.getHandler();
 
 router.get("/", function (req, res, next) {
-    res.render("./pages/hobbies_all", {
-        top_page: {
-            title: "My Hobbies",
-            tagline: "I have several hobbies and interests... Some of them are somewhat worrying",
-            image_src: "/images/handle_logo.png",
-            image_alt: "Main face of the site"
-        },
+    Promise.all([
+        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10),
+        animeHandlerInstance.getTotalShowCount()
+    ]).then(([allShows, totalCount]) => {
+        res.render("./pages/anime/anime_all", {
+            top_page: {
+                title: "My Anime Watchlist",
+                tagline: "A list of all the strange things that I have seen at some point or another",
+                image_src: "/images/handle_logo.png",
+                image_alt: "Main face of the site"
+            },
 
-        head: {
-            title: "M4Numbers :: Hobbies",
-            description: "Home to the wild things",
-            current_page: "hobbies"
-        }
-    });
+            content: {
+                shows: allShows
+            },
+
+            pagination: {
+                base: "/hobbies/anime",
+                total: totalCount,
+                page: Math.max((req.query["page"] || 1), 1),
+            },
+
+            head: {
+                title: "M4Numbers :: Hobbies :: Anime",
+                description: "Home to the wild things",
+                current_page: "hobbies",
+                current_sub_page: "anime"
+            }
+        });
+    }, next);
 });
-
-router.use("/anime", [anime]);
-
-module.exports = router;
