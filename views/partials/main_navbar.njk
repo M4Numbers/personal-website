@@ -15,11 +15,11 @@
             <li class="nav-item {{ m.page_test("blog", head.current_page, "active") }}">
                 <a class="nav-link" href="/blog">Blog</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ m.page_test("projects", head.current_page, "active") }}" href="/projects">Projects</a>
+            <li class="nav-item {{ m.page_test("projects", head.current_page, "active") }}">
+                <a class="nav-link" href="/projects">Projects</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Hobbies</a>
+            <li class="nav-item {{ m.page_test("hobbies", head.current_page, "active") }}">
+                <a class="nav-link" href="/hobbies">Hobbies</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
