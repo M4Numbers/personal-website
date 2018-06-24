@@ -29,6 +29,10 @@ const SiteError = require("../lib/SiteError");
 const ProjectHandler = require("../lib/ProjectHandler");
 const projectHandlerInstance = ProjectHandler.getHandler();
 
+const loggingSystem = require("../lib/Logger");
+const logger = loggingSystem.getLogger("master");
+
+
 /* GET all projects posts */
 router.get("/", function (req, res, next) {
     Promise.all(
@@ -37,6 +41,7 @@ router.get("/", function (req, res, next) {
             projectHandlerInstance.getTotalProjectCount()
         ]
     ).then(([projects, totalCount]) => {
+        logger.debug(`Found ${totalCount} available projects`);
         res.render("./pages/project_all", {
             top_page: {
                 title: "My Projects",

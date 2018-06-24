@@ -29,7 +29,9 @@ const nunjucks = require("nunjucks");
 const nunjucksDate = require("nunjucks-date");
 const path = require("path");
 const favicon = require("serve-favicon");
-const logger = require("morgan");
+const morgan = require("morgan");
+const loggingSystem = require("./lib/Logger");
+const logger = loggingSystem.getLogger("master");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
@@ -60,7 +62,7 @@ njk.addFilter("date", nunjucksDate);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ico")));
 
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser("secret-goes-here"));
@@ -100,6 +102,8 @@ app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
+
+    logger.error(`New error found :: ${err}`);
 
     // render the error page
     res.status(err.status || 500);
