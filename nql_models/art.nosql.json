@@ -1,0 +1,7 @@
+{
+  "_id": ObjectId("abc123"),
+  "title": "An interesting art piece",
+  "art_img": "abc123.png",
+  "time_posted": ISODate("2018-06-10T13:15:00Z"),
+  "story": "This is why the art piece is interesting"
+}

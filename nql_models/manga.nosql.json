@@ -1,0 +1,16 @@
+{
+  "_id": ObjectId("acb123"),
+  "manga_id": 123456,
+  "manga_status": "Finished publishing",
+  "story_type": "Light Novel",
+  "title": "awesome manga title",
+  "score": 6,
+  "status": "Currently Reading",
+  "total_vols": 32,
+  "total_chaps": 160,
+  "current_vol": 3,
+  "current_chap": 17,
+  "synopsis": "This is what happens in the awesome manga",
+  "cover_img": "abc123.png",
+  "review": "This is a review of that awesome manga"
+}
