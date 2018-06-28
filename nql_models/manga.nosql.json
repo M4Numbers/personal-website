@@ -1,6 +1,9 @@
 {
   "_id": ObjectId("acb123"),
-  "manga_id": 123456,
+  "manga_id": {
+    "my_anime_list": 12345,
+    "ani_list": 12345
+  },
   "manga_status": "Finished publishing",
   "story_type": "Light Novel",
   "title": "awesome manga title",

@@ -1,6 +1,10 @@
 {
   "_id": ObjectId("abc123"),
-  "anime_id": 12382,
+  "anime_ids": {
+    "my_anime_list": 12345,
+    "ani_list": 12345,
+    "ani_db": 12345
+  },
   "anime_status": "Finished Airing",
   "title": "Very interesting anime title",
   "score": 6,
