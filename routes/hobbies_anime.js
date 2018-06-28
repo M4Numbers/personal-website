@@ -35,9 +35,12 @@ router.get("/", function (req, res, next) {
         animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 12),
         animeHandlerInstance.getTotalShowCount()
     ]).then(([allShows, totalCount]) => {
-        let baseUrl;
+        let baseUrl = "";
         if (req.query.category) {
-            baseUrl = `category=${req.query.category}&`;
+            baseUrl += `category=${req.query.category}&`;
+        }
+        if (req.query.q) {
+            baseUrl += `q=${req.query.q}&`;
         }
         res.render("./pages/anime/anime_all", {
             top_page: {
