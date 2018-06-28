@@ -49,7 +49,7 @@ router.get("/", function (req, res) {
             },
 
             pagination: {
-                base: "/admin/projects",
+                base_url: "/admin/projects?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
             },

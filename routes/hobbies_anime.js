@@ -32,9 +32,13 @@ const animeHandlerInstance = AnimeHandler.getHandler();
 
 router.get("/", function (req, res, next) {
     Promise.all([
-        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10),
+        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 12),
         animeHandlerInstance.getTotalShowCount()
     ]).then(([allShows, totalCount]) => {
+        let baseUrl;
+        if (req.query.category) {
+            baseUrl = `category=${req.query.category}&`;
+        }
         res.render("./pages/anime/anime_all", {
             top_page: {
                 title: "My Anime Watchlist",
@@ -48,7 +52,7 @@ router.get("/", function (req, res, next) {
             },
 
             pagination: {
-                base: "/hobbies/anime",
+                base_url: `/hobbies/anime?${baseUrl}`,
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
             },
@@ -57,8 +61,11 @@ router.get("/", function (req, res, next) {
                 title: "M4Numbers :: Hobbies :: Anime",
                 description: "Home to the wild things",
                 current_page: "hobbies",
-                current_sub_page: "anime"
+                current_sub_page: "anime",
+                current_category: req.query["category"] || "all"
             }
         });
     }, next);
 });
+
+module.exports = router;

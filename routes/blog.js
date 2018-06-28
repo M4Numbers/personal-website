@@ -50,7 +50,7 @@ router.get("/", function (req, res, next) {
             },
 
             pagination: {
-                base: "/blog",
+                base_url: "/blog?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
             },

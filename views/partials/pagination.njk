@@ -3,10 +3,10 @@
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item">
-            <a class="page-link" href="?">First</a>
+            <a class="page-link" href="{{- pagination.base_url -}}">First</a>
         </li>
         <li class="page-item {% if pagination.page <= 1 %}disabled{% endif %}">
-            <a class="page-link" href="?page={{ pagination.page - 1 }}" tabindex="-1">Previous</a>
+            <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page - 1 }}" tabindex="-1">Previous</a>
         </li>
         {% if pagination.total > 50 %}
             {% if pagination.page > 3 %}
@@ -16,25 +16,25 @@
             {% endif %}
             {% if pagination.page - 2 > 0 %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.page - 2 }}">{{ pagination.page - 2 }}</a>
+                    <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page - 2 }}">{{ pagination.page - 2 }}</a>
                 </li>
             {% endif %}
             {% if pagination.page - 1 > 0 %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.page - 1 }}">{{ pagination.page - 1 }}</a>
+                    <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page - 1 }}">{{ pagination.page - 1 }}</a>
                 </li>
             {% endif %}
             <li class="page-item active">
-                <a class="page-link" href="?page={{ pagination.page }}">{{ pagination.page }}</a>
+                <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page }}">{{ pagination.page }}</a>
             </li>
             {% if (pagination.page + 1) <= ((pagination.total / 10) | round(0, "ceiling")) %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.page + 1 }}">{{ pagination.page + 1 }}</a>
+                    <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page + 1 }}">{{ pagination.page + 1 }}</a>
                 </li>
             {% endif %}
             {% if (pagination.page + 2) <= ((pagination.total / 10) | round(0, "ceiling")) %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.page + 2 }}">{{ pagination.page + 2 }}</a>
+                    <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page + 2 }}">{{ pagination.page + 2 }}</a>
                 </li>
             {% endif %}
             {% if pagination.page <= (((pagination.total / 10) | round(0, "floor")) - 2) %}
@@ -45,15 +45,15 @@
         {% else %}
             {% for i in range(1, ((pagination.total / 10) | round(0, "floor")) + 2) %}
                 <li class="page-item {{ p.page_test(i, pagination.page, "active") }}">
-                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                    <a class="page-link" href="{{- pagination.base_url -}}page={{ i }}">{{ i }}</a>
                 </li>
             {% endfor %}
         {% endif %}
         <li class="page-item {% if (pagination.page * 10) >= pagination.total %}disabled{% endif %}">
-            <a class="page-link" href="?page={{ pagination.page + 1 }}">Next</a>
+            <a class="page-link" href="{{- pagination.base_url -}}page={{ pagination.page + 1 }}">Next</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ ((pagination.total / 10) + 1) | round(0, "floor") }}">Last</a>
+            <a class="page-link" href="{{- pagination.base_url -}}page={{ ((pagination.total / 10) + 1) | round(0, "floor") }}">Last</a>
         </li>
     </ul>
 </nav>
