@@ -74,21 +74,27 @@ router.get("/about", function (req, res, next) {
 });
 
 router.get("/contact", function (req, res, next) {
-    res.render("./pages/contact", {
-        top_page: {
-            title: "Contact Me",
-            tagline: "If, for whatever reason, you want to get in touch with me, use the links below to find my other" +
-                     " hidey-holes.",
-            fa_type: "fas",
-            fa_choice: "fa-phone"
-        },
+    staticHandlerInstance.findStatic(StaticDocumentTypes.CONTACT_ME).then(staticContent => {
+        res.render("./pages/contact", {
+            top_page: {
+                title: "Contact Me",
+                tagline: "If, for whatever reason, you want to get in touch with me, use the links below to find my other" +
+                " hidey-holes.",
+                fa_type: "fas",
+                fa_choice: "fa-phone"
+            },
 
-        head: {
-            title: "M4Numbers :: Contact Me",
-            description: "Home to the wild things",
-            current_page: "contact"
-        }
-    });
+            content: {
+                options: staticContent.content
+            },
+
+            head: {
+                title: "M4Numbers :: Contact Me",
+                description: "Home to the wild things",
+                current_page: "contact"
+            }
+        });
+    }, next);
 });
 
 module.exports = router;
