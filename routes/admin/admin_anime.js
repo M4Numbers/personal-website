@@ -113,4 +113,16 @@ router.get("/:animeId/edit", function (req, res) {
     });
 });
 
+router.post("/:animeId/edit", function (req, res) {
+    animeHandlerInstance.editAnime(
+        req.params["animeId"], req.body["show-review"],
+        req.body["show-tags"].split(/, ?/)
+    ).then(() => {
+        res.redirect(303, `/admin/anime/${req.params["animeId"]}`);
+    }, rejection => {
+        res.cookie("anime-update-error", {anime_id: req.params["animeId"], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/anime/${req.params["animeId"]}`);
+    });
+});
+
 module.exports = router;
