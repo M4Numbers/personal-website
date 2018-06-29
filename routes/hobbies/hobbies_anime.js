@@ -33,7 +33,7 @@ const animeHandlerInstance = AnimeHandler.getHandler();
 router.get("/", function (req, res, next) {
     Promise.all([
         animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 12),
-        animeHandlerInstance.getTotalShowCount()
+        animeHandlerInstance.getTotalShowCount(req.query["category"] || "")
     ]).catch(next)
         .then(([allShows, totalCount]) => {
         let baseUrl = "";
