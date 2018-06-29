@@ -1,0 +1,37 @@
+{% extends "base_layouts/homepage_base.njk" %}
+
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        {% for tag in content.show.tags %}
+            <span class="btn btn-light">{{ tag }}</span>
+        {% endfor %}
+    </p>
+    <div class="row">
+        <div class="col-xl-7">
+            <p>Current airing status: <span class="btn btn-light">{{ content.show.anime_status }}</span></p>
+            <p>Current watching status: <span class="btn btn-light">{{ content.show.status }}</span></p>
+            <p>My score: <span class="btn btn-light">{{ content.show.score }}/10</span></p>
+        </div>
+        <div class="col-xl-5">
+            <p>Total episodes: <span class="btn btn-light">{{ content.show.total_eps }}</span></p>
+            <p>My current episode: <span class="btn btn-light">{{ content.show.current_ep }}</span></p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ content.show.title }}</h2>
+        <p>{{ content.show.synopsis | safe }}</p>
+        {% if content.show.review | length %}
+            <h2>My Thoughts</h2>
+            <p>{{ content.comments | safe }}</p>
+        {% endif %}
+    </div>
+{% endblock %}

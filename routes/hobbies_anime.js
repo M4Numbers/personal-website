@@ -34,7 +34,8 @@ router.get("/", function (req, res, next) {
     Promise.all([
         animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 12),
         animeHandlerInstance.getTotalShowCount()
-    ]).then(([allShows, totalCount]) => {
+    ]).catch(next)
+        .then(([allShows, totalCount]) => {
         let baseUrl = "";
         if (req.query.category) {
             baseUrl += `category=${req.query.category}&`;
@@ -69,6 +70,33 @@ router.get("/", function (req, res, next) {
             }
         });
     }, next);
+});
+
+router.get("/:animeId", (req, res, next) => {
+    animeHandlerInstance.findAnimeByRawId(req.params["animeId"])
+        .catch(next)
+        .then(anime => {
+            res.render("./pages/anime/anime_one", {
+                top_page: {
+                    title: anime.title,
+                    tagline: "A list of all the strange things that I have seen at some point or another",
+                    image_src: anime.cover_img,
+                    image_alt: anime.title
+                },
+
+                content: {
+                    show: anime,
+                    comments: markdown.render(anime.review || "")
+                },
+
+                head: {
+                    title: "M4Numbers :: Hobbies :: Anime :: ",
+                    description: "Home to the wild things",
+                    current_page: "hobbies",
+                    current_sub_page: "anime",
+                }
+            });
+        }, next);
 });
 
 module.exports = router;

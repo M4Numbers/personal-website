@@ -15,5 +15,9 @@
   "current_chap": 17,
   "synopsis": "This is what happens in the awesome manga",
   "cover_img": "abc123.png",
+  "tags": [
+    "tag_1",
+    "tag_2"
+  ],
   "review": "This is a review of that awesome manga"
 }
