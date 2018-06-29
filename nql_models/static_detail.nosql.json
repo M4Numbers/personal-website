@@ -1,0 +1,30 @@
+[
+
+  {
+    "id": "ABOUT_ME",
+    "content": "This is the about me page in markdown format"
+  },
+
+  {
+    "id": "CONTACT_ME",
+    "content": [
+      {
+        "contact_method": "GitHub",
+        "fa_style": "fas",
+        "fa_icon": "fa_octocat",
+        "contact_link": "https://github.com/m4numbers"
+      }
+    ]
+  },
+
+  {
+    "id": "SITEMAP",
+    "content": [
+      {
+        "page_name": "Blog",
+        "page_link": "/blog"
+      }
+    ]
+  }
+
+]
