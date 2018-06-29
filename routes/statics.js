@@ -25,6 +25,12 @@
 const express = require("express");
 const router = express.Router();
 
+const markdown = require("markdown-it")();
+
+const StaticHandler = require("../lib/StaticHandler");
+const staticHandlerInstance = StaticHandler.getHandler();
+const StaticDocumentTypes = require("../lib/StaticDocumentTypes");
+
 /* GET home page. */
 router.get("/map", function (req, res, next) {
     res.render("./pages/sitemap", {
@@ -44,20 +50,27 @@ router.get("/map", function (req, res, next) {
 });
 
 router.get("/about", function (req, res, next) {
-    res.render("./pages/about", {
-        top_page: {
-            title: "About Me",
-            tagline: "If you were looking for a general overview about yours truly, you've come to the right place!",
-            image_src: "images/handle_logo.png",
-            image_alt: "My logo that I use to represent myself"
-        },
+    staticHandlerInstance.findStatic(StaticDocumentTypes.ABOUT_ME).then(staticContent => {
+        res.render("./pages/about", {
+            top_page: {
+                title: "About Me",
+                tagline: "If you were looking for a general overview about yours truly, you've come to the right place!",
+                image_src: "images/handle_logo.png",
+                image_alt: "My logo that I use to represent myself"
+            },
 
-        head: {
-            title: "M4Numbers :: About Me",
-            description: "Home to the wild things",
-            current_page: "about"
-        }
-    });
+            content: {
+                title: "About Me",
+                text: markdown.render(staticContent.content || ""),
+            },
+
+            head: {
+                title: "M4Numbers :: About Me",
+                description: "Home to the wild things",
+                current_page: "about"
+            }
+        });
+    }, next);
 });
 
 router.get("/contact", function (req, res, next) {
