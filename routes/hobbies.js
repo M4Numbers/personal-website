@@ -25,7 +25,7 @@
 const express = require("express");
 const router = express.Router();
 
-const anime = require("./hobbies_anime");
+const anime = require("./hobbies/hobbies_anime");
 
 router.get("/", function (req, res, next) {
     res.render("./pages/hobbies_all", {

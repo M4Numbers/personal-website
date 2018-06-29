@@ -26,7 +26,7 @@ const express = require("express");
 const router = express.Router();
 
 const markdown = require("markdown-it")();
-const ProjectHandler = require("../lib/ProjectHandler");
+const ProjectHandler = require("../../lib/ProjectHandler");
 const projectHandlerInstance = ProjectHandler.getHandler();
 
 router.get("/", function (req, res) {

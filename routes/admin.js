@@ -25,8 +25,8 @@
 const express = require("express");
 const router = express.Router();
 
-const blogAdmin = require("./admin_blog");
-const projectAdmin = require("./admin_projects");
+const blogAdmin = require("./admin/admin_blog");
+const projectAdmin = require("./admin/admin_projects");
 
 router.use((req, res, next) => {
     if (!req.signedCookies.logged_in) {
