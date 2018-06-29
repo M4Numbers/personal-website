@@ -64,4 +64,29 @@ router.get("/", function (req, res) {
     });
 });
 
+router.get("/:animeId", function (req, res) {
+    animeHandlerInstance.findAnimeByRawId(req.params["animeId"]).then((show) => {
+        res.render("./pages/admin/admin_anime_view_single", {
+            top_page: {
+                title: "Administrator Toolkit",
+                tagline: "All the functions that the administrator of the site has available to them",
+                fa_type: "fas",
+                fa_choice: "fa-toolbox"
+            },
+
+            content: {
+                show: show,
+                show_text: markdown.render(show.review)
+            },
+
+            head: {
+                title: "M4Numbers",
+                description: "Home to the wild things",
+                current_page: "admin",
+                current_sub_page: "anime-view"
+            }
+        });
+    });
+});
+
 module.exports = router;
