@@ -12,25 +12,25 @@
         "contact_method": "YouTube",
         "fa_style": "fab",
         "fa_icon": "fa-youtube",
-        "contact_link": "#"
+        "contact_link": "https://youtube.com/M4Numbers"
       },
       {
         "contact_method": "Twitter",
         "fa_style": "fab",
         "fa_icon": "fa-twitter",
-        "contact_link": "#"
+        "contact_link": "https://twitter.com/m4numbers"
       },
       {
         "contact_method": "Email",
         "fa_style": "fas",
         "fa_icon": "fa-at",
-        "contact_link": "#"
+        "contact_link": "mailto:m4numbers@gmail.com"
       },
       {
         "contact_method": "Facebook",
         "fa_style": "fab",
         "fa_icon": "fa-facebook-f",
-        "contact_link": "#"
+        "contact_link": "https://facebook.com/m4numbers"
       },
       {
         "contact_method": "Steam",
@@ -42,23 +42,51 @@
         "contact_method": "GitHub",
         "fa_style": "fab",
         "fa_icon": "fa-github",
-        "contact_link": "#"
+        "contact_link": "https://github.com/m4numbers"
       },
       {
         "contact_method": "Twitch",
         "fa_style": "fab",
         "fa_icon": "fa-twitch",
-        "contact_link": "#"
+        "contact_link": "https://twitch.tv/m477h3w1012"
       }
     ]
   },
 
   {
-    "id": "SITEMAP",
+    "_id": "SITEMAP",
     "content": [
+      {
+        "page_name": "About me",
+        "page_link": "/about"
+      },
+      {
+        "page_name": "Administrator Toolkit",
+        "page_link": "admin"
+      },
+      {
+        "page_name": "Anime",
+        "page_link": "/hobbies/anime"
+      },
       {
         "page_name": "Blog",
         "page_link": "/blog"
+      },
+      {
+        "page_name": "Contact me",
+        "page_link": "/contact"
+      },
+      {
+        "page_name": "Hobbies",
+        "page_link": "/hobbies"
+      },
+      {
+        "page_name": "Homepage",
+        "page_link": "/"
+      },
+      {
+        "page_name": "Projects",
+        "page_link": "/projects"
       }
     ]
   }

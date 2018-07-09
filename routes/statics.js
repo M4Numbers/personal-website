@@ -33,20 +33,30 @@ const StaticDocumentTypes = require("../lib/StaticDocumentTypes");
 
 /* GET home page. */
 router.get("/map", function (req, res, next) {
-    res.render("./pages/sitemap", {
-        top_page: {
-            title: "Sitemap",
-            tagline: "If you want to get somewhere, why not use the links below to navigate!",
-            fa_type: "fas",
-            fa_choice: "fa-map"
-        },
+    staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP).then(sitemapItems => {
+        let sortedSiteMap = ((sitemapItems || {}).content || []).sort((a, b) => {
+            return (a["page_name"] > b["page_name"]) ? 1 : ((a["page_name"] < b["page_name"]) ? -1 : 0);
+        });
+        res.render("./pages/sitemap", {
+            top_page: {
+                title: "Sitemap",
+                tagline: "If you want to get somewhere, why not use the links below to navigate!",
+                fa_type: "fas",
+                fa_choice: "fa-map"
+            },
 
-        head: {
-            title: "M4Numbers :: Sitemap",
-            description: "Home to the wild things",
-            current_page: "sitemap"
-        }
-    });
+            content: {
+                title: "Sitemap",
+                site_links: sortedSiteMap || [],
+            },
+
+            head: {
+                title: "M4Numbers :: Sitemap",
+                description: "Home to the wild things",
+                current_page: "sitemap"
+            }
+        }, reject => {console.log(`Error during find static :: ${reject}`); next();});
+    }).catch(caught => {console.log(`Catch during find static :: ${caught}`); next();});
 });
 
 router.get("/about", function (req, res, next) {
