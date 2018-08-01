@@ -55,7 +55,7 @@ router.get("/map", function (req, res, next) {
                 description: "Home to the wild things",
                 current_page: "sitemap"
             }
-        }, reject => {console.log(`Error during find static :: ${reject}`); next();});
+        });
     }).catch(caught => {console.log(`Catch during find static :: ${caught}`); next();});
 });
 
