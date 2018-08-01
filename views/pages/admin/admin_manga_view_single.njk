@@ -1,0 +1,21 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Manga</h2>
+    <div class="manga-book">
+        <h3 class="mb-4">{{ content.book.title }}</h3>
+        <div class="mb-4">
+            {{ content.book_text | safe }}
+        </div>
+        <p class="mb-4">
+            {% for tag in content.book.tags %}
+                <span class="btn btn-dark">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        <div class="admin-toolbar">
+            <a href="/admin/manga/{{ content.book._id }}/edit" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}
