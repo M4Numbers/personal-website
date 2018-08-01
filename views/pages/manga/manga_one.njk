@@ -1,0 +1,37 @@
+{% extends "base_layouts/homepage_base.njk" %}
+
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        {% for tag in content.book.tags %}
+            <span class="btn btn-light">{{ tag }}</span>
+        {% endfor %}
+    </p>
+    <div class="row">
+        <div class="col-xl-7">
+            <p>Current publishing status: <span class="btn btn-light">{{ content.book.manga_status }}</span></p>
+            <p>Current reading status: <span class="btn btn-light">{{ content.book.status }}</span></p>
+            <p>My score: <span class="btn btn-light">{{ content.book.score }}/10</span></p>
+        </div>
+        <div class="col-xl-5">
+            <p>Total chapters: <span class="btn btn-light">{{ content.book.total_chaps }}</span></p>
+            <p>My current chapter: <span class="btn btn-light">{{ content.book.current_chap }}</span></p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ content.book.title }}</h2>
+        <p>{{ content.book.synopsis | safe }}</p>
+        {% if content.book.review | length %}
+            <h2>My Thoughts</h2>
+            <p>{{ content.comments | safe }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
