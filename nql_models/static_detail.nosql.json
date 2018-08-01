@@ -85,6 +85,10 @@
         "page_link": "/"
       },
       {
+        "page_name": "Manga",
+        "page_link": "/hobbies/manga"
+      },
+      {
         "page_name": "Projects",
         "page_link": "/projects"
       }

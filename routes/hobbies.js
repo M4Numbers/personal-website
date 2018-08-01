@@ -26,6 +26,7 @@ const express = require("express");
 const router = express.Router();
 
 const anime = require("./hobbies/hobbies_anime");
+const manga = require("./hobbies/hobbies_manga");
 
 router.get("/", function (req, res, next) {
     res.render("./pages/hobbies_all", {
@@ -45,5 +46,6 @@ router.get("/", function (req, res, next) {
 });
 
 router.use("/anime", [anime]);
+router.use("/manga", [manga]);
 
 module.exports = router;
