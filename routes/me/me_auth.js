@@ -23,32 +23,39 @@
  */
 
 const express = require("express");
+const crypto = require("crypto");
 const router = express.Router();
 
-const me = require("./me");
-const meAuth = require("./me/me_auth");
-const anime = require("./hobbies/hobbies_anime");
-const manga = require("./hobbies/hobbies_manga");
+/* GET home page. */
+router.get("/login", function (req, res, next) {
+    if (req.signedCookies.knows_me) {
+        res.redirect(303, "/hobbies/me");
+    } else {
+        res.render("./pages/me/me_login", {
+            top_page: {
+                title: "Test Your Knowledge",
+                tagline: "Log into the site as someone who knows me",
+                fa_type: "fas",
+                fa_choice: "fa-key"
+            },
 
-router.get("/", function (req, res, next) {
-    res.render("./pages/hobbies_all", {
-        top_page: {
-            title: "My Hobbies",
-            tagline: "I have several hobbies and interests... Some of them are somewhat worrying",
-            image_src: "/images/handle_logo.png",
-            image_alt: "Main face of the site"
-        },
-
-        head: {
-            title: "M4Numbers :: Hobbies",
-            description: "Home to the wild things",
-            current_page: "hobbies"
-        }
-    });
+            head: {
+                title: "M4Numbers",
+                description: "Home to the wild things",
+                current_page: "me_login"
+            }
+        });
+    }
 });
 
-router.use("/me", [meAuth, me]);
-router.use("/anime", [anime]);
-router.use("/manga", [manga]);
+router.post("/login", function (req, res, next) {
+    if (req.body["me_password"] && !req.signedCookies.knows_me) {
+        let hash = crypto.createHash("sha256").update(req.body["me_password"]).digest("hex");
+        if (hash === "c4d4c7cd46704006b40586ad7b9f5cc64e519641aae57f201c2d7d119d1bf9f9") {
+            res.cookie("knows_me", 1, {signed: true, maxAge: 6000000});
+        }
+    }
+    res.redirect(303, "/hobbies/me/login");
+});
 
 module.exports = router;

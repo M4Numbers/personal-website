@@ -25,30 +25,18 @@
 const express = require("express");
 const router = express.Router();
 
-const me = require("./me");
-const meAuth = require("./me/me_auth");
-const anime = require("./hobbies/hobbies_anime");
-const manga = require("./hobbies/hobbies_manga");
-
-router.get("/", function (req, res, next) {
-    res.render("./pages/hobbies_all", {
-        top_page: {
-            title: "My Hobbies",
-            tagline: "I have several hobbies and interests... Some of them are somewhat worrying",
-            image_src: "/images/handle_logo.png",
-            image_alt: "Main face of the site"
-        },
-
-        head: {
-            title: "M4Numbers :: Hobbies",
-            description: "Home to the wild things",
-            current_page: "hobbies"
-        }
-    });
+router.use((req, res, next) => {
+    if (!req.signedCookies.knows_me) {
+        res.redirect(303, "/hobbies/me/login");
+    } else {
+        next();
+    }
 });
 
-router.use("/me", [meAuth, me]);
-router.use("/anime", [anime]);
-router.use("/manga", [manga]);
+//router.use("/blog", [blogAdmin]);
+
+router.get("/", function (req, res, next) {
+    res.redirect(303, "/admin/blog");
+});
 
 module.exports = router;
