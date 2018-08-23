@@ -6,6 +6,11 @@
   },
 
   {
+    "_id": "KNOWING_ME",
+    "content": "Hello world!"
+  },
+
+  {
     "_id": "CONTACT_ME",
     "content": [
       {

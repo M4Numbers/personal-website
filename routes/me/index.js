@@ -25,6 +25,12 @@
 const express = require("express");
 const router = express.Router();
 
+const markdown = require("markdown-it")();
+
+const StaticHandler = require("../../lib/StaticHandler");
+const staticHandlerInstance = StaticHandler.getHandler();
+const StaticDocumentTypes = require("../../lib/StaticDocumentTypes");
+
 router.use((req, res, next) => {
     if (!req.signedCookies.knows_me) {
         res.redirect(303, "/hobbies/me/login");
@@ -36,7 +42,27 @@ router.use((req, res, next) => {
 //router.use("/blog", [blogAdmin]);
 
 router.get("/", function (req, res, next) {
-    res.redirect(303, "/admin/blog");
+    staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
+        res.render("./pages/me/me_index", {
+            top_page: {
+                title: "Welcome to Me",
+                tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
+                image_src: "../images/handle_logo.png",
+                image_alt: "My logo that I use to represent myself"
+            },
+
+            content: {
+                title: "Welcome to Me",
+                text: markdown.render(staticContent.content || ""),
+            },
+
+            head: {
+                title: "M4Numbers :: Welcome to Me",
+                description: "Home to the wild things",
+                current_page: "me"
+            }
+        });
+    }, next);
 });
 
 module.exports = router;
