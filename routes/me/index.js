@@ -39,9 +39,13 @@ router.use((req, res, next) => {
     }
 });
 
+router.get("/", function (req, res, next) {
+    res.redirect(303, "/hobbies/me/overview");
+});
+
 //router.use("/blog", [blogAdmin]);
 
-router.get("/", function (req, res, next) {
+router.get("/overview", function (req, res, next) {
     staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
         res.render("./pages/me/me_index", {
             top_page: {
@@ -59,7 +63,8 @@ router.get("/", function (req, res, next) {
             head: {
                 title: "M4Numbers :: Welcome to Me",
                 description: "Home to the wild things",
-                current_page: "me"
+                current_page: "me",
+                current_sub_page: "overview"
             }
         });
     }, next);
