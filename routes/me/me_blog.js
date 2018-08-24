@@ -25,8 +25,8 @@
 const express = require("express");
 const router = express.Router();
 const markdown = require("markdown-it")();
-const SiteError = require("../lib/SiteError");
-const BlogHandler = require("../lib/BlogHandler");
+const SiteError = require("../../lib/SiteError");
+const BlogHandler = require("../../lib/BlogHandler");
 const blogHandlerInstance = BlogHandler.getHandler();
 
 /* GET all blog posts */
@@ -50,7 +50,7 @@ router.get("/", function (req, res, next) {
             },
 
             pagination: {
-                base_url: "/blog?",
+                base_url: "/hobbies/me/extended-blog?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
             },
@@ -58,7 +58,7 @@ router.get("/", function (req, res, next) {
             head: {
                 title: "M4Numbers :: Extended Blog",
                 description: "Home to the wild things",
-                current_page: "me",
+                current_page: "hobbies",
                 current_sub_page: "extended-blog"
             }
         });
@@ -87,7 +87,7 @@ router.get("/:blogId", function (req, res, next) {
                     head: {
                         title: `M4Numbers :: ${blogPost.long_title}`,
                         description: "Home to the wild things",
-                        current_page: "me",
+                        current_page: "hobbies",
                         current_sub_page: "extended-blog"
                     }
                 });
