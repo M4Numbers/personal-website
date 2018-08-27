@@ -23,6 +23,8 @@
     "nunjucks": "^3.0.1",
     "nunjucks-date": "^1.2.0",
     "popper.js": "^1.14.3",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
     "serve-favicon": "~2.4.5",
     "winston": "^3.0.0"
   },
