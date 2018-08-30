@@ -27,7 +27,7 @@
 
 {% block content %}
     <div class="container">
-        <h2>{{ content.show.title }}</h2>
+        <h2>{{ content.show.title.romaji }}</h2>
         <p>{{ content.show.synopsis | safe }}</p>
         {% if content.show.review | length %}
             <h2>My Thoughts</h2>

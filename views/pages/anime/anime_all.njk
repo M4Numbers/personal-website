@@ -18,8 +18,8 @@
 
             <div class="show-item col-lg-4">
                 <a href="/hobbies/anime/{{ show._id }}">
-                    <img class="small_cover img-thumbnail" src="{{ show.cover_img }}" alt="{{ show.title }}" />
-                    <h2 class="anime_title">{{ show.title }}</h2>
+                    <img class="small_cover img-thumbnail" src="{{ show.cover_img.large }}" alt="{{ show.title.romaji }}" />
+                    <h2 class="anime_title">{{ show.title.romaji }}</h2>
                 </a>
                 <p class="anime_status">
                     {{ show.status }} <span class="float-right">Score: {{ show.score }}</span>

@@ -32,7 +32,7 @@ const animeHandlerInstance = AnimeHandler.getHandler();
 
 router.get("/", function (req, res, next) {
     Promise.all([
-        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 12),
+        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title.romaji": 1}, req.query["category"]),
         animeHandlerInstance.getTotalShowCount(req.query["category"] || "")
     ]).catch(next)
         .then(([allShows, totalCount]) => {
@@ -78,10 +78,10 @@ router.get("/:animeId", (req, res, next) => {
         .then(anime => {
             res.render("./pages/anime/anime_one", {
                 top_page: {
-                    title: anime.title,
+                    title: anime.title.romaji,
                     tagline: "A list of all the strange things that I have seen at some point or another",
-                    image_src: anime.cover_img,
-                    image_alt: anime.title
+                    image_src: anime.cover_img.large,
+                    image_alt: anime.title.romaji
                 },
 
                 content: {

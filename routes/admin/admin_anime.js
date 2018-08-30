@@ -28,6 +28,7 @@ const router = express.Router();
 const markdown = require("markdown-it")();
 const AnimeHandler = require("../../lib/AnimeHandler");
 const animeHandlerInstance = AnimeHandler.getHandler();
+const importHandler = require("../../lib/ImportHandler");
 
 router.get("/", function (req, res) {
     Promise.all(
@@ -123,6 +124,11 @@ router.post("/:animeId/edit", function (req, res) {
         res.cookie("anime-update-error", {anime_id: req.params["animeId"], error: rejection}, {signed: true, maxAge: 1000});
         res.redirect(303, `/admin/anime/${req.params["animeId"]}`);
     });
+});
+
+router.post("/refresh", function (req, res) {
+    importHandler.importAnimeIntoMongo();
+    res.status(200).end();
 });
 
 module.exports = router;
