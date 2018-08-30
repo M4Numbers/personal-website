@@ -52,6 +52,7 @@ router.get("/", function (req, res) {
                 base_url: "/admin/manga?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
+                page_size: 10
             },
 
             head: {

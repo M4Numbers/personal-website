@@ -4,13 +4,13 @@
     <h2>View Anime Shows</h2>
     {% for show in content.shows %}
         <div class="anime-show">
-            <h3><a href="/admin/anime/{{ show._id }}">{{ show.title }}</a></h3>
+            <h3><a href="/admin/anime/{{ show._id }}">{{ show.title.romaji }}</a></h3>
         </div>
         <hr />
     {% endfor %}
 
-    <div class="admin-toolbar mb-4">
+    {#<div class="admin-toolbar mb-4">
         <a class="btn btn-block btn-primary" href="/admin/anime/new" >Add New Anime</a>
-    </div>
+    </div>#}
     {% include "partials/pagination.njk" %}
 {% endblock %}

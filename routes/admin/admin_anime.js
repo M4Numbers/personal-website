@@ -33,7 +33,7 @@ const importHandler = require("../../lib/ImportHandler");
 router.get("/", function (req, res) {
     Promise.all(
         [
-            animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}, false),
+            animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"title.romaji": 1}, false),
             animeHandlerInstance.getTotalShowCount(false)
         ]
     ).then(([shows, totalCount]) => {
@@ -53,6 +53,7 @@ router.get("/", function (req, res) {
                 base_url: "/admin/anime?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
+                page_size: 10
             },
 
             head: {
@@ -77,7 +78,7 @@ router.get("/:animeId", function (req, res) {
 
             content: {
                 show: show,
-                show_text: markdown.render(show.review)
+                show_text: markdown.render(show.review || "")
             },
 
             head: {

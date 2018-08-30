@@ -52,6 +52,7 @@ router.get("/", function (req, res) {
                 base_url: "/admin/projects?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
+                page_size: 10
             },
 
             head: {

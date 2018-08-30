@@ -4,7 +4,7 @@
     <h2>Edit Show</h2>
     <div class="anime-show">
         <form method="post" enctype="application/json" action="">
-            <h3>{{ content.show.title }}</h3>
+            <h3>{{ content.show.title.romaji }}</h3>
             <label for="show-review">Show Review</label>
             <textarea class="form-control" id="show-review" name="show-review">{{ content.show.review }}</textarea>
             <label for="show-tags">Show Tags</label>

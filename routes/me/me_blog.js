@@ -53,6 +53,7 @@ router.get("/", function (req, res, next) {
                 base_url: "/hobbies/me/extended-blog?",
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
+                page_size: 10
             },
 
             head: {

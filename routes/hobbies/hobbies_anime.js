@@ -59,6 +59,7 @@ router.get("/", function (req, res, next) {
                 base_url: `/hobbies/anime?${baseUrl}`,
                 total: totalCount,
                 page: Math.max((req.query["page"] || 1), 1),
+                page_size: 12
             },
 
             head: {
