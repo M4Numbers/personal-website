@@ -36,7 +36,7 @@ const logger = loggingSystem.getLogger("master");
 router.get("/", function (req, res) {
     Promise.all(
         [
-            mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}, false),
+            mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"title.romaji": 1}, false),
             mangaHandlerInstance.getTotalBookCount(false)
         ]
     ).then(([books, totalCount]) => {
@@ -81,7 +81,7 @@ router.get("/:mangaId", function (req, res) {
 
             content: {
                 book: book,
-                book_text: markdown.render(book.review)
+                book_text: markdown.render(book.review || "")
             },
 
             head: {
@@ -132,7 +132,7 @@ router.post("/:mangaId/edit", function (req, res) {
 
 router.post("/refresh", function (req, res) {
     logger.info("Importing new manga into mongo...");
-    //importHandler.importMangaIntoMongo();
+    importHandler.importMangaIntoMongo();
     res.status(200).json({});
 });
 

@@ -4,7 +4,7 @@
     <h2>Edit Book</h2>
     <div class="manga-book">
         <form method="post" enctype="application/json" action="">
-            <h3>{{ content.book.title }}</h3>
+            <h3>{{ content.book.title.romaji }}</h3>
             <label for="book-review">Book Review</label>
             <textarea class="form-control" id="book-review" name="book-review">{{ content.book.review }}</textarea>
             <label for="book-tags">Book Tags</label>

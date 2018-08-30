@@ -4,7 +4,7 @@
     <h2>View Manga Books</h2>
     {% for book in content.books %}
         <div class="manga-show">
-            <h3><a href="/admin/manga/{{ book._id }}">{{ book.title }}</a></h3>
+            <h3><a href="/admin/manga/{{ book._id }}">{{ book.title.romaji }}</a></h3>
         </div>
         <hr />
     {% endfor %}

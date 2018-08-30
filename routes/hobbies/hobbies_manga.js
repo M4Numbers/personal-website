@@ -32,7 +32,7 @@ const mangaHandlerInstance = MangaHandler.getHandler();
 
 router.get("/", function (req, res, next) {
     Promise.all([
-        mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 12),
+        mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title.romaji": 1}, req.query.category),
         mangaHandlerInstance.getTotalBookCount(req.query["category"] || "")
     ]).catch(next)
         .then(([allBooks, totalCount]) => {
@@ -79,10 +79,10 @@ router.get("/:mangaId", (req, res, next) => {
         .then(manga => {
             res.render("./pages/manga/manga_one", {
                 top_page: {
-                    title: manga.title,
+                    title: manga.title.romaji,
                     tagline: "A list of all the strange things that I have read at some point or another",
-                    image_src: manga.cover_img,
-                    image_alt: manga.title
+                    image_src: manga.cover_img.large,
+                    image_alt: manga.title.romaji
                 },
 
                 content: {

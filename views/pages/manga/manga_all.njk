@@ -18,8 +18,8 @@
 
             <div class="show-item col-lg-4">
                 <a href="/hobbies/manga/{{ book._id }}">
-                    <img class="small_cover img-thumbnail" src="{{ book.cover_img }}" alt="{{ book.title }}" />
-                    <h2 class="manga_title">{{ book.title }}</h2>
+                    <img class="small_cover img-thumbnail" src="{{ book.cover_img.large }}" alt="{{ book.title.romaji }}" />
+                    <h2 class="manga_title">{{ book.title.romaji }}</h2>
                 </a>
                 <p class="manga_status">
                     {{ book.status }} <span class="float-right">Score: {{ book.score }}</span>

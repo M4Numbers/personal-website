@@ -3,7 +3,7 @@
 {% block admin_content %}
     <h2>View Manga</h2>
     <div class="manga-book">
-        <h3 class="mb-4">{{ content.book.title }}</h3>
+        <h3 class="mb-4">{{ content.book.title.romaji }}</h3>
         <div class="mb-4">
             {{ content.book_text | safe }}
         </div>
