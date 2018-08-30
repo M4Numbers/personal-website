@@ -1,9 +1,9 @@
-{% extends "base_layouts/homepage_base.njk" %}
+{% extends "base_layouts/hobbies_base.njk" %}
 
 {% import "macros/content.njk" as c %}
 
 {% block banner_icon %}
-    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+    {{ c.cover_banner(top_page.image_src, top_page.image_alt) }}
 {% endblock %}
 
 {% block banner_tagline %}

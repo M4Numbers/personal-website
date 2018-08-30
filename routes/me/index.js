@@ -66,7 +66,8 @@ router.get("/overview", function (req, res, next) {
                 title: "M4Numbers :: Welcome to Me",
                 description: "Home to the wild things",
                 current_page: "hobbies",
-                current_sub_page: "overview"
+                current_sub_page: "me",
+                current_sub_sub_page: "overview"
             }
         });
     }, next);

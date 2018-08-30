@@ -60,7 +60,8 @@ router.get("/", function (req, res, next) {
                 title: "M4Numbers :: Extended Blog",
                 description: "Home to the wild things",
                 current_page: "hobbies",
-                current_sub_page: "extended-blog"
+                current_sub_page: "me",
+                current_sub_sub_page: "extended-blog"
             }
         });
     }, rejection => {
@@ -89,7 +90,8 @@ router.get("/:blogId", function (req, res, next) {
                         title: `M4Numbers :: ${blogPost.long_title}`,
                         description: "Home to the wild things",
                         current_page: "hobbies",
-                        current_sub_page: "extended-blog"
+                        current_sub_page: "me",
+                        current_sub_sub_page: "extended-blog"
                     }
                 });
             } else {

@@ -1,0 +1,22 @@
+{% import "macros/navigation.njk" as m %}
+
+<nav class="navbar navbar-expand-md navbar-default navbar-dark bg-dark-darker navbar-lower" role="navigation">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {{ m.page_test("index", head.current_sub_page, "active") }}">
+                    <a class="nav-link" href="/hobbies">Index <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item {{ m.page_test("manga", head.current_sub_page, "active") }}">
+                    <a class="nav-link" href="/hobbies/manga">Manga</a>
+                </li>
+                <li class="nav-item {{ m.page_test("anime", head.current_sub_page, "active") }}">
+                    <a class="nav-link" href="/hobbies/anime">Anime</a>
+                </li>
+                <li class="nav-item {{ m.page_test("me", head.current_sub_page, "active") }}">
+                    <a class="nav-link" href="/hobbies/me">Me</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -42,7 +42,8 @@ router.get("/", function (req, res, next) {
         head: {
             title: "M4Numbers :: Hobbies",
             description: "Home to the wild things",
-            current_page: "hobbies"
+            current_page: "hobbies",
+            current_sub_page: "index"
         }
     });
 });
