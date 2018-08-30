@@ -30,6 +30,9 @@ const AnimeHandler = require("../../lib/AnimeHandler");
 const animeHandlerInstance = AnimeHandler.getHandler();
 const importHandler = require("../../lib/ImportHandler");
 
+const loggingSystem = require("./../../lib/Logger");
+const logger = loggingSystem.getLogger("master");
+
 router.get("/", function (req, res) {
     Promise.all(
         [
@@ -128,8 +131,9 @@ router.post("/:animeId/edit", function (req, res) {
 });
 
 router.post("/refresh", function (req, res) {
+    logger.info("Importing new anime into mongo...");
     importHandler.importAnimeIntoMongo();
-    res.status(200).end();
+    res.status(200).json({});
 });
 
 module.exports = router;

@@ -9,8 +9,8 @@
         <hr />
     {% endfor %}
 
-    {#<div class="admin-toolbar mb-4">
-        <a class="btn btn-block btn-primary" href="/admin/anime/new" >Add New Anime</a>
-    </div>#}
+    <div class="admin-toolbar mb-4">
+        <a class="btn btn-block btn-primary" href="javascript:;" onclick="refreshAnimeItems()" >Refresh Anime list</a>
+    </div>
     {% include "partials/pagination.njk" %}
 {% endblock %}

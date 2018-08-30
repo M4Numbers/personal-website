@@ -28,6 +28,10 @@ const router = express.Router();
 const markdown = require("markdown-it")();
 const MangaHandler = require("../../lib/MangaHandler");
 const mangaHandlerInstance = MangaHandler.getHandler();
+const importHandler = require("../../lib/ImportHandler");
+
+const loggingSystem = require("./../../lib/Logger");
+const logger = loggingSystem.getLogger("master");
 
 router.get("/", function (req, res) {
     Promise.all(
@@ -124,6 +128,12 @@ router.post("/:mangaId/edit", function (req, res) {
         res.cookie("manga-update-error", {manga_id: req.params["mangaId"], error: rejection}, {signed: true, maxAge: 1000});
         res.redirect(303, `/admin/manga/${req.params["mangaId"]}`);
     });
+});
+
+router.post("/refresh", function (req, res) {
+    logger.info("Importing new manga into mongo...");
+    //importHandler.importMangaIntoMongo();
+    res.status(200).json({});
 });
 
 module.exports = router;

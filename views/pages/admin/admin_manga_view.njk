@@ -10,7 +10,7 @@
     {% endfor %}
 
     <div class="admin-toolbar mb-4">
-        <a class="btn btn-block btn-primary" href="/admin/manga/new" >Add New Manga</a>
+        <a class="btn btn-block btn-primary" href="javascript:;" onclick="refreshMangaItems()" >Refresh manga list</a>
     </div>
     {% include "partials/pagination.njk" %}
 {% endblock %}
