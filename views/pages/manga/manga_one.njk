@@ -19,8 +19,8 @@
             <p>My score: <span class="btn btn-light">{{ content.book.score }}/10</span></p>
         </div>
         <div class="col-xl-5">
-            <p>Total chapters: <span class="btn btn-light">{{ content.book.total_chaps }}</span></p>
-            <p>My current chapter: <span class="btn btn-light">{{ content.book.current_chap }}</span></p>
+            <p>Total chapters: <span class="btn btn-light">{% if content.book.total_chaps %}{{ content.book.total_chaps }}{% else %}-{% endif %}</span></p>
+            <p>My current chapter: <span class="btn btn-light">{% if content.book.current_chap %}{{ content.book.current_chap }}{% else %}-{% endif %}</span></p>
         </div>
     </div>
 {% endblock %}

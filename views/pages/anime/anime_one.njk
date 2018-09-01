@@ -19,8 +19,8 @@
             <p>My score: <span class="btn btn-light">{{ content.show.score }}/10</span></p>
         </div>
         <div class="col-xl-5">
-            <p>Total episodes: <span class="btn btn-light">{{ content.show.total_eps }}</span></p>
-            <p>My current episode: <span class="btn btn-light">{{ content.show.current_ep }}</span></p>
+            <p>Total episodes: <span class="btn btn-light">{% if content.show.total_eps %}{{ content.show.total_eps }}{% else %}-{% endif %}</span></p>
+            <p>My current episode: <span class="btn btn-light">{% if content.show.total_eps %}{{ content.show.current_ep }}{% else %}-{% endif %}</span></p>
         </div>
     </div>
 {% endblock %}
