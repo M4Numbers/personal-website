@@ -51,7 +51,7 @@ router.get("/login", function (req, res, next) {
 router.post("/login", function (req, res, next) {
     if (req.body["me_password"] && !req.signedCookies.knows_me) {
         let hash = crypto.createHash("sha256").update(req.body["me_password"]).digest("hex");
-        if (hash === "c4d4c7cd46704006b40586ad7b9f5cc64e519641aae57f201c2d7d119d1bf9f9") {
+        if (hash === "c4c6754d992bee00451e7065c4c1ccf91bafefeaafed58e68b1008bb525c493b") {
             res.cookie("knows_me", 1, {signed: true, maxAge: 6000000});
         }
     }
