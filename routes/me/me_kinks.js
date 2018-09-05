@@ -31,27 +31,9 @@ const StaticHandler = require("../../lib/StaticHandler");
 const staticHandlerInstance = StaticHandler.getHandler();
 const StaticDocumentTypes = require("../../lib/StaticDocumentTypes");
 
-const blogAdmin = require("./me_blog");
-const kinkCollection = require("./me_kinks");
-
-router.use((req, res, next) => {
-    if (!req.signedCookies.knows_me) {
-        res.redirect(303, "/hobbies/me/login");
-    } else {
-        next();
-    }
-});
-
 router.get("/", function (req, res, next) {
-    res.redirect(303, "/hobbies/me/overview");
-});
-
-router.use("/extended-blog", [blogAdmin]);
-router.use("/fetishes", [kinkCollection]);
-
-router.get("/overview", function (req, res, next) {
-    staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
-        res.render("./pages/me/me_index", {
+    if (req.signedCookies["over_18"]) {
+        res.render("./pages/me/me_kinks_all", {
             top_page: {
                 title: "Welcome to Me",
                 tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
@@ -60,8 +42,7 @@ router.get("/overview", function (req, res, next) {
             },
 
             content: {
-                title: "Welcome to Me",
-                text: markdown.render(staticContent.content || ""),
+                title: "A collection of kinks belonging to me",
             },
 
             head: {
@@ -69,10 +50,46 @@ router.get("/overview", function (req, res, next) {
                 description: "Home to the wild things",
                 current_page: "hobbies",
                 current_sub_page: "me",
-                current_sub_sub_page: "overview"
+                current_sub_sub_page: "fetishes"
             }
         });
-    }, next);
+    } else {
+        staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)
+            .then(kinkWarning => {
+                res.render("./pages/me/me_kinks_warn", {
+                    top_page: {
+                        title: "Welcome to Me",
+                        tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
+                        image_src: "/images/handle_logo.png",
+                        image_alt: "My logo that I use to represent myself"
+                    },
+
+                    content: {
+                        title: "A warning, dear reader",
+                        content: markdown.render(kinkWarning.content || "")
+                    },
+
+                    head: {
+                        title: "M4Numbers :: Welcome to Me",
+                        description: "Home to the wild things",
+                        current_page: "hobbies",
+                        current_sub_page: "me",
+                        current_sub_sub_page: "fetishes"
+                    }
+                });
+            }, next);
+    }
+});
+
+router.post("/", function (req, res, next) {
+    if (req.body["over_18"] === "yes") {
+        res.cookie("over_18", req.body["over_18"], {signed: true, maxAge: 360000000});
+    }
+    res.redirect(302, "/hobbies/me/fetishes");
+});
+
+router.get("/:kinkId", function (req, res, next) {
+
 });
 
 module.exports = router;
