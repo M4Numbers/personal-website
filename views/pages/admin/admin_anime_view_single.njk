@@ -5,7 +5,7 @@
     <div class="anime-show">
         <h3 class="mb-4">{{ content.show.title.romaji }}</h3>
         <div class="mb-4">
-            {{ content.show_text | safe }}
+            {{ content.show.review | markdown | safe }}
         </div>
         <p class="mb-4">
             {% for tag in content.show.tags %}

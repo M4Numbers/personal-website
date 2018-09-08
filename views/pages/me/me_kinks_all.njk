@@ -18,7 +18,7 @@
         <tbody>
         {% for kink in content.kinks %}
             <tr>
-                <td>{{ kink.kink_name }}</td>
+                <td><a href="/hobbies/me/fetishes/{{ kink._id }}">{{ kink.kink_name }}</a></td>
                 <td>{{ kink.kink_description }}</td>
             </tr>
         {% endfor %}

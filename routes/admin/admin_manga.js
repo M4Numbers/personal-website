@@ -25,7 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const markdown = require("markdown-it")();
 const MangaHandler = require("../../lib/MangaHandler");
 const mangaHandlerInstance = MangaHandler.getHandler();
 const importHandler = require("../../lib/ImportHandler");
@@ -80,8 +79,7 @@ router.get("/:mangaId", function (req, res) {
             },
 
             content: {
-                book: book,
-                book_text: markdown.render(book.review || "")
+                book: book
             },
 
             head: {

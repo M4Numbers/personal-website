@@ -25,8 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const markdown = require("markdown-it")();
-
 const StaticHandler = require("../lib/StaticHandler");
 const staticHandlerInstance = StaticHandler.getHandler();
 const StaticDocumentTypes = require("../lib/StaticDocumentTypes");
@@ -71,7 +69,7 @@ router.get("/about", function (req, res, next) {
 
             content: {
                 title: "About Me",
-                text: markdown.render(staticContent.content || ""),
+                text: staticContent.content,
             },
 
             head: {

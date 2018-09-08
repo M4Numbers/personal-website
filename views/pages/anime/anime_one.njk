@@ -31,7 +31,7 @@
         <p>{{ content.show.synopsis | safe }}</p>
         {% if content.show.review | length %}
             <h2>My Thoughts</h2>
-            <p>{{ content.comments | safe }}</p>
+            <p>{{ content.show.review | markdown | safe }}</p>
         {% endif %}
     </div>
 {% endblock %}

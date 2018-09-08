@@ -25,7 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const markdown = require("markdown-it")();
 const SiteError = require("../../lib/SiteError");
 const MangaHandler = require("../../lib/MangaHandler");
 const mangaHandlerInstance = MangaHandler.getHandler();
@@ -87,7 +86,7 @@ router.get("/:mangaId", (req, res, next) => {
 
                 content: {
                     book: manga,
-                    comments: markdown.render(manga.review || "")
+                    comments: manga.review
                 },
 
                 head: {

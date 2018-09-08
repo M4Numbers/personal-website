@@ -25,7 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const markdown = require("markdown-it")();
 const AnimeHandler = require("../../lib/AnimeHandler");
 const animeHandlerInstance = AnimeHandler.getHandler();
 const importHandler = require("../../lib/ImportHandler");
@@ -80,8 +79,7 @@ router.get("/:animeId", function (req, res) {
             },
 
             content: {
-                show: show,
-                show_text: markdown.render(show.review || "")
+                show: show
             },
 
             head: {

@@ -25,7 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const markdown = require("markdown-it")();
 const KinkHandler = require("../../lib/KinkHandler");
 const kinkHandlerInstance = KinkHandler.getHandler();
 

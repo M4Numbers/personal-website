@@ -31,7 +31,7 @@
         <p>{{ content.book.synopsis | safe }}</p>
         {% if content.book.review | length %}
             <h2>My Thoughts</h2>
-            <p>{{ content.comments | safe }}</p>
+            <p>{{ content.book.review | markdown | safe }}</p>
         {% endif %}
     </div>
 {% endblock %}

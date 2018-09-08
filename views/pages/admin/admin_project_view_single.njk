@@ -5,7 +5,7 @@
     <div class="blog-post">
         <h3 class="mb-4">{{ content.project.long_title }}</h3>
         <div class="mb-4">
-            {{ content.project_text | safe }}
+            {{ content.project.description | markdown | safe }}
         </div>
         <p class="mb-4">
             {% for tag in content.project.tags %}

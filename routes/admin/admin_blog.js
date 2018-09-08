@@ -25,7 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const markdown = require("markdown-it")();
 const BlogHandler = require("../../lib/BlogHandler");
 const blogHandlerInstance = BlogHandler.getHandler();
 
@@ -106,8 +105,7 @@ router.get("/:blogId", function (req, res) {
             },
 
             content: {
-                blog: blog,
-                blog_text: markdown.render(blog.full_text)
+                blog: blog
             },
 
             head: {

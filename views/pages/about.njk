@@ -8,7 +8,7 @@
 {% block content %}
     <div class="container">
         <h2>{{ content.title }}</h2>
-        {{ content.text | safe }}
+        {{ content.text | markdown | safe }}
     </div>
 
     <hr class="mb-4"/>

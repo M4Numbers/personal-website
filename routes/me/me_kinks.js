@@ -42,7 +42,7 @@ router.get("/", function (req, res, next) {
         Promise.all(
             [
                 kinkHandlerInstance.findKinks(Math.max(0, ((req.query["page"] || 1) - 1)) * 20, 20, {"kink_name": 1}, false),
-                kinkHandlerInstance.getTotalKinkCount()
+                kinkHandlerInstance.getTotalKinkCount(false)
             ]
         ).then(([kinks, totalCount]) => {
             res.render("./pages/me/me_kinks_all", {
@@ -72,11 +72,8 @@ router.get("/", function (req, res, next) {
                     current_sub_page: "me",
                     current_sub_sub_page: "fetishes"
                 }
-            }, rejection => {
-                logger.error(rejection);
-                next(rejection);
             });
-        });
+        }, rejection => next(rejection));
     } else {
         staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)
             .then(kinkWarning => {

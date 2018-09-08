@@ -15,6 +15,6 @@
 
 {% block content %}
     <div class="container">
-        {{ content.project_text | safe }}
+        {{ content.project_text | markdown | safe }}
     </div>
 {% endblock %}

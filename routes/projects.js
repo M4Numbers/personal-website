@@ -24,7 +24,6 @@
 
 const express = require("express");
 const router = express.Router();
-const markdown = require("markdown-it")();
 const SiteError = require("../lib/SiteError");
 const ProjectHandler = require("../lib/ProjectHandler");
 const projectHandlerInstance = ProjectHandler.getHandler();
@@ -86,7 +85,7 @@ router.get("/:projectId", function (req, res, next) {
                     },
 
                     content: {
-                        project_text: markdown.render(project.description)
+                        project_text: project.description
                     },
 
                     head: {
