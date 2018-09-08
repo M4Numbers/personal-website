@@ -1,0 +1,27 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Create Kink</h2>
+    <div class="kink">
+        <form method="post" enctype="application/json" action="">
+            <label for="kink-name">Kink Name</label>
+            <input type="text" class="form-control" id="kink-name" name="kink-name"/>
+            <label for="kink-description">Kink Description</label>
+            <textarea class="form-control" id="kink-description" name="kink-description"></textarea>
+            <label for="kink-status">Kink Status</label>
+            <input type="text" class="form-control" id="kink-status" name="kink-status" />
+            <label for="kink-experience">Kink Experience</label>
+            <textarea class="form-control" id="kink-experience" name="kink-experience"></textarea>
+            <label for="kink-image">Kink Image</label>
+            <input type="text" class="form-control" id="kink-image" name="kink-image" />
+            <label for="kink-tags">Kink Tags</label>
+            <input type="text" class="form-control" id="kink-tags" name="kink-tags"/>
+            <div class="admin-toolbar">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/fetishes/" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <hr />
+
+{% endblock %}

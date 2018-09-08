@@ -31,27 +31,51 @@ const StaticHandler = require("../../lib/StaticHandler");
 const staticHandlerInstance = StaticHandler.getHandler();
 const StaticDocumentTypes = require("../../lib/StaticDocumentTypes");
 
+const KinkHandler = require("../../lib/KinkHandler");
+const kinkHandlerInstance = KinkHandler.getHandler();
+
+const loggingSystem = require("../../lib/Logger");
+const logger = loggingSystem.getLogger("master");
+
 router.get("/", function (req, res, next) {
     if (req.signedCookies["over_18"]) {
-        res.render("./pages/me/me_kinks_all", {
-            top_page: {
-                title: "Welcome to Me",
-                tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
-                image_src: "/images/handle_logo.png",
-                image_alt: "My logo that I use to represent myself"
-            },
+        Promise.all(
+            [
+                kinkHandlerInstance.findKinks(Math.max(0, ((req.query["page"] || 1) - 1)) * 20, 20, {"kink_name": 1}, false),
+                kinkHandlerInstance.getTotalKinkCount()
+            ]
+        ).then(([kinks, totalCount]) => {
+            res.render("./pages/me/me_kinks_all", {
+                top_page: {
+                    title: "Welcome to Me",
+                    tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
+                    image_src: "/images/handle_logo.png",
+                    image_alt: "My logo that I use to represent myself"
+                },
 
-            content: {
-                title: "A collection of kinks belonging to me",
-            },
+                content: {
+                    title: "A collection of kinks belonging to me",
+                    kinks: kinks
+                },
 
-            head: {
-                title: "M4Numbers :: Welcome to Me",
-                description: "Home to the wild things",
-                current_page: "hobbies",
-                current_sub_page: "me",
-                current_sub_sub_page: "fetishes"
-            }
+                pagination: {
+                    base_url: "/hobbies/me/fetishes?",
+                    total: totalCount,
+                    page: Math.max((req.query["page"] || 1), 1),
+                    page_size: 20
+                },
+
+                head: {
+                    title: "M4Numbers :: Welcome to Me",
+                    description: "Home to the wild things",
+                    current_page: "hobbies",
+                    current_sub_page: "me",
+                    current_sub_sub_page: "fetishes"
+                }
+            }, rejection => {
+                logger.error(rejection);
+                next(rejection);
+            });
         });
     } else {
         staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)

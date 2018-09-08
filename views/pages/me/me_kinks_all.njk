@@ -8,4 +8,20 @@
 {% block me_content %}
     <h2>{{ content.title }}</h2>
 
+    <table class="table table-striped table-hover" id="kink-collection">
+        <thead class="thead-dark">
+            <tr>
+                <td>Kink Name</td>
+                <td>Kink Description</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for kink in content.kinks %}
+            <tr>
+                <td>{{ kink.kink_name }}</td>
+                <td>{{ kink.kink_description }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
