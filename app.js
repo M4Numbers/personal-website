@@ -27,6 +27,7 @@
 const express = require("express");
 const nunjucks = require("nunjucks");
 const nunjucksDate = require("nunjucks-date");
+const nunjucksFilters = require("./lib/NunjucksFilters");
 const path = require("path");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
@@ -59,6 +60,7 @@ const njk = new nunjucks.Environment(
 );
 njk.express(app);
 njk.addFilter("date", nunjucksDate);
+nunjucksFilters(njk);
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ico")));
