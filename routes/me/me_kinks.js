@@ -37,44 +37,8 @@ const kinkHandlerInstance = KinkHandler.getHandler();
 const loggingSystem = require("../../lib/Logger");
 const logger = loggingSystem.getLogger("master");
 
-router.get("/", function (req, res, next) {
-    if (req.signedCookies["over_18"]) {
-        Promise.all(
-            [
-                kinkHandlerInstance.findKinks(Math.max(0, ((req.query["page"] || 1) - 1)) * 20, 20, {"kink_name": 1}, false),
-                kinkHandlerInstance.getTotalKinkCount(false)
-            ]
-        ).then(([kinks, totalCount]) => {
-            res.render("./pages/me/me_kinks_all", {
-                top_page: {
-                    title: "Welcome to Me",
-                    tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
-                    image_src: "/images/handle_logo.png",
-                    image_alt: "My logo that I use to represent myself"
-                },
-
-                content: {
-                    title: "A collection of kinks belonging to me",
-                    kinks: kinks
-                },
-
-                pagination: {
-                    base_url: "/hobbies/me/fetishes?",
-                    total: totalCount,
-                    page: Math.max((req.query["page"] || 1), 1),
-                    page_size: 20
-                },
-
-                head: {
-                    title: "M4Numbers :: Welcome to Me",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "me",
-                    current_sub_sub_page: "fetishes"
-                }
-            });
-        }, rejection => next(rejection));
-    } else {
+router.use(function (req, res, next) {
+    if (!req.signedCookies["over_18"]) {
         staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)
             .then(kinkWarning => {
                 res.render("./pages/me/me_kinks_warn", {
@@ -99,7 +63,47 @@ router.get("/", function (req, res, next) {
                     }
                 });
             }, next);
+    } else {
+        next();
     }
+});
+
+router.get("/", function (req, res, next) {
+    Promise.all(
+        [
+            kinkHandlerInstance.findKinks(Math.max(0, ((req.query["page"] || 1) - 1)) * 20, 20, {"kink_name": 1}, false),
+            kinkHandlerInstance.getTotalKinkCount(false)
+        ]
+    ).then(([kinks, totalCount]) => {
+        res.render("./pages/me/me_kinks_all", {
+            top_page: {
+                title: "Welcome to Me",
+                tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
+                image_src: "/images/handle_logo.png",
+                image_alt: "My logo that I use to represent myself"
+            },
+
+            content: {
+                title: "A collection of kinks belonging to me",
+                kinks: kinks
+            },
+
+            pagination: {
+                base_url: "/hobbies/me/fetishes?",
+                total: totalCount,
+                page: Math.max((req.query["page"] || 1), 1),
+                page_size: 20
+            },
+
+            head: {
+                title: "M4Numbers :: Welcome to Me",
+                description: "Home to the wild things",
+                current_page: "hobbies",
+                current_sub_page: "me",
+                current_sub_sub_page: "fetishes"
+            }
+        });
+    }, rejection => next(rejection));
 });
 
 router.post("/", function (req, res, next) {
@@ -110,7 +114,29 @@ router.post("/", function (req, res, next) {
 });
 
 router.get("/:kinkId", function (req, res, next) {
+    kinkHandlerInstance.findKinkByRawId(req.params["kinkId"])
+        .then(foundKink => {
+            res.render("./pages/me/me_kinks_single", {
+                top_page: {
+                    title: foundKink["kink_name"],
+                    tagline: "If you were looking for a more personal overview about yours truly, you've come to the right place!",
+                    image_src: "/images/handle_logo.png",
+                    image_alt: "My logo that I use to represent myself"
+                },
 
+                content: {
+                    kink: foundKink
+                },
+
+                head: {
+                    title: "M4Numbers :: Welcome to Me",
+                    description: "Home to the wild things",
+                    current_page: "hobbies",
+                    current_sub_page: "me",
+                    current_sub_sub_page: "fetishes"
+                }
+            });
+        }, rejection => next(rejection));
 });
 
 module.exports = router;
