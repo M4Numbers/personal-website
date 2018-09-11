@@ -71,7 +71,7 @@ router.use(function (req, res, next) {
 router.get("/", function (req, res, next) {
     Promise.all(
         [
-            kinkHandlerInstance.findKinks(Math.max(0, ((req.query["page"] || 1) - 1)) * 20, 20, {"kink_name": 1}, false),
+            kinkHandlerInstance.findKinks(Math.max(0, ((req.query["page"] || 1) - 1)) * 20, 20, {"kink_name": 1}, req.query["category"]),
             kinkHandlerInstance.getTotalKinkCount(false)
         ]
     ).then(([kinks, totalCount]) => {
@@ -100,7 +100,8 @@ router.get("/", function (req, res, next) {
                 description: "Home to the wild things",
                 current_page: "hobbies",
                 current_sub_page: "me",
-                current_sub_sub_page: "fetishes"
+                current_sub_sub_page: "fetishes",
+                current_category: req.query["category"]
             }
         });
     }, rejection => next(rejection));
