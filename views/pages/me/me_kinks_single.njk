@@ -15,11 +15,11 @@
 {% endblock %}
 
 {% block me_content %}
-    <h2>{{ content.title }}</h2>
+    <h2 class="mb-4">Description</h2>
 
-    <div id="kink-description">{{ content.kink.kink_description }}</div>
+    <div id="kink-description" class="mb-4">{{ content.kink.kink_description }}</div>
 
-    <h3>Personal Experience</h3>
+    <h3 class="mb-4">Personal Experience</h3>
 
-    <div id="kink-experience">{{ content.kink.personal_experience }}</div>
+    <div id="kink-experience" class="mb-4">{{ content.kink.personal_experience }}</div>
 {% endblock %}
