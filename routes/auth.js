@@ -52,7 +52,7 @@ router.post("/login", function (req, res, next) {
     if (req.body["admin_password"] && !req.signedCookies.logged_in) {
         let hash = crypto.createHash("sha256").update(req.body["admin_password"]).digest("hex");
         if (hash === "c4d4c7cd46704006b40586ad7b9f5cc64e519641aae57f201c2d7d119d1bf9f9") {
-            res.cookie("logged_in", 1, {signed: true, maxAge: 600000});
+            res.cookie("logged_in", 1, {signed: true, maxAge: 60000000});
         }
     }
     res.redirect(303, "/login");
