@@ -148,12 +148,12 @@ router.post("/:kinkId/edit", function (req, res) {
         req.params["kinkId"], req.body["kink-name"],
         req.body["kink-description"], req.body["kink-status"],
         req.body["kink-experience"], req.body["kink-image"],
-        req.body["blog-tags"].split(/, ?/)
+        req.body["kink-tags"].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/blog/${req.params["blogId"]}`);
+        res.redirect(303, `/admin/fetishes/${req.params["kinkId"]}`);
     }, rejection => {
-        res.cookie("blog-update-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/blog/${req.params["blogId"]}`);
+        res.cookie("kink-update-error", {blog_id: req.params["kinkId"], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/fetishes/${req.params["kinkId"]}`);
     });
 });
 
