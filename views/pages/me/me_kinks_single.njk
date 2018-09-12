@@ -11,7 +11,7 @@
             <span class="btn btn-light">{{ tag }}</span>
         {% endfor %}
     </p>
-    <p>Practising status: <span class="btn btn-light">{{ content.kink.practising_status }}</span></p>
+    <p>Practising status: <span class="btn btn-light">{{ content.kink.practising_status | capitalize }}</span></p>
 {% endblock %}
 
 {% block me_content %}
