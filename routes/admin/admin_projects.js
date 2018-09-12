@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
             projectHandlerInstance.getTotalProjectCount(false)
         ]
     ).then(([projects, totalCount]) => {
-        res.render("./pages/admin/admin_project_view", {
+        res.render("./pages/admin/projects/admin_project_view", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -65,7 +65,7 @@ router.get("/", function (req, res) {
 });
 
 router.get("/new", function (req, res) {
-    res.render("./pages/admin/admin_project_create", {
+    res.render("./pages/admin/projects/admin_project_create", {
         top_page: {
             title: "Administrator Toolkit",
             tagline: "All the functions that the administrator of the site has available to them",
@@ -96,7 +96,7 @@ router.post("/new", function (req, res) {
 
 router.get("/:projectId", function (req, res) {
     projectHandlerInstance.findProject(req.params["projectId"]).then((project) => {
-        res.render("./pages/admin/admin_project_view_single", {
+        res.render("./pages/admin/projects/admin_project_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -120,7 +120,7 @@ router.get("/:projectId", function (req, res) {
 
 router.get("/:projectId/edit", function (req, res) {
     projectHandlerInstance.findProject(req.params["projectId"]).then((project) => {
-        res.render("./pages/admin/admin_project_edit_single", {
+        res.render("./pages/admin/projects/admin_project_edit_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -157,7 +157,7 @@ router.post("/:projectId/edit", function (req, res) {
 
 router.get("/:project/delete", function (req, res) {
     projectHandlerInstance.findProject(req.params["projectId"]).then((project) => {
-        res.render("./pages/admin/admin_project_delete_single", {
+        res.render("./pages/admin/projects/admin_project_delete_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",

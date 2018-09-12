@@ -39,7 +39,7 @@ router.get("/", function (req, res) {
             animeHandlerInstance.getTotalShowCount(false)
         ]
     ).then(([shows, totalCount]) => {
-        res.render("./pages/admin/admin_anime_view", {
+        res.render("./pages/admin/anime/admin_anime_view", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -70,7 +70,7 @@ router.get("/", function (req, res) {
 
 router.get("/:animeId", function (req, res) {
     animeHandlerInstance.findAnimeByRawId(req.params["animeId"]).then((show) => {
-        res.render("./pages/admin/admin_anime_view_single", {
+        res.render("./pages/admin/anime/admin_anime_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -94,7 +94,7 @@ router.get("/:animeId", function (req, res) {
 
 router.get("/:animeId/edit", function (req, res) {
     animeHandlerInstance.findAnimeByRawId(req.params["animeId"]).then((show) => {
-        res.render("./pages/admin/admin_anime_edit_single", {
+        res.render("./pages/admin/anime/admin_anime_edit_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",

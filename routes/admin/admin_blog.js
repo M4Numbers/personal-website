@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
             blogHandlerInstance.getTotalBlogCount(false)
         ]
     ).then(([blogs, totalCount]) => {
-        res.render("./pages/admin/admin_blog_view", {
+        res.render("./pages/admin/blogs/admin_blog_view", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -65,7 +65,7 @@ router.get("/", function (req, res) {
 });
 
 router.get("/new", function (req, res) {
-    res.render("./pages/admin/admin_blog_create", {
+    res.render("./pages/admin/blogs/admin_blog_create", {
         top_page: {
             title: "Administrator Toolkit",
             tagline: "All the functions that the administrator of the site has available to them",
@@ -96,7 +96,7 @@ router.post("/new", function (req, res) {
 
 router.get("/:blogId", function (req, res) {
     blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
-        res.render("./pages/admin/admin_blog_view_single", {
+        res.render("./pages/admin/blogs/admin_blog_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -120,7 +120,7 @@ router.get("/:blogId", function (req, res) {
 
 router.get("/:blogId/edit", function (req, res) {
     blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
-        res.render("./pages/admin/admin_blog_edit_single", {
+        res.render("./pages/admin/blogs/admin_blog_edit_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -157,7 +157,7 @@ router.post("/:blogId/edit", function (req, res) {
 
 router.get("/:blogId/delete", function (req, res) {
     blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
-        res.render("./pages/admin/admin_blog_delete_single", {
+        res.render("./pages/admin/blogs/admin_blog_delete_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",

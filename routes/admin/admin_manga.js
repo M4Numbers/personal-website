@@ -39,7 +39,7 @@ router.get("/", function (req, res) {
             mangaHandlerInstance.getTotalBookCount(false)
         ]
     ).then(([books, totalCount]) => {
-        res.render("./pages/admin/admin_manga_view", {
+        res.render("./pages/admin/manga/admin_manga_view", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -70,7 +70,7 @@ router.get("/", function (req, res) {
 
 router.get("/:mangaId", function (req, res) {
     mangaHandlerInstance.findMangaByRawId(req.params["mangaId"]).then((book) => {
-        res.render("./pages/admin/admin_manga_view_single", {
+        res.render("./pages/admin/manga/admin_manga_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -94,7 +94,7 @@ router.get("/:mangaId", function (req, res) {
 
 router.get("/:mangaId/edit", function (req, res) {
     mangaHandlerInstance.findMangaByRawId(req.params["mangaId"]).then((book) => {
-        res.render("./pages/admin/admin_manga_edit_single", {
+        res.render("./pages/admin/manga/admin_manga_edit_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",

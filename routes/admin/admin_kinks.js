@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
             kinkHandlerInstance.getTotalKinkCount(false)
         ]
     ).then(([kinks, totalCount]) => {
-        res.render("./pages/admin/admin_kink_view", {
+        res.render("./pages/admin/kinks/admin_kink_view", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -65,7 +65,7 @@ router.get("/", function (req, res) {
 });
 
 router.get("/new", function (req, res) {
-    res.render("./pages/admin/admin_kink_create", {
+    res.render("./pages/admin/kinks/admin_kink_create", {
         top_page: {
             title: "Administrator Toolkit",
             tagline: "All the functions that the administrator of the site has available to them",
@@ -97,7 +97,7 @@ router.post("/new", function (req, res) {
 
 router.get("/:kinkId", function (req, res) {
     kinkHandlerInstance.findKinkByRawId(req.params["kinkId"]).then((kink) => {
-        res.render("./pages/admin/admin_kink_view_single", {
+        res.render("./pages/admin/kinks/admin_kink_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -121,7 +121,7 @@ router.get("/:kinkId", function (req, res) {
 
 router.get("/:kinkId/edit", function (req, res) {
     kinkHandlerInstance.findKinkByRawId(req.params["kinkId"]).then((kink) => {
-        res.render("./pages/admin/admin_kink_edit_single", {
+        res.render("./pages/admin/kinks/admin_kink_edit_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -159,7 +159,7 @@ router.post("/:kinkId/edit", function (req, res) {
 
 router.get("/:kinkId/delete", function (req, res) {
     kinkHandlerInstance.findKinkByRawId(req.params["kinkId"]).then((kink) => {
-        res.render("./pages/admin/admin_kink_delete_single", {
+        res.render("./pages/admin/kinks/admin_kink_delete_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
