@@ -41,6 +41,11 @@ router.use((req, res, next) => {
     }
 });
 
+router.use((req, res, next) => {
+    res.cookie("logged_in", 1, {signed: true, maxAge: 60000000});
+    next();
+});
+
 router.use("/blog", [blogAdmin]);
 router.use("/projects", [projectAdmin]);
 router.use("/art", [artAdmin]);

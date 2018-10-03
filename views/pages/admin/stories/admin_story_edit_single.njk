@@ -1,0 +1,39 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Edit Story</h2>
+    <div class="blog-post">
+        <form method="post" enctype="multipart/form-data" action="">
+            <label for="story-title">Story Title</label>
+            <input type="text" class="form-control" id="story-title" name="story-title" value="{{ content.story.title }}"/>
+            <label for="story-type">Story Type</label>
+            <select id="story-type" name="story-type" class="form-control">
+                <option value="NOT_CHOSEN">Please choose a story type</option>
+                <option {{ "selected=\"selected\"" if content.story.story_type == "ORIGINAL" }} value="ORIGINAL">Original</option>
+                <option {{ "selected=\"selected\"" if content.story.story_type == "FANFICTION" }} value="FANFICTION">Fanfiction</option>
+            </select>
+            <label for="story-status">Story status</label>
+            <select id="story-status" name="story-status" class="form-control">
+                <option value="NOT_CHOSEN">Please choose a story status</option>
+                <option {{ "selected=\"selected\"" if content.story.story_status == "IN_PROGRESS" }} value="IN_PROGRESS">In progress</option>
+                <option {{ "selected=\"selected\"" if content.story.story_status == "ON_HOLD" }} value="ON HOLD">On hold</option>
+                <option {{ "selected=\"selected\"" if content.story.story_status == "COMPLETED" }} value="COMPLETED">Completed</option>
+                <option {{ "selected=\"selected\"" if content.story.story_status == "DROPPED" }} value="DROPPED">Dropped</option>
+            </select>
+            <label for="story-synopsis">Story Synopsis</label>
+            <textarea id="story-synopsis" name="story-synopsis" class="form-control" >{{ content.story.synopsis }}</textarea>
+            <label for="story-image">Story Cover Image</label>
+            <input class="form-control-file" id="story-image" name="story-image" type="file" />
+            <label for="story-notes">Story Meta-commentary</label>
+            <textarea id="story-notes" name="story-notes" class="form-control" >{{ content.story.meta_review }}</textarea>
+            <label for="story-tags">Story Tags</label>
+            <input type="text" class="form-control" id="story-tags" name="story-tags" value="{{ content.story.tags | join(", ") }}"/>
+            <div class="admin-toolbar">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/stories/{{ content.story._id }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <hr />
+
+{% endblock %}

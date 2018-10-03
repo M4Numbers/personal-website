@@ -92,7 +92,7 @@ router.post("/new", uploads.single("story-image"), function (req, res) {
     logger.info(`Reading in new image from ${req.file.path}`);
     let imageAsBase64 = fs.readFileSync(req.file.path, "base64");
     storyHandlerInstance.addNewStory(
-        req.body["story-title"], req.body["story-type"], req.body["story-status"],
+        req.body["story-title"], req.body["story-status"], req.body["story-type"],
         req.body["story-synopsis"], imageAsBase64, req.body["story-tags"].split(/, ?/),
         req.body["story-notes"]
     ).then((savedStory) => {
@@ -155,7 +155,7 @@ router.post("/:storyId/edit", uploads.single("story-image"), function (req, res)
     let imageAsBase64 = fs.readFileSync(req.file.path, "base64");
     storyHandlerInstance.updateExistingStory(
         req.params["storyId"], req.body["story-title"],
-        req.body["story-type"], req.body["story-status"],
+        req.body["story-status"], req.body["story-type"],
         req.body["story-synopsis"], imageAsBase64,
         req.body["story-tags"].split(/, ?/), req.body["story-notes"]
     ).then(() => {

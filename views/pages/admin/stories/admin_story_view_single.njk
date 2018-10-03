@@ -1,0 +1,25 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Story</h2>
+    <div class="story">
+        <h3 class="mb-4">{{ content.story.title }}</h3>
+        <div class="mb-4">
+            {{ content.story.synopsis | markdown | safe }}
+        </div>
+        <div class="mb-4">
+            {{ content.story.meta_review | markdown | safe }}
+        </div>
+        <p class="mb-4">
+            {% for tag in content.story.tags %}
+                <span class="btn btn-dark">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        <div class="admin-toolbar">
+            <a href="/admin/stories/{{ content.story._id }}/edit" class="btn btn-primary">Edit</a>
+            <a href="/admin/stories/{{ content.story._id }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}
