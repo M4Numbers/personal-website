@@ -26,7 +26,7 @@
 {% block content %}
     <div class="container">
         <h2>{{ content.story.title }}</h2>
-        <p>{{ content.story.synopsis | safe }}</p>
+        <p>{{ content.story.synopsis | markdown | safe }}</p>
         {% if content.story.meta_review | length %}
             <h2>My Thoughts</h2>
             <p>{{ content.story.meta_review | markdown | safe }}</p>
@@ -44,13 +44,11 @@
                 </thead>
                 <tbody>
                     {% for chapter in content.story.chapters %}
-                        <a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ chapter._id }}">
-                            <tr>
-                                <td>{{ chapter.chapter_number }}</td>
-                                <td>{{ chapter.chapter_title }}</td>
-                                <td>{{ chapter.time_updated | date("Do MMMM YYYY") }}</td>
-                            </tr>
-                        </a>
+                        <tr>
+                            <td>{{ chapter.chapter_number }}</td>
+                            <td><a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ chapter._id }}">{{ chapter.chapter_title }}</a></td>
+                            <td>{{ chapter.last_updated | date("Do MMMM YYYY") }}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

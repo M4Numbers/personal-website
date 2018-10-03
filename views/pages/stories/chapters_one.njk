@@ -1,0 +1,24 @@
+{% extends "base_layouts/hobbies_base.njk" %}
+
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.cover_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        <a href="/hobbies/writing/{{ content.story._id }}" class="text-light">Back to story</a>
+    </p>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ content.chapter.chapter_title }}</h2>
+        <p>{{ content.chapter.chapter_text | markdown | safe }}</p>
+
+        <div class="blockquote-footer">
+            <p><a href="/hobbies/writing/{{ content.story._id }}">Back to story</a></p>
+        </div>
+    </div>
+{% endblock %}

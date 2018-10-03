@@ -123,4 +123,34 @@ router.get("/:storyId", (req, res, next) => {
         }, next);
 });
 
+router.get("/:storyId/chapter/:chapterId", (req, res, next) => {
+    Promise.all([
+        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
+        chapterHandlerInstance.findChapterByRawId(req.params["chapterId"])
+    ])
+        .catch(next)
+        .then(([story, chapter]) => {
+            res.render("./pages/stories/chapters_one", {
+                top_page: {
+                    title: story.title,
+                    tagline: chapter.chapter_title,
+                    image_src: `data:image/png;base64,${story.cover_img}`,
+                    image_alt: story.title
+                },
+
+                content: {
+                    story: story,
+                    chapter: chapter
+                },
+
+                head: {
+                    title: "M4Numbers :: Hobbies :: Writing :: ",
+                    description: "Home to the wild things",
+                    current_page: "hobbies",
+                    current_sub_page: "writing",
+                }
+            });
+        }, next);
+});
+
 module.exports = router;
