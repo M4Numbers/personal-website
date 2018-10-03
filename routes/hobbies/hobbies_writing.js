@@ -29,6 +29,9 @@ const SiteError = require("../../lib/SiteError");
 const StoryHandler = require("../../lib/StoryHandler");
 const storyHandlerInstance = StoryHandler.getHandler();
 
+const ChapterHandler = require("../../lib/ChapterHandler");
+const chapterHandlerInstance = ChapterHandler.getHandler();
+
 router.get("/", function (req, res, next) {
     Promise.all([
         storyHandlerInstance.findAllStories(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title": 1}),
@@ -72,16 +75,35 @@ router.get("/:storyId", (req, res, next) => {
     storyHandlerInstance.findStoryByRawId(req.params["storyId"])
         .catch(next)
         .then(story => {
+            return Promise.all(
+                story.chapters.map(chapter => {
+                    return new Promise((resolve, reject) => {
+                    chapterHandlerInstance.findChapterByRawId(chapter.chapter_id)
+                        .catch(reject)
+                        .then(full_chapter => {
+                            resolve({
+                                ...chapter,
+                                ...full_chapter
+                            });
+                        });
+                    });
+                })
+            ).then(chapterList => {
+                story.chapters = chapterList;
+                return Promise.resolve(story);
+            });
+        })
+        .then(storyWithChapters => {
             res.render("./pages/stories/stories_one", {
                 top_page: {
-                    title: story.title,
+                    title: storyWithChapters.title,
                     tagline: "A collection of all the things that I've scribbled down at one point or another",
-                    image_src: story.cover_img,
-                    image_alt: story.title
+                    image_src: `data:image/png;base64,${storyWithChapters.cover_img}`,
+                    image_alt: storyWithChapters.title
                 },
 
                 content: {
-                    story: story
+                    story: storyWithChapters
                 },
 
                 head: {

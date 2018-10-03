@@ -1,0 +1,59 @@
+{% extends "base_layouts/hobbies_base.njk" %}
+
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.cover_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        {% for tag in content.show.tags %}
+            <span class="btn btn-light">{{ tag }}</span>
+        {% endfor %}
+    </p>
+    <div class="row">
+        <div class="col-xl-7">
+            <p>Story type: <span class="btn btn-light">{{ content.story.story_type | capitalize }}</span></p>
+            <p>Current story status: <span class="btn btn-light">{{ content.story.story_status | replace("_", " ") | capitalize }}</span></p>
+        </div>
+        <div class="col-xl-5">
+            <p>Total chapters: <span class="btn btn-light">{{ content.story.total_chaps }}</span></p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ content.story.title }}</h2>
+        <p>{{ content.story.synopsis | safe }}</p>
+        {% if content.story.meta_review | length %}
+            <h2>My Thoughts</h2>
+            <p>{{ content.story.meta_review | markdown | safe }}</p>
+        {% endif %}
+
+        <div class="chapter-list">
+            <h2>Chapter List</h2>
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <td>Chapter Number</td>
+                        <td>Chapter Title</td>
+                        <td>Last updated</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chapter in content.story.chapters %}
+                        <a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ chapter._id }}">
+                            <tr>
+                                <td>{{ chapter.chapter_number }}</td>
+                                <td>{{ chapter.chapter_title }}</td>
+                                <td>{{ chapter.time_updated | date("Do MMMM YYYY") }}</td>
+                            </tr>
+                        </a>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
