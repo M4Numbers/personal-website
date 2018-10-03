@@ -1,0 +1,16 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Stories</h2>
+    {% for story in content.stories %}
+        <div class="story">
+            <h3><a href="/admin/stories/{{ story._id }}">{{ story.title }}</a></h3>
+        </div>
+        <hr />
+    {% endfor %}
+
+    <div class="admin-toolbar mb-4">
+        <a class="btn btn-block btn-primary" href="/admin/stories/new" >Add New Story</a>
+    </div>
+    {% include "partials/pagination.njk" %}
+{% endblock %}
