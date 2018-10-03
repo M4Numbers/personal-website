@@ -1,0 +1,8 @@
+{
+  "_id": ObjectId("abc123"),
+  "chapter_title": "Chapter the first",
+  "chapter_text": "This is the chapter",
+  "time_posted": ISODate("2018-10-03T12:00:00.000Z"),
+  "time_updated": ISODate("2018-10-03T12:00:00.000Z"),
+  "author_notes": "Notes about the chapter"
+}
