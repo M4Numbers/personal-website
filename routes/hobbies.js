@@ -28,6 +28,7 @@ const router = express.Router();
 const me = require("./me");
 const meAuth = require("./me/me_auth");
 const art = require("./hobbies/hobbies_art");
+const writing = require("./hobbies/hobbies_writing");
 const anime = require("./hobbies/hobbies_anime");
 const manga = require("./hobbies/hobbies_manga");
 
@@ -50,6 +51,7 @@ router.get("/", function (req, res, next) {
 });
 
 router.use("/me", [meAuth, me]);
+router.use("/writing", [writing]);
 router.use("/art", [art]);
 router.use("/anime", [anime]);
 router.use("/manga", [manga]);
