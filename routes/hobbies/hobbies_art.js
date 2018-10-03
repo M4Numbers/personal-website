@@ -76,12 +76,12 @@ router.get("/:artId", (req, res, next) => {
                 top_page: {
                     title: picture.title,
                     tagline: "A collection of the things that I have attempted to draw at some point or another",
-                    image_src: picture.image.thumb,
+                    image_src: `data:image/png;base64,${picture.image.thumb}`,
                     image_alt: picture.title
                 },
 
                 content: {
-                    show: picture
+                    picture: picture
                 },
 
                 head: {

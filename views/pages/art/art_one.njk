@@ -19,7 +19,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="mx-auto my-auto"><img src="{{ content.picture.image.full_size }}" alt="{{ content.picture.title }}"></div>
+        <div class="mx-auto my-auto"><img class="w-100" src="data:image/png;base64,{{ content.picture.image.full_size }}" alt="{{ content.picture.title }}"></div>
         <h2>{{ content.picture.title }}</h2>
         <p>{{ content.picture.notes | markdown | safe }}</p>
     </div>

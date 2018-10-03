@@ -16,7 +16,7 @@
 
             <div class="art-item col-lg-4">
                 <a href="/hobbies/art/{{ picture._id }}">
-                    <img class="small_cover img-thumbnail" src="{{ picture.thumbnail }}" alt="{{ picture.title }}" />
+                    <img class="small_cover img-thumbnail" src="data:image/png;base64,{{ picture.image.thumb }}" alt="{{ picture.title }}" />
                     <h2 class="art_title">{{ picture.title }}</h2>
                 </a>
             </div>
