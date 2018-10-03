@@ -32,6 +32,9 @@ const storyHandlerInstance = StoryHandler.getHandler();
 const ChapterHandler = require("../../lib/ChapterHandler");
 const chapterHandlerInstance = ChapterHandler.getHandler();
 
+const loggingSystem = require("../../lib/Logger");
+const logger = loggingSystem.getLogger("master");
+
 router.get("/", function (req, res, next) {
     Promise.all([
         storyHandlerInstance.findAllStories(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title": 1}),
@@ -78,18 +81,22 @@ router.get("/:storyId", (req, res, next) => {
             return Promise.all(
                 story.chapters.map(chapter => {
                     return new Promise((resolve, reject) => {
-                    chapterHandlerInstance.findChapterByRawId(chapter.chapter_id)
-                        .catch(reject)
-                        .then(full_chapter => {
-                            resolve({
-                                ...chapter,
-                                ...full_chapter
+                        chapterHandlerInstance.findChapterByRawId(chapter.chapter_id)
+                            .catch(reject)
+                            .then(full_chapter => {
+                                resolve({
+                                    _id: chapter.chapter_id,
+                                    chapter_number: chapter.chapter_number,
+                                    chapter_title: full_chapter.chapter_title,
+                                    last_updated: full_chapter.time_updated
+                                });
                             });
-                        });
                     });
                 })
             ).then(chapterList => {
-                story.chapters = chapterList;
+                return Promise.resolve(chapterList.sort((a, b) => {return a.chapter_number - b.chapter_number;}));
+            }).then(sortedChapterList => {
+                story.chapters = sortedChapterList;
                 return Promise.resolve(story);
             });
         })
