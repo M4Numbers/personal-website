@@ -169,8 +169,8 @@ router.post("/:storyId/chapter/:chapterNumber/edit", function (req, res) {
 });
 
 router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
-    storyHandlerInstance.findStoryByRawId(req.params["storyId"]).then((story) => {
-        res.render("./pages/admin/stories/admin_story_delete_single", {
+    chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"]).then((chapter) => {
+        res.render("./pages/admin/stories/admin_chapter_delete_single", {
             top_page: {
                 title: "Administrator Toolkit",
                 tagline: "All the functions that the administrator of the site has available to them",
@@ -179,7 +179,7 @@ router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
             },
 
             content: {
-                story: story
+                chapter: chapter.pop()
             },
 
             head: {
@@ -193,11 +193,11 @@ router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
 });
 
 router.post("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
-    storyHandlerInstance.deleteStory(req.params["storyId"]).then(() => {
-        res.redirect(303, "/admin/stories/");
-    }, rejection => {
-        res.cookie("story-delete-error", {art_id: req.params["storyId"], error: rejection}, {signed: true, maxAge: 1000});
+    chapterHandlerInstance.deleteChapter(req.body["chapter-id"]).then(() => {
         res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
+    }, rejection => {
+        res.cookie("chapter-delete-error", {chapter_id: req.body["chapter-id"], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
     });
 });
 

@@ -1,0 +1,20 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Delete Chapter</h2>
+    <div class="story">
+        <h3 class="mb-4">{{ content.chapter.chapter_number }} :: {{ content.chapter.chapter_title }}</h3>
+        <div class="admin-toolbar">
+            <form method="post" action="">
+                <p class="alert-danger">Are you sure you want to delete this chapter?</p>
+
+                <input type="hidden" id="chapter-id" name="chapter-id" value="{{ content.chapter._id }}" />
+
+                <input type="submit" class="btn btn-danger" value="Yes" />
+                <a href="/admin/stories/{{ content.chapter.parent_story_id }}/chapter/{{ content.chapter.chapter_number }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}
