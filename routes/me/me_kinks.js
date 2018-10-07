@@ -37,6 +37,13 @@ const kinkHandlerInstance = KinkHandler.getHandler();
 const loggingSystem = require("../../lib/Logger");
 const logger = loggingSystem.getLogger("master");
 
+router.post("/", function (req, res, next) {
+    if (req.body["over_18"] === "yes") {
+        res.cookie("over_18", req.body["over_18"], {signed: true, maxAge: 360000000});
+    }
+    res.redirect(302, "/hobbies/me/fetishes");
+});
+
 router.use(function (req, res, next) {
     if (!req.signedCookies["over_18"]) {
         staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)
@@ -51,7 +58,7 @@ router.use(function (req, res, next) {
 
                     content: {
                         title: "A warning, dear reader",
-                        content: markdown.render(kinkWarning.content || "")
+                        content: markdown.render((kinkWarning || {}).content || "")
                     },
 
                     head: {
@@ -105,13 +112,6 @@ router.get("/", function (req, res, next) {
             }
         });
     }, rejection => next(rejection));
-});
-
-router.post("/", function (req, res, next) {
-    if (req.body["over_18"] === "yes") {
-        res.cookie("over_18", req.body["over_18"], {signed: true, maxAge: 360000000});
-    }
-    res.redirect(302, "/hobbies/me/fetishes");
 });
 
 router.get("/:kinkId", function (req, res, next) {

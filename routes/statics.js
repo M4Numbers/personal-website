@@ -69,7 +69,7 @@ router.get("/about", function (req, res, next) {
 
             content: {
                 title: "About Me",
-                text: staticContent.content,
+                text: (staticContent || {}).content,
             },
 
             head: {
@@ -93,7 +93,7 @@ router.get("/contact", function (req, res, next) {
             },
 
             content: {
-                options: staticContent.content
+                options: (staticContent || {}).content
             },
 
             head: {

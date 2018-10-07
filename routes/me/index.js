@@ -61,7 +61,7 @@ router.get("/overview", function (req, res, next) {
 
             content: {
                 title: "Welcome to Me",
-                text: markdown.render(staticContent.content || ""),
+                text: markdown.render((staticContent || {}).content || ""),
             },
 
             head: {
