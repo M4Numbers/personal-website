@@ -128,7 +128,7 @@ router.get("/:storyId", function (req, res, next) {
 
                 pagination: {
                     base_url: `/admin/stories/${req.params["storyId"]}?`,
-                    total: story.total_chaps,
+                    total: story.chapters.length,
                     page: Math.max((req.query["page"] || 1), 1),
                     page_size: 25
                 },

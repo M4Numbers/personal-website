@@ -25,7 +25,7 @@
                     No previous chapters
                 {% endif %}
                 | <a href="/hobbies/writing/{{ content.story._id }}">Back to story</a> |
-                {% if content.story.total_chaps > content.chapter.chapter_number %}
+                {% if (content.story.chapters | length) > content.chapter.chapter_number %}
                     <a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ content.chapter.chapter_number + 1 }}">Next chapter</a>
                 {% else %}
                     No future chapters

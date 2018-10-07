@@ -5,7 +5,7 @@
     <div class="blog-post">
         <form method="post" action="">
             <label for="chapter-number">Chapter Number</label>
-            <input type="text" class="form-control" id="chapter-number" name="chapter-number" value="{{ content.story.total_chaps + 1 }}"/>
+            <input type="text" class="form-control" id="chapter-number" name="chapter-number" value="{{ (content.story.chapters | length) + 1 }}"/>
             <label for="chapter-title">Chapter Title</label>
             <input type="text" class="form-control" id="chapter-title" name="chapter-title"/>
             <label for="chapter-text">Chapter Text</label>

@@ -81,25 +81,22 @@ router.get("/:storyId", (req, res, next) => {
     ])
         .catch(next)
         .then(([story, sortedChapterList]) => {
-            story.chapters = sortedChapterList;
-            return Promise.resolve(story);
-        })
-        .then(storyWithChapters => {
             res.render("./pages/stories/stories_one", {
                 top_page: {
-                    title: storyWithChapters.title,
+                    title: story.title,
                     tagline: "A collection of all the things that I've scribbled down at one point or another",
-                    image_src: `data:image/png;base64,${storyWithChapters.cover_img}`,
-                    image_alt: storyWithChapters.title
+                    image_src: `data:image/png;base64,${story.cover_img}`,
+                    image_alt: story.title
                 },
 
                 content: {
-                    story: storyWithChapters
+                    story: story,
+                    chapters: sortedChapterList
                 },
 
                 pagination: {
                     base_url: `/hobbies/writing/${req.params["storyId"]}?`,
-                    total: storyWithChapters.total_chaps,
+                    total: story.chapters.length,
                     page: Math.max((req.query["page"] || 1), 1),
                     page_size: 25
                 },

@@ -193,12 +193,18 @@ router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
 });
 
 router.post("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
-    chapterHandlerInstance.deleteChapter(req.body["chapter-id"]).then(() => {
-        res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
-    }, rejection => {
-        res.cookie("chapter-delete-error", {chapter_id: req.body["chapter-id"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
-    });
+    Promise.all([
+        chapterHandlerInstance.deleteChapter(req.body["chapter-id"]),
+        storyHandlerInstance.removeChapterFromStory(req.params["storyId"], req.body["chapter-id"])
+    ])
+        .then(() => {
+            res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
+        }, rejection => {
+            logger.warn("Failed to delete chapter");
+            logger.warn(rejection);
+            res.cookie("chapter-delete-error", {chapter_id: req.body["chapter-id"], error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
+        });
 });
 
 module.exports = router;
