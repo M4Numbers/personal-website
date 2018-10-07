@@ -155,19 +155,12 @@ router.get("/:storyId/chapter/:chapterNumber/edit", function (req, res, next) {
         });
 });
 
-router.post("/:storyId/chapter/:chapterNumber/edit", function (req, res, next) {
-    chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
-        .catch(next)
-        .then(chapterList => {return Promise.resolve(chapterList.pop());})
-        .then(chapter => {
-            logger.info(chapter);
-            return chapterHandlerInstance.updateExistingChapter(
-                chapter._id, req.body["chapter-number"],
-                req.body["chapter-title"], req.body["chapter-text"],
-                req.body["chapter-comments"]
-            );
-        })
-        .then(() => {
+router.post("/:storyId/chapter/:chapterNumber/edit", function (req, res) {
+        chapterHandlerInstance.updateExistingChapter(
+            req.body["chapter-id"], req.body["chapter-number"],
+            req.body["chapter-title"], req.body["chapter-text"],
+            req.body["chapter-comments"]
+        ).then(() => {
             res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
         }, rejection => {
             res.cookie("chapter-update-error", {chapter_id: req.params["chapterNumber"], error: rejection}, {signed: true, maxAge: 1000});

@@ -4,6 +4,7 @@
     <h2>Edit chapter {{ content.chapter.chapter_number }} of {{ content.story.story_title }}</h2>
     <div class="blog-post">
         <form method="post" action="">
+            <input type="hidden" id="chapter-id" name="chapter-id" value="{{ content.chapter._id }}" />
             <label for="chapter-number">Chapter Number</label>
             <input type="text" class="form-control" id="chapter-number" name="chapter-number" value="{{ content.chapter.chapter_number }}"/>
             <label for="chapter-title">Chapter Title</label>
