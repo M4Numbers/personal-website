@@ -75,30 +75,14 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/:storyId", (req, res, next) => {
-    storyHandlerInstance.findStoryByRawId(req.params["storyId"])
+    Promise.all([
+        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
+        chapterHandlerInstance.findChaptersByStory(req.params["storyId"], Math.max(0, ((req.query["page"] || 1) - 1)) * 25, 25)
+    ])
         .catch(next)
-        .then(story => {
-            return Promise.all(
-                story.chapters.map(chapter => {
-                    return new Promise((resolve, reject) => {
-                        chapterHandlerInstance.findChapterByRawId(chapter.chapter_id)
-                            .catch(reject)
-                            .then(full_chapter => {
-                                resolve({
-                                    _id: chapter.chapter_id,
-                                    chapter_number: chapter.chapter_number,
-                                    chapter_title: full_chapter.chapter_title,
-                                    last_updated: full_chapter.time_updated
-                                });
-                            });
-                    });
-                })
-            ).then(chapterList => {
-                return Promise.resolve(chapterList.sort((a, b) => {return a.chapter_number - b.chapter_number;}));
-            }).then(sortedChapterList => {
-                story.chapters = sortedChapterList;
-                return Promise.resolve(story);
-            });
+        .then(([story, sortedChapterList]) => {
+            story.chapters = sortedChapterList;
+            return Promise.resolve(story);
         })
         .then(storyWithChapters => {
             res.render("./pages/stories/stories_one", {
@@ -111,6 +95,13 @@ router.get("/:storyId", (req, res, next) => {
 
                 content: {
                     story: storyWithChapters
+                },
+
+                pagination: {
+                    base_url: `/hobbies/writing/${req.params["storyId"]}?`,
+                    total: storyWithChapters.total_chaps,
+                    page: Math.max((req.query["page"] || 1), 1),
+                    page_size: 25
                 },
 
                 head: {

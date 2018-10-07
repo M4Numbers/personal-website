@@ -31,6 +31,9 @@ const uploads = Multer({dest: "../../tmp/uploads"});
 const StoryHandler = require("../../lib/StoryHandler");
 const storyHandlerInstance = StoryHandler.getHandler();
 
+const ChapterHandler = require("../../lib/ChapterHandler");
+const chapterHandlerInstance = ChapterHandler.getHandler();
+
 const loggingSystem = require("../../lib/Logger");
 const logger = loggingSystem.getLogger("master");
 
@@ -103,8 +106,17 @@ router.post("/new", uploads.single("story-image"), function (req, res) {
     });
 });
 
-router.get("/:storyId", function (req, res) {
-    storyHandlerInstance.findStoryByRawId(req.params["storyId"]).then((story) => {
+router.get("/:storyId", function (req, res, next) {
+    Promise.all([
+        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
+        chapterHandlerInstance.findChaptersByStory(req.params["storyId"], Math.max(0, ((req.query["page"] || 1) - 1)) * 25, 25)
+    ])
+        .catch(next)
+        .then(([story, sortedChapterList]) => {
+            story.chapters = sortedChapterList;
+            return Promise.resolve(story);
+        })
+        .then(storyWithChapters => {
         res.render("./pages/admin/stories/admin_story_view_single", {
             top_page: {
                 title: "Administrator Toolkit",
@@ -114,7 +126,14 @@ router.get("/:storyId", function (req, res) {
             },
 
             content: {
-                story: story
+                story: storyWithChapters
+            },
+
+            pagination: {
+                base_url: `/admin/stories/${req.params["storyId"]}?`,
+                total: storyWithChapters.total_chaps,
+                page: Math.max((req.query["page"] || 1), 1),
+                page_size: 25
             },
 
             head: {
