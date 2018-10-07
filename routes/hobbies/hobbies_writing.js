@@ -114,10 +114,10 @@ router.get("/:storyId", (req, res, next) => {
         }, next);
 });
 
-router.get("/:storyId/chapter/:chapterId", (req, res, next) => {
+router.get("/:storyId/chapter/:chapterNumber", (req, res, next) => {
     Promise.all([
         storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
-        chapterHandlerInstance.findChapterByRawId(req.params["chapterId"])
+        chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
     ])
         .catch(next)
         .then(([story, chapter]) => {
@@ -131,7 +131,7 @@ router.get("/:storyId/chapter/:chapterId", (req, res, next) => {
 
                 content: {
                     story: story,
-                    chapter: chapter
+                    chapter: chapter.pop()
                 },
 
                 head: {
