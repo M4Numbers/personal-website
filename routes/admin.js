@@ -28,7 +28,8 @@ const router = express.Router();
 const blogAdmin = require("./admin/admin_blog");
 const projectAdmin = require("./admin/admin_projects");
 const artAdmin = require("./admin/admin_art");
-const artStories = require("./admin/admin_stories");
+const storiesAdmin = require("./admin/admin_stories");
+const chaptersAdmin = require("./admin/admin_chapters");
 const animeAdmin = require("./admin/admin_anime");
 const mangaAdmin = require("./admin/admin_manga");
 const kinkAdmin = require("./admin/admin_kinks");
@@ -49,7 +50,7 @@ router.use((req, res, next) => {
 router.use("/blog", [blogAdmin]);
 router.use("/projects", [projectAdmin]);
 router.use("/art", [artAdmin]);
-router.use("/stories", [artStories]);
+router.use("/stories", [storiesAdmin, chaptersAdmin]);
 router.use("/anime", [animeAdmin]);
 router.use("/manga", [mangaAdmin]);
 router.use("/fetishes", [kinkAdmin]);
