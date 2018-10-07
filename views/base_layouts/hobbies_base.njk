@@ -1,0 +1,8 @@
+{% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+{% import "macros/navigation.njk" as nav %}
+
+{% block navbar %}
+    {% include "partials/main_navbar.njk" %}
+    {% include "partials/hobbies_navbar.njk" %}
+{% endblock %}

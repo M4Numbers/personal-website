@@ -1,0 +1,20 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Edit Book</h2>
+    <div class="manga-book">
+        <form method="post" enctype="application/json" action="">
+            <h3>{{ content.book.title.romaji }}</h3>
+            <label for="book-review">Book Review</label>
+            <textarea class="form-control" id="book-review" name="book-review">{{ content.book.review }}</textarea>
+            <label for="book-tags">Book Tags</label>
+            <input type="text" class="form-control" id="book-tags" name="book-tags" value="{{ content.book.tags | join(", ") }}" />
+            <div class="admin-toolbar mt-4">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/manga/{{ content.book._id }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <hr />
+
+{% endblock %}

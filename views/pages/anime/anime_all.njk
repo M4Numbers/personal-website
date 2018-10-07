@@ -1,0 +1,48 @@
+{% extends "base_layouts/hobbies_base.njk" %}
+{% import "macros/content.njk" as c %}
+{% import "macros/navigation.njk" as nav %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        {% include "partials/anime_navbar.njk" %}
+
+        {% for show in content.shows %}
+            {% if ((loop.index0 % 3) == 0) %}
+                <div class="row">
+            {% endif %}
+
+            <div class="show-item col-lg-4">
+                <a href="/hobbies/anime/{{ show._id }}">
+                    <img class="small_cover img-thumbnail" src="{{ show.cover_img.large }}" alt="{{ show.title.romaji }}" />
+                    <h2 class="anime_title">{{ show.title.romaji }}</h2>
+                </a>
+                <p class="anime_status">
+                    {{ show.status }} <span class="float-right">Score: {{ show.score }}</span>
+                </p>
+            </div>
+
+            {% if ((loop.index0 % 3) == 2) or (loop.last) %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>
+                        There is nothing here at the moment. That usually means that there will be at some point in
+                        the future, but I promise nothing.
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                {% include "partials/pagination.njk" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

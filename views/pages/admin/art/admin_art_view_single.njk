@@ -1,0 +1,22 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Art Piece</h2>
+    <div class="art-piece">
+        <h3 class="mb-4">{{ content.picture.title }}</h3>
+        <div class="mb-4">
+            {{ content.picture.notes | markdown | safe }}
+        </div>
+        <p class="mb-4">
+            {% for tag in content.picture.tags %}
+                <span class="btn btn-dark">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        <div class="admin-toolbar">
+            <a href="/admin/art/{{ content.picture._id }}/edit" class="btn btn-primary">Edit</a>
+            <a href="/admin/art/{{ content.picture._id }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}

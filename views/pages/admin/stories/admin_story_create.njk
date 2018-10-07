@@ -1,0 +1,39 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Create Story</h2>
+    <div class="blog-post">
+        <form method="post" enctype="multipart/form-data" action="">
+            <label for="story-title">Story Title</label>
+            <input type="text" class="form-control" id="story-title" name="story-title"/>
+            <label for="story-type">Story Type</label>
+            <select id="story-type" name="story-type" class="form-control">
+                <option value="NOT_CHOSEN" selected="selected">Please choose a story type</option>
+                <option value="ORIGINAL">Original</option>
+                <option value="FANFICTION">Fanfiction</option>
+            </select>
+            <label for="story-status">Story status</label>
+            <select id="story-status" name="story-status" class="form-control">
+                <option value="NOT_CHOSEN" selected="selected">Please choose a story status</option>
+                <option value="IN_PROGRESS">In progress</option>
+                <option value="ON HOLD">On hold</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="DROPPED">Dropped</option>
+            </select>
+            <label for="story-synopsis">Story Synopsis</label>
+            <textarea id="story-synopsis" name="story-synopsis" class="form-control" ></textarea>
+            <label for="story-image">Story Cover Image</label>
+            <input class="form-control-file" id="story-image" name="story-image" type="file" />
+            <label for="story-notes">Story Meta-commentary</label>
+            <textarea id="story-notes" name="story-notes" class="form-control" ></textarea>
+            <label for="story-tags">Story Tags</label>
+            <input type="text" class="form-control" id="story-tags" name="story-tags"/>
+            <div class="admin-toolbar">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/stories/" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <hr />
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base_layouts/me_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block me_content %}
+    <h2>{{ content.title }}</h2>
+
+    <div class="blockquote">
+
+        {{ content.content | safe }}
+
+        <p class="text-center h3 text-danger">
+            If you are over 18 and want to know me to a degree that you wish you didn't, click 'continue'.
+            Otherwise, click on 'back' to return to the root page of this site.
+        </p>
+        <div class="row mt-5 mb-5">
+            <div class="col-md-6 text-center">
+                <form method="post" action="/hobbies/me/fetishes" >
+                    <input type="hidden" name="over_18" value="yes" />
+                    <input type="submit" class="btn btn-danger" value="Continue">
+                </form>
+            </div>
+            <div class="col-md-6 text-center">
+                <a class="btn btn-secondary" href="/">Back</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Manga Books</h2>
+    {% for book in content.books %}
+        <div class="manga-show">
+            <h3><a href="/admin/manga/{{ book._id }}">{{ book.title.romaji }}</a></h3>
+        </div>
+        <hr />
+    {% endfor %}
+
+    <div class="admin-toolbar mb-4">
+        <a class="btn btn-block btn-primary" href="javascript:;" onclick="refreshMangaItems()" >Refresh manga list</a>
+    </div>
+    {% include "partials/pagination.njk" %}
+{% endblock %}

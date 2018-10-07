@@ -1,0 +1,10 @@
+{
+  "_id": ObjectId("abc123"),
+  "parent_story_id": "somethingabc123",
+  "chapter_number": 2,
+  "chapter_title": "Chapter the first",
+  "chapter_text": "This is the chapter",
+  "time_posted": ISODate("2018-10-03T12:00:00.000Z"),
+  "time_updated": ISODate("2018-10-03T12:00:00.000Z"),
+  "author_notes": "Notes about the chapter"
+}

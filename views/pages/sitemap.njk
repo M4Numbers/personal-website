@@ -1,0 +1,19 @@
+{% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.fa_banner(top_page.fa_type, top_page.fa_choice) }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Site links:</h2>
+        <ul>
+            {% for site_link in content.site_links %}
+                <li><a href="{{ site_link.page_link }}">{{ site_link.page_name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <hr class="mb-4"/>
+{% endblock %}

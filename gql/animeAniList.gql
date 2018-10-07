@@ -1,0 +1,34 @@
+query($page: Int, $mediaType: MediaType) {
+    Page(page: $page, perPage: 50) {
+        pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+        },
+        mediaList (userId: 150148, type:$mediaType) {
+            id,
+            score,
+            status,
+            progress,
+            media {
+                id,
+                idMal,
+                description,
+                episodes,
+                status,
+                type,
+                title {
+                    romaji
+                    english
+                    native
+                },
+                coverImage {
+                    large
+                    medium
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+{% extends "base_layouts/me_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block me_content %}
+    {% for blog in content.blogs %}
+        <div class="blog-item row">
+            <div class="col-lg-12">
+                <h2 class="blog-title"><a href="/hobbies/me/extended-blog/{{ blog._id }}" >{{ blog.long_title }}</a></h2>
+            </div>
+            <div class="col-lg-6">
+                <p>Posted: {{ blog.time_posted | date("Do MMMM YYYY") }}</p>
+                <p>Updated: {{ blog.time_updated | date("Do MMMM YYYY") }}</p>
+            </div>
+            <div class="col-lg-6">
+                <p class="text-right">
+                    {% for tag in blog.tags %}
+                        <span class="btn btn-dark">{{ tag }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    There is nothing here at the moment. That usually means that there will be at some point in
+                    the future, but I promise nothing.
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-lg-12 text-right">
+            {% include "partials/pagination.njk" %}
+        </div>
+    </div>
+{% endblock %}

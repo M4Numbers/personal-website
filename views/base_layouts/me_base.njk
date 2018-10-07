@@ -1,0 +1,13 @@
+{% extends "base_layouts/hobbies_base.njk" %}
+
+{% block content %}
+    <div class="container">
+        {% block me_navbar %}
+            {% include "partials/me_navbar.njk" %}
+        {% endblock %}
+        {% block me_content %}
+        {% endblock %}
+    </div>
+
+    <hr class="mb-4"/>
+{% endblock %}

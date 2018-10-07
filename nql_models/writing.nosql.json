@@ -1,0 +1,22 @@
+{
+  "_id": ObjectId("acb123"),
+  "story_status": "Finished publishing",
+  "story_type": "Original|Fanfiction",
+  "title": "awesome manga title",
+  "total_chaps": 3,
+  "synopsis": "This is what happens in the awesome manga",
+  "cover_img": "abc123.png",
+  "chapters": [
+    {
+      "chapter_number": 1,
+      "chapter_id": "abc123"
+    }
+  ],
+  "time_posted": ISODate("2018-06-07T05:09:01.222Z"),
+  "time_updated": ISODate("2018-06-07T07:09:08.000Z"),
+  "tags": [
+    "tag_1",
+    "tag_2"
+  ],
+  "meta_review": "These are some words from the author about the story"
+}

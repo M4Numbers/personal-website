@@ -1,0 +1,20 @@
+{% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.fa_banner(top_page.fa_type, top_page.fa_choice) }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form class="login-box" method="post">
+            <h2>Log In</h2>
+            <label for="adminPassword" class="invisible">Admin Password</label>
+            <input type="password" name="admin_password" id="adminPassword" class="form-control mb-3"
+                   placeholder="Admin Password" />
+            <input type="submit" value="Log In" class="btn btn-primary btn-block" />
+        </form>
+    </div>
+
+    <hr class="mb-4"/>
+{% endblock %}

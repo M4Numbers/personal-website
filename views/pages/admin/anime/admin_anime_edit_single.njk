@@ -1,0 +1,20 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Edit Show</h2>
+    <div class="anime-show">
+        <form method="post" enctype="application/json" action="">
+            <h3>{{ content.show.title.romaji }}</h3>
+            <label for="show-review">Show Review</label>
+            <textarea class="form-control" id="show-review" name="show-review">{{ content.show.review }}</textarea>
+            <label for="show-tags">Show Tags</label>
+            <input type="text" class="form-control" id="show-tags" name="show-tags" value="{{ content.show.tags | join(", ") }}" />
+            <div class="admin-toolbar mt-4">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/anime/{{ content.show._id }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <hr />
+
+{% endblock %}

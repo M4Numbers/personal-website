@@ -1,0 +1,14 @@
+$colour-shade: rgb(16, 16, 16);
+
+$footer-height: 12rem;
+$footer-collapsed-height: 25rem;
+$contact-size: 8rem;
+$icon-size: 12rem;
+$avatar-max: 19rem;
+
+$dark-darker: $dark - $colour-shade;
+$dark-lighter: $dark + $colour-shade;
+
+$footer-color: color("gray-dark");
+
+$unavailable-color: color("orange");

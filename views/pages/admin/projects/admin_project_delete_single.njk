@@ -1,0 +1,18 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Delete Project</h2>
+    <div class="project-post">
+        <h3 class="mb-4">{{ content.project.long_title }}</h3>
+        <div class="admin-toolbar">
+            <form method="post" action="">
+                <p class="alert-danger">Are you sure you want to delete this project?</p>
+
+                <input type="submit" class="btn btn-danger" value="Yes" />
+                <a href="/admin/projects/{{ content.project._id }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}

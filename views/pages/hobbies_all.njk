@@ -1,0 +1,117 @@
+{% extends "base_layouts/hobbies_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-white justify-content-center text-dark pt-4 pb-4">
+        <div class="container marketing text-center">
+            <h1>Hobbies</h1>
+            <p>I do a few things, and this site is home to even fewer of them.</p>
+            <hr class="bg-dark"/>
+            <div class="row">
+                <div class="col-lg-4">
+                    <a href="/hobbies/art" class="hidden-dark-link">
+                        <div class="img-thumbnail mx-auto bg-dark rounded-circle text-light icon-host row">
+                            <div class="my-auto mx-auto">
+                                <i class="fas fa-paint-brush fa-7x"></i>
+                            </div>
+                        </div>
+                        <h2 class="mt-3">Art</h2>
+                    </a>
+                    <p>
+                        For whatever reason, again, I occasionally sketch things in the corners of
+                        notebooks or draw larger pieces that I am never satisfied with. Interesting
+                        point on that; I draw all of my own assets on here.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <a href="/hobbies/writing" class="hidden-dark-link">
+                        <div class="img-thumbnail mx-auto bg-dark rounded-circle text-light icon-host row">
+                            <div class="my-auto mx-auto">
+                                <i class="fas fa-file-alt fa-7x"></i>
+                            </div>
+                        </div>
+                        <h2 class="mt-3">Writing</h2>
+                    </a>
+                    <p>
+                        Along with the words that interest me, sometimes I write words that might interest
+                        others too. This includes traditional fiction, along with RPG campaigns that I keep
+                        around for when I want my friends to hate me.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <a href="#" class="hidden-dark-link">
+                        <div class="img-thumbnail mx-auto bg-dark rounded-circle text-light icon-host row">
+                            <div class="my-auto mx-auto">
+                                <i class="fas fa-dice fa-7x coming-soon"></i>
+                            </div>
+                        </div>
+                        <h3 class="mt-3">Tabletop Gaming</h3>
+                    </a>
+                    <p>
+                        What nerd would be complete without a hefty helping of tabletop gaming items?
+                        Over the last few years, I've somehow managed to accrue a fair number of both board
+                        games and tabletop RPGs; here are my thoughts on some of them. Coming soon.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="/hobbies/anime" class="hidden-dark-link">
+                        <div class="img-thumbnail mx-auto bg-dark rounded-circle text-light icon-host row">
+                            <div class="my-auto mx-auto">
+                                <i class="fas fa-tv fa-7x"></i>
+                            </div>
+                        </div>
+                        <h3 class="mt-3">Anime</h3>
+                    </a>
+                    <p>
+                        And then we get into the stranger hobbies... It's hardly a hobby at all really,
+                        but I've managed to watch a somewhat large amount of stuff over the years.
+                        Sometimes I even write a review about what I thought about it.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <a href="/hobbies/manga" class="hidden-dark-link">
+                        <div class="img-thumbnail mx-auto bg-dark rounded-circle text-light icon-host row">
+                            <div class="my-auto mx-auto">
+                                <i class="fas fa-book-open fa-7x"></i>
+                            </div>
+                        </div>
+                        <h3 class="mt-3">Manga</h3>
+                    </a>
+                    <p>
+                        And if I've seen a lot of anime normally, then I think I've read less manga more
+                        voraciously. My manga tastes are somewhat stranger than my anime tastes, and that's
+                        saying something... so that's your warning. Enter if you don't mind all manner of
+                        literature...
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <a href="/hobbies/me" class="hidden-dark-link">
+                        <div class="img-thumbnail mx-auto bg-dark rounded-circle text-light icon-host row">
+                            <div class="my-auto mx-auto">
+                                <i class="fas fa-book fa-7x"></i>
+                            </div>
+                        </div>
+                        <h3 class="mt-3">Me</h3>
+                    </a>
+                    <p>
+                        So, one of the reasons why I created this site in the first place is so that people
+                        might get a better impression of me as a person, and of what I do. It's somewhat split
+                        between my personal projects, namely on the projects page, what I do for fun, under hobbies,
+                        and whatever I feel like writing about at any particular point in time. However, I do write
+                        more things, and then hide them away, because they're somewhat personal to me, so if you
+                        know me, or would really like to know me better, and would like a glimpse into the darkest
+                        reaches of my mind, this is the place for you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

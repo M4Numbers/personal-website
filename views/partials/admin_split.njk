@@ -1,0 +1,31 @@
+{% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+{% import "macros/navigation.njk" as f %}
+
+{% block banner_icon %}
+    {{ c.fa_banner(top_page.fa_type, top_page.fa_choice) }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="list-unstyled">
+                    <li class="mb-3"><a href="/admin/blog" class="btn btn-block btn-dark" >Blogs</a></li>
+                    <li class="mb-3"><a href="/admin/projects" class="btn btn-block btn-dark">Projects</a></li>
+                    <li class="mb-3"><a href="/admin/art" class="btn btn-block btn-dark">Art</a></li>
+                    <li class="mb-3"><a href="/admin/stories" class="btn btn-block btn-dark">Stories</a></li>
+                    <li class="mb-3"><a href="/admin/anime" class="btn btn-block btn-dark">Anime</a></li>
+                    <li class="mb-3"><a href="/admin/manga" class="btn btn-block btn-dark">Manga</a></li>
+                    <li class="mb-3"><a href="/admin/fetishes" class="btn btn-block btn-dark">Kinks</a></li>
+                </ul>
+            </div>
+            <div class="col-md-8">
+                {% block admin_content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <hr class="mb-4"/>
+{% endblock %}

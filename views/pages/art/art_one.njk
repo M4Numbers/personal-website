@@ -1,0 +1,26 @@
+{% extends "base_layouts/hobbies_base.njk" %}
+
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.cover_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        {% for tag in content.picture.tags %}
+            <span class="btn btn-light">{{ tag }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        Created <span class="btn btn-light">{{ content.picture.date_completed | date("D MMMM YYYY") }}</span>
+    </p>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="mx-auto my-auto"><img class="w-100" src="data:image/png;base64,{{ content.picture.image.full_size }}" alt="{{ content.picture.title }}"></div>
+        <h2>{{ content.picture.title }}</h2>
+        <p>{{ content.picture.notes | markdown | safe }}</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        {% for tag in top_page.project_tags %}
+            <span class="btn btn-light">{{ tag }}</span>
+        {% endfor %}
+    </p>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {{ content.project_text | markdown | safe }}
+    </div>
+{% endblock %}

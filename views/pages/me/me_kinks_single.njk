@@ -1,0 +1,25 @@
+{% extends "base_layouts/me_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.img_banner(top_page.image_src, top_page.image_alt) }}
+{% endblock %}
+
+{% block banner_tagline %}
+    <p>
+        {% for tag in content.show.tags %}
+            <span class="btn btn-light">{{ tag }}</span>
+        {% endfor %}
+    </p>
+    <p>Practising status: <span class="btn btn-light">{{ content.kink.practising_status | capitalize }}</span></p>
+{% endblock %}
+
+{% block me_content %}
+    <h2 class="mb-4">Description</h2>
+
+    <div id="kink-description" class="mb-4">{{ content.kink.kink_description }}</div>
+
+    <h3 class="mb-4">Personal Experience</h3>
+
+    <div id="kink-experience" class="mb-4">{{ content.kink.personal_experience }}</div>
+{% endblock %}

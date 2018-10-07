@@ -1,0 +1,60 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Story</h2>
+    <div class="story">
+        <h3 class="mb-4">{{ content.story.title }}</h3>
+        <div class="mb-4">
+            {{ content.story.synopsis | markdown | safe }}
+        </div>
+        <div class="mb-4">
+            {{ content.story.meta_review | markdown | safe }}
+        </div>
+        <p class="mb-4">
+            {% for tag in content.story.tags %}
+                <span class="btn btn-dark">{{ tag }}</span>
+            {% endfor %}
+        </p>
+
+        <h4>Chapters</h4>
+
+        <table class="table thead-dark table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>Chapter Number</td>
+                    <td>Chapter Name</td>
+                    <td>Edit/Delete</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chapter in content.chapters %}
+                    <tr>
+                        <td>{{ chapter.chapter_number }}</td>
+                        <td><a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}">{{ chapter.chapter_title }}</a></td>
+                        <td>
+                            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}/edit" class="btn btn-primary">Edit</a>
+                            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}/delete" class="btn-danger btn">Remove</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        {% include "partials/pagination.njk" %}
+                    </td>
+                    <td>
+                        <a href="/admin/stories/{{ content.story._id }}/chapter/new" class="btn btn-primary">Add</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="admin-toolbar">
+            <a href="/admin/stories/{{ content.story._id }}/edit" class="btn btn-primary">Edit</a>
+            <a href="/admin/stories/{{ content.story._id }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}

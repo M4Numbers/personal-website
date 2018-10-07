@@ -1,0 +1,21 @@
+{
+  "_id": ObjectId("abc123"),
+  "anime_ids": {
+    "my_anime_list": 12345,
+    "ani_list": 12345,
+    "ani_db": 12345
+  },
+  "anime_status": "Finished Airing",
+  "title": "Very interesting anime title",
+  "score": 6,
+  "status": "Completed",
+  "total_eps": 12,
+  "current_ep": 12,
+  "synopsis": "This is a synopsis",
+  "cover_img": "abc123.png",
+  "tags": [
+    "tag_1",
+    "tag_2"
+  ],
+  "review": "This is a review of the very interesting anime"
+}

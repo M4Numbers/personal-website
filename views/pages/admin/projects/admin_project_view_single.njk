@@ -1,0 +1,26 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Projects</h2>
+    <div class="blog-post">
+        <h3 class="mb-4">{{ content.project.long_title }}</h3>
+        <div class="mb-4">
+            {{ content.project.description | markdown | safe }}
+        </div>
+        <p class="mb-4">
+            {% for tag in content.project.tags %}
+                <span class="btn btn-dark">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        <p class="mb-4">
+            <label for="project-visible">Project is publicly findable:</label>
+            <input id="project-visible" type="checkbox" {{ "checked=\"checked\"" if content.project.public }} disabled="disabled" />
+        </p>
+        <div class="admin-toolbar">
+            <a href="/admin/projects/{{ content.project._id }}/edit" class="btn btn-primary">Edit</a>
+            <a href="/admin/projects/{{ content.project._id }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}

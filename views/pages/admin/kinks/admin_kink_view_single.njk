@@ -1,0 +1,28 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Kink</h2>
+    <div class="blog-post">
+        <h3 class="mb-4">{{ content.kink.kink_name }}</h3>
+        <div class="mb-4">
+            {{ content.kink.kink_description | markdown | safe }}
+        </div>
+        <h4 class="mb-4">Personal experience</h4>
+        <div class="mb-4">
+            {{ content.kink.personal_experience | markdown | safe }}
+        </div>
+        <p class="mb-4">
+            {% for tag in content.kink.tags %}
+                <span class="btn btn-dark">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        <p class="mb-4">
+            Currently practising: <span class="btn btn-dark">{{ content.kink.practising_status | capitalize }}</span>
+        </p>
+        <div class="admin-toolbar">
+            <a href="/admin/fetishes/{{ content.kink._id }}/edit" class="btn btn-primary">Edit</a>
+            <a href="/admin/fetishes/{{ content.kink._id }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <hr />
+{% endblock %}
