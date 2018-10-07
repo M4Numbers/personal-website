@@ -125,43 +125,54 @@ router.get("/:storyId/chapter/:chapterNumber", function (req, res, next) {
         });
 });
 
-router.get("/:storyId/chapter/:chapterNumber/edit", function (req, res) {
-    storyHandlerInstance.findStoryByRawId(req.params["storyId"]).then((story) => {
-        res.render("./pages/admin/stories/admin_story_edit_single", {
-            top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
-            },
+router.get("/:storyId/chapter/:chapterNumber/edit", function (req, res, next) {
+    Promise.all([
+        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
+        chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
+    ])
+        .catch(next)
+        .then(([story, chapter]) => {
+            res.render("./pages/admin/stories/admin_chapter_edit_single", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
 
-            content: {
-                story: story
-            },
+                content: {
+                    story: story,
+                    chapter: chapter.pop()
+                },
 
-            head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "story-edit"
-            }
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "story-edit"
+                }
+            });
         });
-    });
 });
 
-router.post("/:storyId/chapter/:chapterNumber/edit", uploads.single("story-image"), function (req, res) {
-    let imageAsBase64 = fs.readFileSync(req.file.path, "base64");
-    storyHandlerInstance.updateExistingStory(
-        req.params["storyId"], req.body["story-title"],
-        req.body["story-status"], req.body["story-type"],
-        req.body["story-synopsis"], imageAsBase64,
-        req.body["story-tags"].split(/, ?/), req.body["story-notes"]
-    ).then(() => {
-        res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
-    }, rejection => {
-        res.cookie("story-update-error", {art_id: req.params["storyId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
-    });
+router.post("/:storyId/chapter/:chapterNumber/edit", function (req, res, next) {
+    chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
+        .catch(next)
+        .then(chapterList => {return Promise.resolve(chapterList.pop());})
+        .then(chapter => {
+            logger.info(chapter);
+            return chapterHandlerInstance.updateExistingChapter(
+                chapter._id, req.body["chapter-number"],
+                req.body["chapter-title"], req.body["chapter-text"],
+                req.body["chapter-comments"]
+            );
+        })
+        .then(() => {
+            res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
+        }, rejection => {
+            res.cookie("chapter-update-error", {chapter_id: req.params["chapterNumber"], error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
+        });
 });
 
 router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
