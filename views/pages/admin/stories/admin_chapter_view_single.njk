@@ -1,0 +1,23 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Chapter</h2>
+    <div class="story">
+        <h3 class="mb-4"><a href="/admin/stories/{{ content.story._id }}">{{ content.story.title }}</a> :: {{ content.story.chapter.chapter_number }} :: {{ content.story.chapter.chapter_title }}</h3>
+        <h4>Chapter Text</h4>
+        <div class="mb-4">
+            {{ content.story.chapter.chapter_text | markdown | safe }}
+        </div>
+        <h4>Chapter Notes</h4>
+        <div class="mb-4">
+            {{ content.story.chapter.author_notes | markdown | safe }}
+        </div>
+
+        <div class="admin-toolbar">
+            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ content.story.chapter.chapter_number }}/edit" class="btn btn-primary">Edit</a>
+            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ content.story.chapter.chapter_number }}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}
