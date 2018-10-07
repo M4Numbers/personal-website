@@ -37,83 +37,15 @@ const chapterHandlerInstance = ChapterHandler.getHandler();
 const loggingSystem = require("../../lib/Logger");
 const logger = loggingSystem.getLogger("master");
 
-router.get("/", function (req, res) {
-    Promise.all(
-        [
-            storyHandlerInstance.findAllStories(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"title": 1}),
-            storyHandlerInstance.getTotalStoryCount()
-        ]
-    ).then(([stories, totalCount]) => {
-        res.render("./pages/admin/stories/admin_story_view", {
-            top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
-            },
+// All endpoints below are prefixed with `/admin/stories/:storyId/chapter`
 
-            content: {
-                stories: stories
-            },
-
-            pagination: {
-                base_url: "/admin/stories?",
-                total: totalCount,
-                page: Math.max((req.query["page"] || 1), 1),
-                page_size: 10
-            },
-
-            head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "story-view"
-            }
-        });
-    });
-});
-
-router.get("/new", function (req, res) {
-    res.render("./pages/admin/stories/admin_story_create", {
-        top_page: {
-            title: "Administrator Toolkit",
-            tagline: "All the functions that the administrator of the site has available to them",
-            fa_type: "fas",
-            fa_choice: "fa-toolbox"
-        },
-
-        head: {
-            title: "M4Numbers",
-            description: "Home to the wild things",
-            current_page: "admin",
-            current_sub_page: "story-edit"
-        }
-    });
-});
-
-router.post("/new", uploads.single("story-image"), function (req, res) {
-    logger.info(`Reading in new image from ${req.file.path}`);
-    let imageAsBase64 = fs.readFileSync(req.file.path, "base64");
-    storyHandlerInstance.addNewStory(
-        req.body["story-title"], req.body["story-status"], req.body["story-type"],
-        req.body["story-synopsis"], imageAsBase64, req.body["story-tags"].split(/, ?/),
-        req.body["story-notes"]
-    ).then((savedStory) => {
-        res.redirect(303, `/admin/stories/${savedStory._id}`);
-    }, rejection => {
-        res.cookie("story-create-error", {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, "/admin/stories/new");
-    });
-});
-
-router.get("/:storyId", function (req, res, next) {
-    Promise.all([
-        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
-        chapterHandlerInstance.findChaptersByStory(req.params["storyId"], Math.max(0, ((req.query["page"] || 1) - 1)) * 25, 25)
-    ])
+router.get("/:storyId/chapter/new", function (req, res, next) {
+    logger.info(`Searching for story with id ${req.params["storyId"]}`);
+    storyHandlerInstance.findStoryByRawId(req.params["storyId"])
         .catch(next)
-        .then(([story, sortedChapterList]) => {
-            res.render("./pages/admin/stories/admin_story_view_single", {
+        .then(story => {
+            logger.info(story);
+            res.render("./pages/admin/stories/admin_chapter_create", {
                 top_page: {
                     title: "Administrator Toolkit",
                     tagline: "All the functions that the administrator of the site has available to them",
@@ -122,15 +54,65 @@ router.get("/:storyId", function (req, res, next) {
                 },
 
                 content: {
-                    story: story,
-                    chapters: sortedChapterList
+                    story: story
                 },
 
-                pagination: {
-                    base_url: `/admin/stories/${req.params["storyId"]}?`,
-                    total: story.total_chaps,
-                    page: Math.max((req.query["page"] || 1), 1),
-                    page_size: 25
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "story-edit"
+                }
+            });
+        });
+});
+
+router.post("/:storyId/chapter/new", function (req, res) {
+    chapterHandlerInstance.addNewChapter(
+        req.params["storyId"], req.body["chapter-number"],
+        req.body["chapter-title"], req.body["chapter-text"],
+        req.body["chapter-comments"]
+    )
+        .then((uploadedChapter) => {
+            return storyHandlerInstance.addChapterToStory(
+                req.params["storyId"], uploadedChapter.chapter_number,
+                uploadedChapter._id
+            );
+        })
+        .then(() => {
+            res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
+        }, rejection => {
+            logger.warn("story creation error");
+            logger.warn(rejection);
+            res.redirect(303, `/admin/stories/${req.params["storyId"]}/new`);
+        });
+});
+
+router.get("/:storyId/chapter/:chapterNumber", function (req, res, next) {
+    Promise.all([
+        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
+        chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
+    ])
+        .catch(next)
+        .then(([story, chapters]) => {
+            if (chapters.length > 0) {
+                story.chapter = chapters.pop();
+                return Promise.resolve(story);
+            } else {
+                next();
+            }
+        })
+        .then(storyWithChapter => {
+            res.render("./pages/admin/stories/admin_chapter_view_single", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    story: storyWithChapter
                 },
 
                 head: {
@@ -143,7 +125,7 @@ router.get("/:storyId", function (req, res, next) {
         });
 });
 
-router.get("/:storyId/edit", function (req, res) {
+router.get("/:storyId/chapter/:chapterNumber/edit", function (req, res) {
     storyHandlerInstance.findStoryByRawId(req.params["storyId"]).then((story) => {
         res.render("./pages/admin/stories/admin_story_edit_single", {
             top_page: {
@@ -167,7 +149,7 @@ router.get("/:storyId/edit", function (req, res) {
     });
 });
 
-router.post("/:storyId/edit", uploads.single("story-image"), function (req, res) {
+router.post("/:storyId/chapter/:chapterNumber/edit", uploads.single("story-image"), function (req, res) {
     let imageAsBase64 = fs.readFileSync(req.file.path, "base64");
     storyHandlerInstance.updateExistingStory(
         req.params["storyId"], req.body["story-title"],
@@ -182,7 +164,7 @@ router.post("/:storyId/edit", uploads.single("story-image"), function (req, res)
     });
 });
 
-router.get("/:storyId/delete", function (req, res) {
+router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
     storyHandlerInstance.findStoryByRawId(req.params["storyId"]).then((story) => {
         res.render("./pages/admin/stories/admin_story_delete_single", {
             top_page: {
@@ -206,7 +188,7 @@ router.get("/:storyId/delete", function (req, res) {
     });
 });
 
-router.post("/:storyId/delete", function (req, res) {
+router.post("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
     storyHandlerInstance.deleteStory(req.params["storyId"]).then(() => {
         res.redirect(303, "/admin/stories/");
     }, rejection => {

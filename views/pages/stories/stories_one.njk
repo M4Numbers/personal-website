@@ -46,7 +46,7 @@
                     {% for chapter in content.story.chapters %}
                         <tr>
                             <td>{{ chapter.chapter_number }}</td>
-                            <td><a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ chapter._id }}">{{ chapter.chapter_title }}</a></td>
+                            <td><a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}">{{ chapter.chapter_title }}</a></td>
                             <td>{{ chapter.last_updated | date("Do MMMM YYYY") }}</td>
                         </tr>
                     {% endfor %}

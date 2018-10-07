@@ -1,0 +1,23 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Add chapter to {{ content.story.story_title }}</h2>
+    <div class="blog-post">
+        <form method="post" action="">
+            <label for="chapter-number">Chapter Number</label>
+            <input type="text" class="form-control" id="chapter-number" name="chapter-number" value="{{ content.story.total_chaps + 1 }}"/>
+            <label for="chapter-title">Chapter Title</label>
+            <input type="text" class="form-control" id="chapter-title" name="chapter-title"/>
+            <label for="chapter-text">Chapter Text</label>
+            <textarea id="chapter-text" name="chapter-text" class="form-control" ></textarea>
+            <label for="chapter-comments">Chapter Comments</label>
+            <textarea id="chapter-comments" name="chapter-comments" class="form-control" ></textarea>
+            <div class="admin-toolbar">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/stories/{{ content.story._id }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <hr />
+
+{% endblock %}

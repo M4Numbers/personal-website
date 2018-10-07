@@ -20,29 +20,33 @@
 
         <table class="table thead-dark table-striped table-hover">
             <thead>
-                <td>Chapter Number</td>
-                <td>Chapter Name</td>
-                <td>Edit/Delete</td>
+                <tr>
+                    <td>Chapter Number</td>
+                    <td>Chapter Name</td>
+                    <td>Edit/Delete</td>
+                </tr>
             </thead>
             <tbody>
-                {% for chapter in content.story.chapters %}
+                {% for chapter in content.chapters %}
                     <tr>
                         <td>{{ chapter.chapter_number }}</td>
-                        <td><a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter._id }}">{{ chapter.chapter_name }}</a></td>
+                        <td><a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}">{{ chapter.chapter_title }}</a></td>
                         <td>
-                            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter._id }}/edit" class="btn btn-primary">Edit</a>
-                            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter._id }}/delete" class="btn-danger btn">Remove</a>
+                            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}/edit" class="btn btn-primary">Edit</a>
+                            <a href="/admin/stories/{{ content.story._id }}/chapter/{{ chapter.chapter_number }}/delete" class="btn-danger btn">Remove</a>
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
-                <td colspan="2">
-                    {% include "partials/pagination.njk" %}
-                </td>
-                <td>
-                    <a href="/admin/stories/{{ content.story._id }}/chapter/new" class="btn btn-primary">Add</a>
-                </td>
+                <tr>
+                    <td colspan="2">
+                        {% include "partials/pagination.njk" %}
+                    </td>
+                    <td>
+                        <a href="/admin/stories/{{ content.story._id }}/chapter/new" class="btn btn-primary">Add</a>
+                    </td>
+                </tr>
             </tfoot>
         </table>
 
