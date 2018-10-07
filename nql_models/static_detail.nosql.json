@@ -105,6 +105,10 @@
       {
         "page_name": "Projects",
         "page_link": "/projects"
+      },
+      {
+        "page_name": "Stories",
+        "page_link": "/hobbies/stories"
       }
     ]
   }
