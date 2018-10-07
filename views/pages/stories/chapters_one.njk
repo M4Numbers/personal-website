@@ -14,11 +14,30 @@
 
 {% block content %}
     <div class="container">
-        <h2>{{ content.chapter.chapter_title }}</h2>
+        <h2>Chapter {{ content.chapter.chapter_number }} :: {{ content.chapter.chapter_title }}</h2>
         <p>{{ content.chapter.chapter_text | markdown | safe }}</p>
 
         <div class="blockquote-footer">
-            <p><a href="/hobbies/writing/{{ content.story._id }}">Back to story</a></p>
+            <p>
+                {% if content.chapter.chapter_number > 1 %}
+                    <a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ content.chapter.chapter_number - 1 }}">Previous chapter</a>
+                {% else %}
+                    No previous chapters
+                {% endif %}
+                | <a href="/hobbies/writing/{{ content.story._id }}">Back to story</a> |
+                {% if content.story.total_chaps > content.chapter.chapter_number %}
+                    <a href="/hobbies/writing/{{ content.story._id }}/chapter/{{ content.chapter.chapter_number + 1 }}">Next chapter</a>
+                {% else %}
+                    No future chapters
+                {% endif %}
+            </p>
         </div>
+
+        {% if content.chapter.author_notes %}
+            <div class="blockquote bg-secondary text-light p-3">
+                <h3 class="text-md-left">Author's notes</h3>
+                <p>{{ content.chapter.author_notes | markdown | safe }}</p>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
