@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+const config = require("config");
 const express = require("express");
 const crypto = require("crypto");
 const router = express.Router();
@@ -51,7 +52,7 @@ router.get("/login", function (req, res, next) {
 router.post("/login", function (req, res, next) {
     if (req.body["admin_password"] && !req.signedCookies.logged_in) {
         let hash = crypto.createHash("sha256").update(req.body["admin_password"]).digest("hex");
-        if (hash === "c4d4c7cd46704006b40586ad7b9f5cc64e519641aae57f201c2d7d119d1bf9f9") {
+        if (hash === config.get("admin.hash")) {
             res.cookie("logged_in", 1, {signed: true, maxAge: 60000000});
         }
     }

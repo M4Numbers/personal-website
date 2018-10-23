@@ -24,6 +24,7 @@
 
 "use strict";
 
+const config = require("config");
 const express = require("express");
 const nunjucks = require("nunjucks");
 const nunjucksDate = require("nunjucks-date");
@@ -68,7 +69,7 @@ app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ic
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser("secret-goes-here"));
+app.use(cookieParser(config.get("cookies.passphrase")));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist")));
@@ -91,10 +92,6 @@ app.use("/projects", [projects]);
 
 // Static pages to be served
 // app.use("/stats", null);
-
-// Content pages
-// app.use("/creative", null);
-// app.use("/media", null);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

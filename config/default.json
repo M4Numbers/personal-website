@@ -1,0 +1,16 @@
+{
+  "app": {
+    "port": 3000
+  },
+  "cookies": {
+    "domain": "localhost",
+    "secure_domain": "localhost",
+    "passphrase": "TO_BE_FILLED_IN_ON_PRODUCTION"
+  },
+  "admin": {
+    "hash": "TO_BE_FILLED_IN_ON_PRODUCTION"
+  },
+  "protected": {
+    "hash": "TO_BE_FILLED_IN_ON_PRODUCTION"
+  }
+}
