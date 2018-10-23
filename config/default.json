@@ -7,6 +7,9 @@
     "secure_domain": "localhost",
     "passphrase": "TO_BE_FILLED_IN_ON_PRODUCTION"
   },
+  "database": {
+    "uri": "mongod://user@password:mongodb-server:27017/database"
+  },
   "admin": {
     "hash": "TO_BE_FILLED_IN_ON_PRODUCTION"
   },
