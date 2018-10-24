@@ -3,7 +3,11 @@
 {% import "macros/content.njk" as c %}
 
 {% block banner_icon %}
-    {{ c.cover_banner(top_page.image_src, top_page.image_alt) }}
+    {% if content.story.cover_img | length %}
+        {{ c.cover_banner(top_page.image_src, top_page.image_alt) }}
+    {% else %}
+        {{ c.fa_banner("fas", "fa-book") }}
+    {% endif %}
 {% endblock %}
 
 {% block banner_tagline %}
