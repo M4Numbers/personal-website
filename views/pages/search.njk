@@ -9,9 +9,21 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h2 aria-label="search_box">Query</h2>
-                <input aria-labelledby="search_box" type="text" id="search_box" name="q" placeholder="query" value="{{ search }}"
-                       class="form-control" />
+                <h2>Query</h2>
+                <form class="form-inline my-2 my-lg-0" method="get" action="/search">
+                    <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text" name="q"
+                           value="{{ search }}" />
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <hr class="clearfix" />
+                <h3>Search result count</h3>
+                <ul>
+                    <li>Anime shows: 0</li>
+                    <li>Art pieces: 0</li>
+                    <li>Blog posts: 0</li>
+                    <li>Manga series: 0</li>
+                    <li>Stories: 0</li>
+                </ul>
             </div>
             <div class="col-md-8">
                 <h2>Search results</h2>
