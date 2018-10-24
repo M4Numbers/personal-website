@@ -1,0 +1,41 @@
+{% extends "base_layouts/homepage_base.njk" %}
+{% import "macros/content.njk" as c %}
+
+{% block banner_icon %}
+    {{ c.fa_banner(top_page.fa_type, top_page.fa_choice) }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h2 aria-label="search_box">Query</h2>
+                <input aria-labelledby="search_box" type="text" id="search_box" name="q" placeholder="query" value="{{ search }}"
+                       class="form-control" />
+            </div>
+            <div class="col-md-8">
+                <h2>Search results</h2>
+                {% for blog in content.results %}
+                    <div class="search-item row">
+                        <div class="col-lg-12">
+                            <h2 class="blog-title"><a href="/blog/{{ blog._id }}" >{{ blog.long_title }}</a></h2>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>
+                                Sorry, but your search returned nothing.
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        {% include "partials/pagination.njk" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -38,6 +38,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const index = require("./routes/index");
+const search = require("./routes/search");
 const auth = require("./routes/auth");
 const statics = require("./routes/statics");
 const admin = require("./routes/admin");
@@ -85,6 +86,7 @@ app.use(function(req, res, next) {
 });
 
 app.use("/", [index, auth, statics]);
+app.use("/search", [search]);
 app.use("/admin", [admin]);
 app.use("/blog", [blog]);
 app.use("/hobbies", [hobbies]);
