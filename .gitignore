@@ -33,6 +33,10 @@ npm-debug.log
 
 **/.sass-cache/
 
+# Built files
+
+*.tgz
+
 ### Compiled Files
 
 /**/*.css
