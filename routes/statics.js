@@ -23,7 +23,10 @@
  */
 
 const express = require("express");
+const moment = require("moment");
 const router = express.Router();
+
+const envs = process.env;
 
 const StaticHandler = require("../lib/StaticHandler");
 const staticHandlerInstance = StaticHandler.getHandler();
@@ -103,6 +106,28 @@ router.get("/contact", function (req, res, next) {
             }
         });
     }, next);
+});
+
+router.get("/stats", (req, res) => {
+    res.render("./pages/stats", {
+        top_page: {
+            title: "Statistics",
+            tagline: "Some statistics that relate directly to the site",
+            fa_type: "fas",
+            fa_choice: "fa-clipboard-check"
+        },
+
+        content: {
+            time: moment(),
+            version: envs["npm_package_version"]
+        },
+
+        head: {
+            title: "M4Numbers :: Statistics",
+            description: "Home to the wild things",
+            current_page: "stats"
+        }
+    });
 });
 
 module.exports = router;

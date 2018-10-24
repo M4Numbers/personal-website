@@ -107,6 +107,10 @@
         "page_link": "/projects"
       },
       {
+        "page_name": "Site statistics",
+        "page_link": "/stats"
+      },
+      {
         "page_name": "Stories",
         "page_link": "/hobbies/stories"
       }
