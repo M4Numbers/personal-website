@@ -2,7 +2,7 @@
   "name": "personal-website",
   "description": "This is the personal website of Matthew D. Ball (otherwise known as M4Numbers)",
   "author": "Matthew D. Ball <m4numbers@gmail.com>",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -42,5 +42,27 @@
     "gulp-sass": "^4.0.1",
     "node-sass-tilde-importer": "^1.0.2",
     "nodemon": "^1.17.5"
-  }
+  },
+  "files": [
+    "bin",
+    "config/default.json",
+    "images",
+    "js",
+    "lib",
+    "routes",
+    "stylesheets",
+    "views",
+    ".babelrc",
+    ".eslintrc",
+    ".gitignore",
+    "app.js",
+    "gulpfile.js",
+    "LICENSE",
+    "lock.html",
+    "package.json",
+    "README.md",
+    "robots.txt",
+    "sitemap.txt",
+    "yarn.lock"
+  ]
 }
