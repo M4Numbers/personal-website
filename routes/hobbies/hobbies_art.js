@@ -25,7 +25,6 @@
 const express = require("express");
 const router = express.Router();
 
-const SiteError = require("../../lib/SiteError");
 const ArtHandler = require("../../lib/ArtHandler");
 const artHandlerInstance = ArtHandler.getHandler();
 

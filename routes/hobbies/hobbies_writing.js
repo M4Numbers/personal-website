@@ -25,15 +25,11 @@
 const express = require("express");
 const router = express.Router();
 
-const SiteError = require("../../lib/SiteError");
 const StoryHandler = require("../../lib/StoryHandler");
 const storyHandlerInstance = StoryHandler.getHandler();
 
 const ChapterHandler = require("../../lib/ChapterHandler");
 const chapterHandlerInstance = ChapterHandler.getHandler();
-
-const loggingSystem = require("../../lib/Logger");
-const logger = loggingSystem.getLogger("master");
 
 router.get("/", function (req, res, next) {
     Promise.all([

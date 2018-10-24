@@ -42,7 +42,7 @@ router.use((req, res, next) => {
     }
 });
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
     res.redirect(303, "/hobbies/me/overview");
 });
 

@@ -28,7 +28,7 @@ const crypto = require("crypto");
 const router = express.Router();
 
 /* GET home page. */
-router.get("/login", function (req, res, next) {
+router.get("/login", function (req, res) {
     if (req.signedCookies.knows_me) {
         res.redirect(303, "/hobbies/me");
     } else {
@@ -49,7 +49,7 @@ router.get("/login", function (req, res, next) {
     }
 });
 
-router.post("/login", function (req, res, next) {
+router.post("/login", function (req, res) {
     if (req.body["me_password"] && !req.signedCookies.knows_me) {
         let hash = crypto.createHash("sha256").update(req.body["me_password"]).digest("hex");
         if (hash === config.get("protected.hash")) {

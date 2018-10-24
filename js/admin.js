@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+/* eslint-disable no-unused-vars */
+
 const refreshAnimeItems = () => {
     let xmlHttp = new XMLHttpRequest();
 

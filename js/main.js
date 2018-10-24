@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+/* eslint-disable no-unused-vars */
+
 function iPromise() {
     return new Promise(resolve => {
         setTimeout(() => resolve(), 5000);

@@ -24,9 +24,6 @@
 
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
-const Multer = require("multer");
-const uploads = Multer({dest: "../../tmp/uploads"});
 
 const StoryHandler = require("../../lib/StoryHandler");
 const storyHandlerInstance = StoryHandler.getHandler();

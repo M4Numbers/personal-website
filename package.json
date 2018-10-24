@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "quality:eslint": "./node_modules/.bin/eslint -c .eslintrc ."
+    "quality:eslint": "./node_modules/.bin/eslint -c .eslintrc .",
+    "test": "npm run quality:eslint"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

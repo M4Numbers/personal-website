@@ -34,10 +34,7 @@ const StaticDocumentTypes = require("../../lib/StaticDocumentTypes");
 const KinkHandler = require("../../lib/KinkHandler");
 const kinkHandlerInstance = KinkHandler.getHandler();
 
-const loggingSystem = require("../../lib/Logger");
-const logger = loggingSystem.getLogger("master");
-
-router.post("/", function (req, res, next) {
+router.post("/", function (req, res) {
     if (req.body["over_18"] === "yes") {
         res.cookie("over_18", req.body["over_18"], {signed: true, maxAge: 360000000});
     }

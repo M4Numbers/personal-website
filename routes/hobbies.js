@@ -32,7 +32,7 @@ const writing = require("./hobbies/hobbies_writing");
 const anime = require("./hobbies/hobbies_anime");
 const manga = require("./hobbies/hobbies_manga");
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
     res.render("./pages/hobbies_all", {
         top_page: {
             title: "My Hobbies",

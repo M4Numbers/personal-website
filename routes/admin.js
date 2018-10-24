@@ -55,7 +55,7 @@ router.use("/anime", [animeAdmin]);
 router.use("/manga", [mangaAdmin]);
 router.use("/fetishes", [kinkAdmin]);
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
     res.redirect(303, "/admin/blog");
 });
 
