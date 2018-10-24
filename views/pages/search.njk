@@ -18,35 +18,22 @@
                 <hr class="clearfix" />
                 <h3>Search result count</h3>
                 <ul>
-                    <li>Anime shows: 0</li>
-                    <li>Art pieces: 0</li>
-                    <li>Blog posts: 0</li>
-                    <li>Manga series: 0</li>
-                    <li>Stories: 0</li>
+                    <li>Anime shows: {{ content.anime | length }}</li>
+                    <li>Art pieces: {{ content.art | length }}</li>
+                    <li>Blog posts: {{ content.blogs | length }}</li>
+                    {% if content.kinks %}<li>Kinks: {{ content.kinks | length }}</li>{% endif %}
+                    <li>Manga series: {{ content.manga | length }}</li>
+                    <li>Stories: {{ content.stories | length }}</li>
                 </ul>
             </div>
             <div class="col-md-8">
                 <h2>Search results</h2>
-                {% for blog in content.results %}
-                    <div class="search-item row">
-                        <div class="col-lg-12">
-                            <h2 class="blog-title"><a href="/blog/{{ blog._id }}" >{{ blog.long_title }}</a></h2>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <p>
-                                Sorry, but your search returned nothing.
-                            </p>
-                        </div>
-                    </div>
-                {% endfor %}
-                <div class="row">
-                    <div class="col-lg-12 text-right">
-                        {% include "partials/pagination.njk" %}
-                    </div>
-                </div>
+                {{ c.search_contents("Art pieces", "/hobbies/art", content.art, translators.title) }}
+                {{ c.search_contents("Anime", "/hobbies/anime", content.anime, translators.anilist) }}
+                {{ c.search_contents("Blog posts", "/blog", content.blogs, translators.blogs) }}
+                {% if content.kinks %}{{ c.search_contents("Kinks", "/hobbies/me/fetishes", content.kinks, translators.kinks) }}{% endif %}
+                {{ c.search_contents("Manga", "/hobbies/manga", content.manga, translators.anilist) }}
+                {{ c.search_contents("Stories", "/hobbies/writing", content.stories, translators.title) }}
             </div>
         </div>
     </div>

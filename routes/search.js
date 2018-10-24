@@ -28,7 +28,14 @@ const router = express.Router();
 const Logger = require("../lib/Logger");
 const logger = Logger.getLogger("master");
 
-router.get("/", (req, res, next) => {
+const animeHandler = require("../lib/AnimeHandler").getHandler();
+const artHandler = require("../lib/ArtHandler").getHandler();
+const blogHandler = require("../lib/BlogHandler").getHandler();
+const kinkHandler = require("../lib/KinkHandler").getHandler();
+const mangaHandler = require("../lib/MangaHandler").getHandler();
+const storyHandler = require("../lib/StoryHandler").getHandler();
+
+router.get("/", (req, res) => {
     let renderVars = {
         top_page: {
             title: "Search",
@@ -50,6 +57,13 @@ router.get("/", (req, res, next) => {
             current_category: req.query["category"] || "all"
         },
 
+        translators: {
+            anilist: (item) => item["title"]["romaji"],
+            blogs: (item) => item["long_title"],
+            kinks: (item) => item["kink_name"],
+            title: (item) => item["title"]
+        },
+
         search: req.query["q"]
     };
     try {
@@ -60,9 +74,42 @@ router.get("/", (req, res, next) => {
                 $all: tagList
             }
         };
-        logger.info(query);
-        res.render("./pages/search", renderVars);
+
+        Promise.all([
+            animeHandler.findAnimeShowsByQuery(query, 0, 10, {"title.romaji": -1}),
+            artHandler.findArtPiecesByQuery(query, 0, 10, {"title": -1}),
+            blogHandler.findBlogsByQuery(query, 0, 10, {"long_title": -1}),
+            kinkHandler.findKinksByQuery(query, 0, 10, {"kink_name": -1}),
+            mangaHandler.findMangaBooksByQuery(query, 0, 10, {"title.romaji": -1}),
+            storyHandler.findStoriesByQuery(query, 0, 10, {"title": -1})
+        ])
+            .then(([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
+                if (!req.signedCookies.knows_me) {
+                    logger.debug("Not signed in... filtering unprotected items");
+                    blogItems.filter((item) => item.public);
+                    kinkItems = undefined;
+                }
+                return Promise.resolve([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]);
+            })
+            .then(([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
+                renderVars["content"] = {
+                    "anime": animeItems,
+                    "art": artItems,
+                    "blogs": blogItems,
+                    "manga": mangaItems,
+                    "stories": storyItems
+                };
+                if (typeof  kinkItems !== "undefined") {
+                    renderVars["content"]["kinks"] = kinkItems;
+                }
+                return Promise.resolve();
+            })
+            .then(() => {
+                res.render("./pages/search", renderVars);
+            });
     } catch (e) {
+        logger.warn("Error when trying to search items");
+        logger.debug(e);
         renderVars["error"] = e;
         res.render("./pages/search", renderVars);
     }

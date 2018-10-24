@@ -25,3 +25,24 @@
 {% macro cover_banner(img_location, img_alt) %}
     <img src="{{ img_location }}" class="img-thumbnail icon-host-width" />
 {% endmacro %}
+
+{% macro search_contents(search_name, search_url_base, search_items, search_title) %}
+    <div class="">
+        <h3>{{ search_name }}</h3>
+    </div>
+    {% for item in search_items %}
+        <div class="search-item row">
+            <div class="col-lg-12">
+                <h4><a href="{{ search_url_base }}/{{ item._id }}" >{{ search_title(item) }}</a></h4>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    Sorry, but your search returned nothing.
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}
