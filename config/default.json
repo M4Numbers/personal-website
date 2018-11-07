@@ -17,6 +17,8 @@
     "hash": "TO_BE_FILLED_IN_ON_PRODUCTION"
   },
   "protected": {
+    "question": "TO_BE_FILLED_IN_ON_PRODUCTION",
+    "hint": "TO_BE_FILLED_IN_ON_PRODUCTION",
     "hash": "TO_BE_FILLED_IN_ON_PRODUCTION"
   }
 }

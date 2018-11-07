@@ -8,10 +8,10 @@
 {% block content %}
     <div class="container">
         <form class="login-box" method="post">
-            <h2>What is my Full Name?</h2>
-            <label for="mePassword" class="invisible">My Full Name</label>
+            <h2>{{ content.question }}</h2>
+            <label for="mePassword" class="invisible">{{ content.hint }}</label>
             <input type="password" name="me_password" id="mePassword" class="form-control mb-3"
-                   placeholder="My Full Name" />
+                   placeholder="{{ content.hint }}" />
             <input type="submit" value="Submit" class="btn btn-primary btn-block" />
         </form>
     </div>
