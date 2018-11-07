@@ -22,12 +22,6 @@
  * SOFTWARE.
  */
 
-@import "~bootstrap/scss/bootstrap";
-
-@import "page_globals/admin";
-@import "page_globals/variables";
-@import "page_globals/header";
-@import "page_globals/footer";
-@import "page_globals/generics";
-
-@import "overrides/bootstrap";
+.admin-toolbar {
+  margin: 1.5rem 0;
+}
