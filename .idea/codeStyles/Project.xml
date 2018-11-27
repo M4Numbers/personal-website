@@ -25,7 +25,7 @@
         <option name="ITERATION_ELEMENTS_WRAPPING" value="chop_down_if_not_single" />
       </formatting-settings>
     </DBN-SQL>
-    <JSCodeStyleSettings>
+    <JSCodeStyleSettings version="0">
       <option name="FORCE_SEMICOLON_STYLE" value="true" />
       <option name="FORCE_QUOTE_STYlE" value="true" />
     </JSCodeStyleSettings>

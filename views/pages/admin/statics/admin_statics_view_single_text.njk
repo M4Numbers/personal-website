@@ -1,0 +1,16 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Edit Static Document</h2>
+    <div class="static-document">
+        <h3 class="mb-4">{{ content.static_id | replace("_", " ") | capitalize }}</h3>
+        <div class="mb-4">
+            {{ content.static_detail | markdown | safe }}
+        </div>
+        <div class="admin-toolbar">
+            <a href="/admin/statics/{{ content.static_id }}/edit" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}

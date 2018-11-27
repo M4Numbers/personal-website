@@ -1,0 +1,11 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>View Static Documents</h2>
+    {% for static in content.statics %}
+        <div class="static-document">
+            <h3><a href="/admin/statics/{{ static }}">{{ static | replace("_", " ") | capitalize }}</a></h3>
+        </div>
+        <hr />
+    {% endfor %}
+{% endblock %}

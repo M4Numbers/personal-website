@@ -33,6 +33,7 @@ const chaptersAdmin = require("./admin/admin_chapters");
 const animeAdmin = require("./admin/admin_anime");
 const mangaAdmin = require("./admin/admin_manga");
 const kinkAdmin = require("./admin/admin_kinks");
+const staticAdmin = require("./admin/admin_static");
 
 router.use((req, res, next) => {
     if (!req.signedCookies.logged_in) {
@@ -54,6 +55,7 @@ router.use("/stories", [storiesAdmin, chaptersAdmin]);
 router.use("/anime", [animeAdmin]);
 router.use("/manga", [mangaAdmin]);
 router.use("/fetishes", [kinkAdmin]);
+router.use("/statics", [staticAdmin]);
 
 router.get("/", function (req, res) {
     res.redirect(303, "/admin/blog");
