@@ -1,0 +1,22 @@
+{% extends "partials/admin_split.njk" %}
+
+{% block admin_content %}
+    <h2>Edit Static Document</h2>
+    <div class="static-document">
+        <h3 class="mb-4">{{ content.static_id | replace("_", " ") | capitalize }}</h3>
+        <div class="mb-4">
+            {% for contact in content.static_detail %}
+                <div class="mb-4">
+                    <h4>{{ contact.contact_method }}</h4>
+                    <p>Icon: {{ contact.fa_style }}:{{ contact.fa_icon }}</p>
+                    <p>Link: {{ contact.contact_link }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="admin-toolbar">
+            <a href="/admin/statics/{{ content.static_id }}/edit" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+    <hr />
+
+{% endblock %}

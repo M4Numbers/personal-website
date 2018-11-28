@@ -88,6 +88,74 @@ const viewSingleTextStaticDocument = (req, res) => {
         });
 };
 
+const viewSingleListContactStaticDocument = (req, res) => {
+    staticHandlerInstance.findStatic(req.params["staticId"])
+        .then(staticData => {
+            return Promise.resolve(staticData.content);
+        })
+        .catch(error => {
+            logger.warn("Issue getting static document");
+            logger.debug(error);
+            return Promise.resolve("");
+        })
+        .then(staticData => {
+            res.render("./pages/admin/statics/admin_statics_view_single_list_contact", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    static_id: req.params["staticId"],
+                    static_detail: staticData
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "statics-view"
+                }
+            });
+        });
+};
+
+const viewSingleListSiteMapStaticDocument = (req, res) => {
+    staticHandlerInstance.findStatic(req.params["staticId"])
+        .then(staticData => {
+            return Promise.resolve(staticData.content);
+        })
+        .catch(error => {
+            logger.warn("Issue getting static document");
+            logger.debug(error);
+            return Promise.resolve("");
+        })
+        .then(staticData => {
+            res.render("./pages/admin/statics/admin_statics_view_single_list_sitemap", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    static_id: req.params["staticId"],
+                    static_detail: staticData
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "statics-view"
+                }
+            });
+        });
+};
+
 const editSingleTextStaticDocument = (req, res) => {
     staticHandlerInstance.findStatic(req.params["staticId"])
         .then(staticData => {
@@ -136,6 +204,8 @@ const editTextDocument = (req, res) => {
 router.get(`/:staticId(${statics.ABOUT_ME})`, viewSingleTextStaticDocument);
 router.get(`/:staticId(${statics.KINK_WARNING})`, viewSingleTextStaticDocument);
 router.get(`/:staticId(${statics.KNOWING_ME})`, viewSingleTextStaticDocument);
+router.get(`/:staticId(${statics.CONTACT_ME})`, viewSingleListContactStaticDocument);
+router.get(`/:staticId(${statics.SITEMAP})`, viewSingleListSiteMapStaticDocument);
 
 router.get(`/:staticId(${statics.ABOUT_ME})/edit`, editSingleTextStaticDocument);
 router.get(`/:staticId(${statics.KINK_WARNING})/edit`, editSingleTextStaticDocument);
