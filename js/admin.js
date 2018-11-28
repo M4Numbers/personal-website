@@ -41,3 +41,38 @@ const refreshMangaItems = () => {
     xmlHttp.open("POST", "/admin/manga/refresh", true);
     xmlHttp.send({});
 };
+
+const generateNewEntry = (number) => {
+    let controller = document.createElement("div");
+    controller.setAttribute("class", "static-item mb4");
+
+    let nameLabel = document.createElement("label");
+    nameLabel.setAttribute("for", `sitemap-page-name-${number}`);
+    let nameLabelName = document.createTextNode("Page name");
+    nameLabel.appendChild(nameLabelName);
+
+    let nameInput = document.createElement("input", {"class": "form-control", "type": "text", "id": `sitemap-page-name-${number}`, "name": "sitemap-page[page_name[]]"});
+    nameInput.setAttribute("class", "form-control");
+    nameInput.setAttribute("type", "text");
+    nameInput.setAttribute("name", "sitemap-page[page_name[]]");
+    nameInput.setAttribute("id", `sitemap-page-name-${number}`);
+
+    let linkLabel = document.createElement("label", {"for": `sitemap-page-link-${number}`});
+    linkLabel.setAttribute("for", `sitemap-page-link-${number}`);
+    let linkLabelName = document.createTextNode("Page link");
+    linkLabel.appendChild(linkLabelName);
+
+    let linkInput = document.createElement("input", {"class": "form-control", "type": "text", "id": `sitemap-page-link-${number}`, "name": "sitemap-page[page_link[]]"});
+    linkInput.setAttribute("class", "form-control");
+    linkInput.setAttribute("type", "text");
+    linkInput.setAttribute("name", "sitemap-page[page_namelink[]]");
+    linkInput.setAttribute("id", `sitemap-page-link-${number}`);
+
+    controller.append(nameLabel, nameInput, linkLabel, linkInput);
+    return controller;
+};
+
+const addNewMapEntry = () => {
+    let collection = document.getElementById("sitemap-collection");
+    collection.append(generateNewEntry(collection.children.length));
+};

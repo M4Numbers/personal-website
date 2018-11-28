@@ -190,9 +190,88 @@ const editSingleTextStaticDocument = (req, res) => {
         });
 };
 
+const editSingleListContactStaticDocument = (req, res) => {
+    staticHandlerInstance.findStatic(req.params["staticId"])
+        .then(staticData => {
+            return Promise.resolve(staticData.content);
+        })
+        .catch(error => {
+            logger.warn("Issue getting static document");
+            logger.debug(error);
+            return Promise.resolve("");
+        })
+        .then(staticData => {
+            res.render("./pages/admin/statics/admin_statics_edit_single_list_contact", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    static_id: req.params["staticId"],
+                    static_detail: staticData
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "statics-edit"
+                }
+            });
+        });
+};
+
+const editSingleListSiteMapStaticDocument = (req, res) => {
+    staticHandlerInstance.findStatic(req.params["staticId"])
+        .then(staticData => {
+            return Promise.resolve(staticData.content);
+        })
+        .catch(error => {
+            logger.warn("Issue getting static document");
+            logger.debug(error);
+            return Promise.resolve("");
+        })
+        .then(staticData => {
+            res.render("./pages/admin/statics/admin_statics_edit_single_list_sitemap", {
+                top_page: {
+                    title: "Administrator Toolkit",
+                    tagline: "All the functions that the administrator of the site has available to them",
+                    fa_type: "fas",
+                    fa_choice: "fa-toolbox"
+                },
+
+                content: {
+                    static_id: req.params["staticId"],
+                    static_detail: staticData
+                },
+
+                head: {
+                    title: "M4Numbers",
+                    description: "Home to the wild things",
+                    current_page: "admin",
+                    current_sub_page: "statics-edit"
+                }
+            });
+        });
+};
+
 const editTextDocument = (req, res) => {
     staticHandlerInstance.updateStatic(
         req.params["staticId"], req.body["document-text"]
+    ).then(() => {
+        res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+    }, rejection => {
+        res.cookie("static-update-error", {static_id: req.params["staticId"], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+    });
+};
+
+const editListDocument = (req, res) => {
+    staticHandlerInstance.updateStatic(
+        req.params["staticId"], req.body["document-list"]
     ).then(() => {
         res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
     }, rejection => {
@@ -210,9 +289,13 @@ router.get(`/:staticId(${statics.SITEMAP})`, viewSingleListSiteMapStaticDocument
 router.get(`/:staticId(${statics.ABOUT_ME})/edit`, editSingleTextStaticDocument);
 router.get(`/:staticId(${statics.KINK_WARNING})/edit`, editSingleTextStaticDocument);
 router.get(`/:staticId(${statics.KNOWING_ME})/edit`, editSingleTextStaticDocument);
+router.get(`/:staticId(${statics.CONTACT_ME})/edit`, editSingleListContactStaticDocument);
+router.get(`/:staticId(${statics.SITEMAP})/edit`, editSingleListSiteMapStaticDocument);
 
 router.post(`/:staticId(${statics.ABOUT_ME})/edit`, editTextDocument);
 router.post(`/:staticId(${statics.KINK_WARNING})/edit`, editTextDocument);
 router.post(`/:staticId(${statics.KNOWING_ME})/edit`, editTextDocument);
+router.post(`/:staticId(${statics.CONTACT_ME})/edit`, editListDocument);
+router.post(`/:staticId(${statics.SITEMAP})/edit`, editListDocument);
 
 module.exports = router;
