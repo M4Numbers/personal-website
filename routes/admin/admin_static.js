@@ -88,6 +88,11 @@ const viewSingleTextStaticDocument = (req, res) => {
         });
 };
 
+const cullListItems = (items) => {
+    logger.info(items);
+    return Promise.resolve(items);
+};
+
 const viewSingleListContactStaticDocument = (req, res) => {
     staticHandlerInstance.findStatic(req.params["staticId"])
         .then(staticData => {
@@ -269,15 +274,21 @@ const editTextDocument = (req, res) => {
     });
 };
 
-const editListDocument = (req, res) => {
-    staticHandlerInstance.updateStatic(
-        req.params["staticId"], req.body["document-list"]
-    ).then(() => {
-        res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
-    }, rejection => {
-        res.cookie("static-update-error", {static_id: req.params["staticId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
-    });
+const editSitemapListDocument = (req, res) => {
+    cullListItems(req.body["sitemap-page"])
+        .then(minimisedItems => {
+            staticHandlerInstance.updateStatic(
+                req.params["staticId"], minimisedItems
+            ).then(() => {
+                res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+            }, rejection => {
+                res.cookie("static-update-error", {static_id: req.params["staticId"], error: rejection}, {
+                    signed: true,
+                    maxAge: 1000
+                });
+                res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+            });
+        });
 };
 
 router.get(`/:staticId(${statics.ABOUT_ME})`, viewSingleTextStaticDocument);
@@ -295,7 +306,7 @@ router.get(`/:staticId(${statics.SITEMAP})/edit`, editSingleListSiteMapStaticDoc
 router.post(`/:staticId(${statics.ABOUT_ME})/edit`, editTextDocument);
 router.post(`/:staticId(${statics.KINK_WARNING})/edit`, editTextDocument);
 router.post(`/:staticId(${statics.KNOWING_ME})/edit`, editTextDocument);
-router.post(`/:staticId(${statics.CONTACT_ME})/edit`, editListDocument);
-router.post(`/:staticId(${statics.SITEMAP})/edit`, editListDocument);
+router.post(`/:staticId(${statics.CONTACT_ME})/edit`, editSitemapListDocument);
+router.post(`/:staticId(${statics.SITEMAP})/edit`, editSitemapListDocument);
 
 module.exports = router;
