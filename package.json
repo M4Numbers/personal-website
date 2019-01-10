@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "start:dev": "node ./bin/mongo_www",
     "build:compile": "gulp build",
     "quality:eslint": "./node_modules/.bin/eslint -c .eslintrc .",
     "test": "npm run quality:eslint"
@@ -41,6 +42,7 @@
     "gulp": "^4.0.0",
     "gulp-babel": "^7.0.0",
     "gulp-sass": "^4.0.1",
+    "mongodb-memory-server": "^2.9.1",
     "node-sass-tilde-importer": "^1.0.2",
     "nodemon": "^1.18.9"
   },
