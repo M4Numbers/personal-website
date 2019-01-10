@@ -1,4 +1,4 @@
-$colour-shade: rgb(16, 16, 16);
+$colour-shade: 6.25%;
 
 $footer-height: 12rem;
 $footer-collapsed-height: 25rem;
@@ -6,8 +6,8 @@ $contact-size: 8rem;
 $icon-size: 12rem;
 $avatar-max: 19rem;
 
-$dark-darker: $dark - $colour-shade;
-$dark-lighter: $dark + $colour-shade;
+$dark-darker: darken($dark, $colour-shade);
+$dark-lighter: lighten($dark, $colour-shade);
 
 $footer-color: color("gray-dark");
 

@@ -16,7 +16,7 @@
   border-bottom: 1px $white dotted;
 
   &:hover {
-    color: $light - rgb(64, 64, 64);
+    color: darken($light, 25%);
     border-bottom: 1px $white solid;
   }
 }

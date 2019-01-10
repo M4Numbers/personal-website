@@ -22,7 +22,7 @@ a.hidden-light-link {
   text-decoration: none;
 
   &:hover {
-    color: $light - rgb(64, 64, 64);
+    color: darken($light, 20%);
   }
 }
 
@@ -31,7 +31,7 @@ a.hidden-dark-link {
   text-decoration: none;
 
   &:hover {
-    color: $dark + rgb(64, 64, 64);
+    color: lighten($dark, 25%);
   }
 }
 
