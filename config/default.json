@@ -2,6 +2,11 @@
   "app": {
     "port": 3000
   },
+  "cache": {
+    "cluster": false,
+    "host": "localhost",
+    "port": 6379
+  },
   "cookies": {
     "domain": "localhost",
     "secure_domain": "localhost",
