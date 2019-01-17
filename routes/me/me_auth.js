@@ -22,47 +22,14 @@
  * SOFTWARE.
  */
 
-const config = require("config");
 const express = require("express");
-const crypto = require("crypto");
-const moment = require("moment");
+
+const { friendLoginView, friendLoginCompare } = require("../../journey/friend_login");
+
 const router = express.Router();
 
 /* GET home page. */
-router.get("/login", function (req, res) {
-    if (req.signedCookies.knows_me) {
-        res.redirect(303, "/hobbies/me");
-    } else {
-        res.render("./pages/me/me_login", {
-            top_page: {
-                title: "Test Your Knowledge",
-                tagline: "Log into the site as someone who knows me",
-                fa_type: "fas",
-                fa_choice: "fa-key"
-            },
-
-            head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "me_login"
-            },
-
-            content: {
-                question: config.get("protected.question"),
-                hint: config.get("protected.hint")
-            }
-        });
-    }
-});
-
-router.post("/login", function (req, res) {
-    if (req.body["me_password"] && !req.signedCookies.knows_me) {
-        let hash = crypto.createHash("sha256").update(req.body["me_password"]).digest("hex");
-        if (hash === config.get("protected.hash")) {
-            res.cookie("knows_me", `1.${moment().format()}`, {signed: true, maxAge: 6000000});
-        }
-    }
-    res.redirect(303, "/hobbies/me/login");
-});
+router.get("/login", friendLoginView);
+router.post("/login", friendLoginCompare);
 
 module.exports = router;

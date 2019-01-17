@@ -22,41 +22,14 @@
  * SOFTWARE.
  */
 
-const config = require("config");
 const express = require("express");
-const crypto = require("crypto");
+
+const { adminLoginView, adminLoginCompare } = require("../journey/administrator_login");
+
 const router = express.Router();
 
 /* GET home page. */
-router.get("/login", function (req, res) {
-    if (req.signedCookies.logged_in) {
-        res.redirect(303, "/admin");
-    } else {
-        res.render("./pages/login", {
-            top_page: {
-                title: "Log in",
-                tagline: "Log into the site as an administrator",
-                fa_type: "fas",
-                fa_choice: "fa-key"
-            },
-
-            head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "login"
-            }
-        });
-    }
-});
-
-router.post("/login", function (req, res) {
-    if (req.body["admin_password"] && !req.signedCookies.logged_in) {
-        let hash = crypto.createHash("sha256").update(req.body["admin_password"]).digest("hex");
-        if (hash === config.get("admin.hash")) {
-            res.cookie("logged_in", 1, {signed: true, maxAge: 60000000});
-        }
-    }
-    res.redirect(303, "/login");
-});
+router.get("/login", adminLoginView);
+router.post("/login", adminLoginCompare);
 
 module.exports = router;

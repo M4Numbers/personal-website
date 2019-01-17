@@ -27,6 +27,8 @@ const router = express.Router();
 
 const markdown = require("markdown-it")();
 
+const { testFriendLoggedIn } = require("../../journey/friend_login");
+
 const StaticHandler = require("../../lib/StaticHandler");
 const staticHandlerInstance = StaticHandler.getHandler();
 const StaticDocumentTypes = require("../../lib/StaticDocumentTypes");
@@ -34,13 +36,7 @@ const StaticDocumentTypes = require("../../lib/StaticDocumentTypes");
 const blogAdmin = require("./me_blog");
 const kinkCollection = require("./me_kinks");
 
-router.use((req, res, next) => {
-    if (!req.signedCookies.knows_me) {
-        res.redirect(303, "/hobbies/me/login");
-    } else {
-        next();
-    }
-});
+router.use(testFriendLoggedIn);
 
 router.get("/", function (req, res) {
     res.redirect(303, "/hobbies/me/overview");

@@ -25,6 +25,8 @@
 const express = require("express");
 const router = express.Router();
 
+const { testAdministratorLoggedIn } = require("../journey/administrator_login");
+
 const blogAdmin = require("./admin/admin_blog");
 const projectAdmin = require("./admin/admin_projects");
 const artAdmin = require("./admin/admin_art");
@@ -35,18 +37,7 @@ const mangaAdmin = require("./admin/admin_manga");
 const kinkAdmin = require("./admin/admin_kinks");
 const staticAdmin = require("./admin/admin_static");
 
-router.use((req, res, next) => {
-    if (!req.signedCookies.logged_in) {
-        res.redirect(303, "/login");
-    } else {
-        next();
-    }
-});
-
-router.use((req, res, next) => {
-    res.cookie("logged_in", 1, {signed: true, maxAge: 60000000});
-    next();
-});
+router.use(testAdministratorLoggedIn);
 
 router.use("/blog", [blogAdmin]);
 router.use("/projects", [projectAdmin]);

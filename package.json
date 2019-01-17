@@ -27,6 +27,8 @@
     "nunjucks": "^3.1.6",
     "nunjucks-date": "^1.2.0",
     "popper.js": "^1.14.6",
+    "redis": "^2.8.0",
+    "redis-clustr": "^1.6.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "serve-favicon": "~2.4.5",
@@ -44,10 +46,7 @@
     "gulp-babel": "^7.0.0",
     "gulp-sass": "^4.0.1",
     "mongodb-memory-server": "^2.9.1",
-    "node-sass-tilde-importer": "^1.0.2",
-    "nodemon": "^1.18.9",
-    "redis": "^2.8.0",
-    "redis-clustr": "^1.6.0"
+    "node-sass-tilde-importer": "^1.0.2"
   },
   "files": [
     "bin",
