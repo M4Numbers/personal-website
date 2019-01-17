@@ -28,7 +28,6 @@ const config = require("config");
 const express = require("express");
 const nunjucks = require("nunjucks");
 const nunjucksDate = require("nunjucks-date");
-const nunjucksFilters = require("./lib/NunjucksFilters");
 const path = require("path");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
@@ -36,6 +35,9 @@ const loggingSystem = require("./lib/Logger");
 const logger = loggingSystem.getLogger("master");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+
+const nunjucksFilters = require("./middleware/NunjucksFilters");
+const sessionGenerator = require("./middleware/session_generator");
 
 const index = require("./routes/index");
 const search = require("./routes/search");
@@ -78,12 +80,7 @@ app.use(express.static(path.join(__dirname, "node_modules/jquery/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/popper.js/dist")));
 app.use(express.static(path.join(__dirname, "node_modules/font-awesome")));
 
-app.use(function(req, res, next) {
-    if (req.signedCookies.logged_in) {
-        res.cookie("logged_in", 1, {signed: true, maxAge: 100000});
-    }
-    next();
-});
+app.use(sessionGenerator);
 
 app.use("/", [index, auth, statics]);
 app.use("/search", [search]);
