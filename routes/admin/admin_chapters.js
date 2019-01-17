@@ -41,7 +41,6 @@ router.get("/:storyId/chapter/new", function (req, res, next) {
     storyHandlerInstance.findStoryByRawId(req.params["storyId"])
         .catch(next)
         .then(story => {
-            logger.info(story);
             res.render("./pages/admin/stories/admin_chapter_create", {
                 top_page: {
                     title: "Administrator Toolkit",

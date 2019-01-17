@@ -69,7 +69,7 @@ app.use(favicon(path.join(__dirname, "public", "images", "favicons", "favicon.ic
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser(config.get("cookies.passphrase")));
 
 app.use(express.static(path.join(__dirname, "public")));

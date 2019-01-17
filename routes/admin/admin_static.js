@@ -89,8 +89,7 @@ const viewSingleTextStaticDocument = (req, res) => {
 };
 
 const cullListItems = (items) => {
-    logger.info(items);
-    return Promise.resolve(items);
+    return Promise.resolve(items.filter(toValidate => toValidate.page_name !== "" && toValidate.page_link !== ""));
 };
 
 const viewSingleListContactStaticDocument = (req, res) => {
@@ -100,7 +99,7 @@ const viewSingleListContactStaticDocument = (req, res) => {
         })
         .catch(error => {
             logger.warn("Issue getting static document");
-            logger.debug(error);
+            logger.debug(error.message);
             return Promise.resolve("");
         })
         .then(staticData => {
@@ -275,7 +274,7 @@ const editTextDocument = (req, res) => {
 };
 
 const editSitemapListDocument = (req, res) => {
-    cullListItems(req.body["sitemap-page"])
+    cullListItems(req.body["sitemap-page"] || [])
         .then(minimisedItems => {
             staticHandlerInstance.updateStatic(
                 req.params["staticId"], minimisedItems

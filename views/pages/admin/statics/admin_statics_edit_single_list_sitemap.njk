@@ -9,9 +9,9 @@
                 {% for map in content.static_detail %}
                     <div class="static-item mb4">
                         <label for="sitemap-page-name-{{ loop.index0 }}">Page name</label>
-                        <input class="form-control" id="sitemap-page-name-{{ loop.index0 }}" name="sitemap-page[page_name[]]" value="{{ map.page_name }}" />
+                        <input class="form-control" id="sitemap-page-name-{{ loop.index0 }}" name="sitemap-page[{{ loop.index0 }}][page_name]" value="{{ map.page_name }}" />
                         <label for="sitemap-page-link-{{ loop.index0 }}">Page link</label>
-                        <input class="form-control" id="sitemap-page-link-{{ loop.index0 }}" name="sitemap-page[page_link[]]" value="{{ map.page_link }}" />
+                        <input class="form-control" id="sitemap-page-link-{{ loop.index0 }}" name="sitemap-page[{{ loop.index0 }}][page_link]" value="{{ map.page_link }}" />
                     </div>
                 {% endfor %}
             </div>
