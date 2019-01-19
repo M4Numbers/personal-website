@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,33 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const mangaHandlerInstance = require('../../../lib/MangaHandler').getHandler();
 
-router.get('/', require('../../journey/hobbies/manga/get_all_manga'));
-router.get('/:mangaId', require('../../journey/hobbies/manga/get_one_manga'));
+const getOneManga = async (req, res, next) => {
+    mangaHandlerInstance.findMangaByRawId(req.params['mangaId'])
+        .catch(next)
+        .then(manga => {
+            res.render('./pages/manga/manga_one', {
+                top_page: {
+                    title: manga.title.romaji,
+                    tagline: 'A list of all the strange things that I have read at some point or another',
+                    image_src: manga.cover_img.large,
+                    image_alt: manga.title.romaji
+                },
 
-module.exports = router;
+                content: {
+                    book: manga,
+                    comments: manga.review
+                },
+
+                head: {
+                    title: 'M4Numbers :: Hobbies :: Manga :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'manga',
+                }
+            });
+        }, next);
+};
+
+module.exports = getOneManga;
