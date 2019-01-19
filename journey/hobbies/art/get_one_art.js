@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,32 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const artHandlerInstance = require('../../../lib/ArtHandler').getHandler();
 
-router.get('/', require('../../journey/hobbies/art/get_all_art'));
-router.get('/:artId', require('../../journey/hobbies/art/get_one_art'));
+const getOneArt = async (req, res, next) => {
+    artHandlerInstance.findArtByRawId(req.params['artId'])
+        .catch(next)
+        .then(picture => {
+            res.render('./pages/art/art_one', {
+                top_page: {
+                    title: picture.title,
+                    tagline: 'A collection of the things that I have attempted to draw at some point or another',
+                    image_src: `data:image/png;base64,${picture.image.thumb}`,
+                    image_alt: picture.title
+                },
 
-module.exports = router;
+                content: {
+                    picture: picture
+                },
+
+                head: {
+                    title: 'M4Numbers :: Hobbies :: Art :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'art',
+                }
+            });
+        }, next);
+};
+
+module.exports = getOneArt;
