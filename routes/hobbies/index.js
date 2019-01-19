@@ -25,11 +25,7 @@
 const router = require('express').Router();
 
 router.use('/', require('./hobbies_home'));
-
-router.use('/me', [
-    require('./me/me_auth'),
-    require('./me')
-]);
+router.use('/me', require('./me/'));
 router.use('/writing', [require('./hobbies_writing')]);
 router.use('/art', [require('./hobbies_art')]);
 router.use('/anime', [require('./hobbies_anime')]);
