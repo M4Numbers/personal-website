@@ -22,13 +22,34 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
-const testFriendLoggedIn = require('../../../journey/misc/test_friend_logged_in');
+const config = require('config');
 
-router.use('/', require('./me_auth'));
-router.use(testFriendLoggedIn);
-router.use('/', require('./me_overview'));
-router.use('/extended-blog', require('./me_blog'));
-router.use('/fetishes', require('./me_kinks'));
+const getIsFriend = require('./get_is_friend');
 
-module.exports = router;
+const friendLoginView = async (req, res) => {
+    if (getIsFriend(req.signedCookies.SSID)) {
+        res.redirect(303, '/hobbies/me');
+    } else {
+        res.render('./pages/me/me_login', {
+            top_page: {
+                title: 'Test Your Knowledge',
+                tagline: 'Log into the site as someone who knows me',
+                fa_type: 'fas',
+                fa_choice: 'fa-key'
+            },
+
+            head: {
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'me_login'
+            },
+
+            content: {
+                question: config.get('protected.question'),
+                hint: config.get('protected.hint')
+            }
+        });
+    }
+};
+
+module.exports = friendLoginView;

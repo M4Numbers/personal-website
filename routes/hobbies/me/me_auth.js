@@ -23,10 +23,9 @@
  */
 
 const router = require('express').Router();
-const { friendLoginView, friendLoginCompare } = require('../../../journey/friend_login');
 
 /* GET home page. */
-router.get('/login', friendLoginView);
-router.post('/login', friendLoginCompare);
+router.get('/login', require('../../../journey/misc/friend_login_view'));
+router.post('/login', require('../../../journey/misc/friend_login_compare'));
 
 module.exports = router;

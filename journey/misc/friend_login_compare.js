@@ -25,55 +25,8 @@
 const config = require('config');
 const crypto = require('crypto');
 
-const CacheFactory = require('../lib/CacheFactory');
-
-const getIsFriend = async (ssid) => {
-    if (typeof ssid === 'undefined') {
-        Promise.resolve(false);
-    } else {
-        let cache = CacheFactory();
-        Promise.resolve(cache.get(ssid).trust_level > 0);
-    }
-};
-
-const testFriendLoggedIn = async (req, res, next) => {
-    if (!req.signedCookies.SSID) {
-        res.redirect(303, '/hobbies/me/login');
-    } else {
-        const cache = CacheFactory();
-        if ((await cache.get(req.signedCookies.SSID)).trust_level < 2) {
-            res.redirect(303, '/hobbies/me/login');
-        } else {
-            next();
-        }
-    }
-};
-
-const friendLoginView = async (req, res) => {
-    if (getIsFriend(req.signedCookies.SSID)) {
-        res.redirect(303, '/hobbies/me');
-    } else {
-        res.render('./pages/me/me_login', {
-            top_page: {
-                title: 'Test Your Knowledge',
-                tagline: 'Log into the site as someone who knows me',
-                fa_type: 'fas',
-                fa_choice: 'fa-key'
-            },
-
-            head: {
-                title: 'M4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'me_login'
-            },
-
-            content: {
-                question: config.get('protected.question'),
-                hint: config.get('protected.hint')
-            }
-        });
-    }
-};
+const CacheFactory = require('../../lib/CacheFactory');
+const getIsFriend = require('./get_is_friend');
 
 const friendLoginCompare = async (req, res) => {
     if (req.body['me_password'] && !getIsFriend(req.signedCookies.SSID)) {
@@ -87,8 +40,4 @@ const friendLoginCompare = async (req, res) => {
     res.redirect(303, '/hobbies/me/login');
 };
 
-module.exports = {
-    testFriendLoggedIn,
-    friendLoginView,
-    friendLoginCompare
-};
+module.exports = friendLoginCompare;

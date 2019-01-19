@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
-const testFriendLoggedIn = require('../../../journey/misc/test_friend_logged_in');
+const CacheFactory = require('../../lib/CacheFactory');
 
-router.use('/', require('./me_auth'));
-router.use(testFriendLoggedIn);
-router.use('/', require('./me_overview'));
-router.use('/extended-blog', require('./me_blog'));
-router.use('/fetishes', require('./me_kinks'));
+const getIsFriend = async (ssid) => {
+    if (typeof ssid === 'undefined') {
+        Promise.resolve(false);
+    } else {
+        let cache = CacheFactory();
+        Promise.resolve(cache.get(ssid).trust_level > 0);
+    }
+};
 
-module.exports = router;
+module.exports = getIsFriend;
+
