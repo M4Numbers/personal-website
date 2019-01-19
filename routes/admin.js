@@ -25,8 +25,6 @@
 const express = require('express');
 const router = express.Router();
 
-const { testAdministratorLoggedIn } = require('../journey/administrator_login');
-
 const blogAdmin = require('./admin/admin_blog');
 const projectAdmin = require('./admin/admin_projects');
 const artAdmin = require('./admin/admin_art');
@@ -37,7 +35,7 @@ const mangaAdmin = require('./admin/admin_manga');
 const kinkAdmin = require('./admin/admin_kinks');
 const staticAdmin = require('./admin/admin_static');
 
-router.use(testAdministratorLoggedIn);
+router.use(require('../journey/misc/test_admin_logged_in'));
 
 router.use('/blog', [blogAdmin]);
 router.use('/projects', [projectAdmin]);

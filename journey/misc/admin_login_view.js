@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,27 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const getIsAdmin = require('./get_is_admin');
 
-/* GET home page. */
-router.get('/admin/login', require('../journey/misc/admin_login_view'));
-router.post('/admin/login', require('../journey/misc/admin_login_compare'));
+const adminLoginView = async (req, res) => {
+    if (await getIsAdmin(req.signedCookies.SSID)) {
+        res.redirect(303, '/admin');
+    } else {
+        res.render('./pages/login', {
+            top_page: {
+                title: 'Log in',
+                tagline: 'Log into the site as an administrator',
+                fa_type: 'fas',
+                fa_choice: 'fa-key'
+            },
 
-module.exports = router;
+            head: {
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'login'
+            }
+        });
+    }
+};
+
+module.exports = adminLoginView;

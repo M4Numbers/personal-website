@@ -24,65 +24,20 @@
 
 const config = require('config');
 const crypto = require('crypto');
-const CacheFactory = require('../lib/CacheFactory');
 
-const getIsAdmin = async (ssid) => {
-    if (typeof ssid === 'undefined') {
-        Promise.resolve(false);
-    } else {
-        let cache = CacheFactory();
-        Promise.resolve(cache.get(ssid).trust_level > 1);
-    }
-};
-
-const testAdministratorLoggedIn = async (req, res, next) => {
-    if (!req.signedCookies.SSID) {
-        res.redirect(303, '/login');
-    } else {
-        const cache = CacheFactory();
-        if ((await cache.get(req.signedCookies.SSID)).trust_level < 2) {
-            res.redirect(303, '/login');
-        } else {
-            next();
-        }
-    }
-};
-
-const adminLoginView = async (req, res) => {
-    if (getIsAdmin(req.signedCookies.SSID)) {
-        res.redirect(303, '/admin');
-    } else {
-        res.render('./pages/login', {
-            top_page: {
-                title: 'Log in',
-                tagline: 'Log into the site as an administrator',
-                fa_type: 'fas',
-                fa_choice: 'fa-key'
-            },
-
-            head: {
-                title: 'M4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'login'
-            }
-        });
-    }
-};
+const CacheFactory = require('../../lib/CacheFactory');
+const getIsAdmin = require('./get_is_admin');
 
 const adminLoginCompare = async (req, res) => {
-    if (req.body['admin_password'] && !getIsAdmin(req.signedCookies.SSID)) {
+    if (req.body['admin_password'] && !(await getIsAdmin(req.signedCookies.SSID))) {
         let hash = crypto.createHash('sha256').update(req.body['admin_password']).digest('hex');
         if (hash === config.get('admin.hash')) {
             const cache = CacheFactory();
-            await cache.set('trust_level', 2);
+            await cache.set(req.signedCookies.SSID, { trust_level: 2 });
             cache.quit();
         }
     }
-    res.redirect(303, '/login');
+    res.redirect(303, '/admin/login');
 };
 
-module.exports = {
-    testAdministratorLoggedIn,
-    adminLoginView,
-    adminLoginCompare
-};
+module.exports = adminLoginCompare;

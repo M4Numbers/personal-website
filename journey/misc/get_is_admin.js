@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,18 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const CacheFactory = require('../../lib/CacheFactory');
 
-/* GET home page. */
-router.get('/admin/login', require('../journey/misc/admin_login_view'));
-router.post('/admin/login', require('../journey/misc/admin_login_compare'));
+const getIsAdmin = async (ssid) => {
+    if (typeof ssid === 'undefined') {
+        return false;
+    } else {
+        let cache = CacheFactory();
+        const session = await cache.get(ssid);
+        console.log(session);
+        return (typeof session.trust_level !== 'undefined')
+            && (session.trust_level > 1);
+    }
+};
 
-module.exports = router;
+module.exports = getIsAdmin;
