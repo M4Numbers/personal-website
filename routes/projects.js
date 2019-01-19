@@ -22,84 +22,12 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
-const SiteError = require('../lib/SiteError');
-const ProjectHandler = require('../lib/ProjectHandler');
-const projectHandlerInstance = ProjectHandler.getHandler();
-
-const loggingSystem = require('../lib/Logger');
-const logger = loggingSystem.getLogger('master');
-
+const router = require('express').Router();
 
 /* GET all projects posts */
-router.get('/', function (req, res, next) {
-    Promise.all(
-        [
-            projectHandlerInstance.findProjects(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}),
-            projectHandlerInstance.getTotalProjectCount()
-        ]
-    ).then(([projects, totalCount]) => {
-        logger.debug(`Found ${totalCount} available projects`);
-        res.render('./pages/project_all', {
-            top_page: {
-                title: 'My Projects',
-                tagline: 'A list of things that I have made in my spare time at some point or another.',
-                image_src: '/images/handle_logo.png',
-                image_alt: 'Main face of the site'
-            },
-
-            content: {
-                projects: projects
-            },
-
-            pagination: {
-                base_url: '/projects?',
-                total: totalCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
-            },
-
-            head: {
-                title: 'M4Numbers :: Projects',
-                description: 'Home to the wild things',
-                current_page: 'projects'
-            }
-        });
-    }, rejection => {
-        next(rejection);
-    });
-});
+router.get('/', require('../journey/base/projects/get_all_projects'));
 
 /* GET single blog post page. */
-router.get('/:projectId', function (req, res, next) {
-    projectHandlerInstance.findProject(req.params['projectId'])
-        .then(project => {
-            if (project !== null) {
-                res.render('./pages/project_single', {
-                    top_page: {
-                        title: project.long_title,
-                        project_tags: project.tags,
-                        image_src: '/images/handle_logo.png',
-                        image_alt: 'Main face of the site',
-                    },
-
-                    content: {
-                        project_text: project.description
-                    },
-
-                    head: {
-                        title: `M4Numbers :: ${project.long_title}`,
-                        description: 'Home to the wild things',
-                        current_page: 'projects'
-                    }
-                });
-            } else {
-                next(new SiteError(404, 'Not Found'));
-            }
-        }, rejection => {
-            next(rejection);
-        });
-});
+router.get('/:projectId', require('../journey/base/projects/get_one_project'));
 
 module.exports = router;
