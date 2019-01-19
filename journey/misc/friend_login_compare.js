@@ -29,11 +29,11 @@ const CacheFactory = require('../../lib/CacheFactory');
 const getIsFriend = require('./get_is_friend');
 
 const friendLoginCompare = async (req, res) => {
-    if (req.body['me_password'] && !getIsFriend(req.signedCookies.SSID)) {
+    if (req.body['me_password'] && !(await getIsFriend(req.signedCookies.SSID))) {
         let hash = crypto.createHash('sha256').update(req.body['me_password']).digest('hex');
         if (hash === config.get('protected.hash')) {
             const cache = CacheFactory();
-            await cache.set('trust_level', 1);
+            await cache.set(req.signedCookies.SSID, { trust_level: 1 });
             cache.quit();
         }
     }

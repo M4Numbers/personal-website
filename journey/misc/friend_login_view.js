@@ -27,7 +27,9 @@ const config = require('config');
 const getIsFriend = require('./get_is_friend');
 
 const friendLoginView = async (req, res) => {
-    if (getIsFriend(req.signedCookies.SSID)) {
+    const isFriend = await getIsFriend(req.signedCookies.SSID);
+    console.log(isFriend);
+    if (isFriend) {
         res.redirect(303, '/hobbies/me');
     } else {
         res.render('./pages/me/me_login', {

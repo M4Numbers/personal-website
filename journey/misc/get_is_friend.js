@@ -26,10 +26,12 @@ const CacheFactory = require('../../lib/CacheFactory');
 
 const getIsFriend = async (ssid) => {
     if (typeof ssid === 'undefined') {
-        Promise.resolve(false);
+        return false;
     } else {
         let cache = CacheFactory();
-        Promise.resolve(cache.get(ssid).trust_level > 0);
+        const session = await cache.get(ssid);
+        return (typeof session.trust_level !== 'undefined')
+            && (session.trust_level > 0);
     }
 };
 
