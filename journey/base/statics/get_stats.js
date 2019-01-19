@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,29 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const moment = require('moment');
+const envs = process.env;
 
-router.get('/map', require('../journey/base/statics/get_sitemap'));
-router.get('/about', require('../journey/base/statics/get_about_me'));
-router.get('/contact', require('../journey/base/statics/get_contact_me'));
-router.get('/stats', require('../journey/base/statics/get_stats'));
+const getStatistics = async  (req, res) => {
+    res.render('./pages/stats', {
+        top_page: {
+            title: 'Statistics',
+            tagline: 'Some statistics that relate directly to the site',
+            fa_type: 'fas',
+            fa_choice: 'fa-clipboard-check'
+        },
 
-module.exports = router;
+        content: {
+            time: moment(),
+            version: envs['npm_package_version']
+        },
+
+        head: {
+            title: 'M4Numbers :: Statistics',
+            description: 'Home to the wild things',
+            current_page: 'stats'
+        }
+    });
+};
+
+module.exports = getStatistics;

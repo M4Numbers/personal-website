@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,31 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
+const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
-router.get('/map', require('../journey/base/statics/get_sitemap'));
-router.get('/about', require('../journey/base/statics/get_about_me'));
-router.get('/contact', require('../journey/base/statics/get_contact_me'));
-router.get('/stats', require('../journey/base/statics/get_stats'));
+const getContactMe = async (req, res, next) => {
+    staticHandlerInstance.findStatic(StaticDocumentTypes.CONTACT_ME).then(staticContent => {
+        res.render('./pages/contact', {
+            top_page: {
+                title: 'Contact Me',
+                tagline: 'If, for whatever reason, you want to get in touch with me, use the links below to find my other' +
+                    ' hidey-holes.',
+                fa_type: 'fas',
+                fa_choice: 'fa-phone'
+            },
 
-module.exports = router;
+            content: {
+                options: (staticContent || {}).content
+            },
+
+            head: {
+                title: 'M4Numbers :: Contact Me',
+                description: 'Home to the wild things',
+                current_page: 'contact'
+            }
+        });
+    }, next);
+};
+
+module.exports = getContactMe;

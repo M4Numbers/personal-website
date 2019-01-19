@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,31 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
+const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
-router.get('/map', require('../journey/base/statics/get_sitemap'));
-router.get('/about', require('../journey/base/statics/get_about_me'));
-router.get('/contact', require('../journey/base/statics/get_contact_me'));
-router.get('/stats', require('../journey/base/statics/get_stats'));
+const getAboutMe = async (req, res, next) => {
+    staticHandlerInstance.findStatic(StaticDocumentTypes.ABOUT_ME).then(staticContent => {
+        res.render('./pages/about', {
+            top_page: {
+                title: 'About Me',
+                tagline: 'If you were looking for a general overview about yours truly, you\'ve come to the right place!',
+                image_src: 'images/handle_logo.png',
+                image_alt: 'My logo that I use to represent myself'
+            },
 
-module.exports = router;
+            content: {
+                title: 'About Me',
+                text: (staticContent || {}).content,
+            },
+
+            head: {
+                title: 'M4Numbers :: About Me',
+                description: 'Home to the wild things',
+                current_page: 'about'
+            }
+        });
+    }, next);
+};
+
+module.exports = getAboutMe;
