@@ -39,17 +39,6 @@ const bodyParser = require('body-parser');
 const nunjucksFilters = require('./middleware/NunjucksFilters');
 const sessionGenerator = require('./middleware/session_generator');
 
-const index = require('./routes/index');
-const search = require('./routes/search');
-const auth = require('./routes/auth');
-const statics = require('./routes/statics');
-const admin = require('./routes/admin');
-const blog = require('./routes/blog');
-const hobbies = require('./routes/hobbies');
-const projects = require('./routes/projects');
-
-const SiteError = require('./lib/SiteError');
-
 const app = express();
 
 // view engine setup
@@ -82,12 +71,7 @@ app.use(express.static(path.join(__dirname, 'node_modules/font-awesome')));
 
 app.use(sessionGenerator);
 
-app.use('/', [index, auth, statics]);
-app.use('/search', [search]);
-app.use('/admin', [admin]);
-app.use('/blog', [blog]);
-app.use('/hobbies', [hobbies]);
-app.use('/projects', [projects]);
+app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler
 app.use(require('./journey/generate_404'));
