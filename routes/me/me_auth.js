@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 
-const { friendLoginView, friendLoginCompare } = require("../../journey/friend_login");
+const { friendLoginView, friendLoginCompare } = require('../../journey/friend_login');
 
 const router = express.Router();
 
 /* GET home page. */
-router.get("/login", friendLoginView);
-router.post("/login", friendLoginCompare);
+router.get('/login', friendLoginView);
+router.post('/login', friendLoginCompare);
 
 module.exports = router;

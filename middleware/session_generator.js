@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-const uuid = require("uuid");
-const config = require("config");
+const uuid = require('uuid');
+const config = require('config');
 
 module.exports = (req, res, next) => {
   let sessionId = req.signedCookies.SSID;
-  if (typeof sessionId === "undefined") {
+  if (typeof sessionId === 'undefined') {
       sessionId = uuid();
-      res.cookie("SSID", sessionId, {httpOnly: true, domain: config.get("cookies.domain"), path: config.get("cookies.path"), signed: true});
+      res.cookie('SSID', sessionId, {httpOnly: true, domain: config.get('cookies.domain'), path: config.get('cookies.path'), signed: true});
   }
   res.locals.sessionId = sessionId;
   next();

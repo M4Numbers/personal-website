@@ -22,29 +22,29 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const AnimeHandler = require("../../lib/AnimeHandler");
+const AnimeHandler = require('../../lib/AnimeHandler');
 const animeHandlerInstance = AnimeHandler.getHandler();
-const importHandler = require("../../lib/ImportHandler");
+const importHandler = require('../../lib/ImportHandler');
 
-const loggingSystem = require("./../../lib/Logger");
-const logger = loggingSystem.getLogger("master");
+const loggingSystem = require('./../../lib/Logger');
+const logger = loggingSystem.getLogger('master');
 
-router.get("/", function (req, res) {
+router.get('/', function (req, res) {
     Promise.all(
         [
-            animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"title.romaji": 1}, false),
+            animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'title.romaji': 1}, false),
             animeHandlerInstance.getTotalShowCount(false)
         ]
     ).then(([shows, totalCount]) => {
-        res.render("./pages/admin/anime/admin_anime_view", {
+        res.render('./pages/admin/anime/admin_anime_view', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -52,30 +52,30 @@ router.get("/", function (req, res) {
             },
 
             pagination: {
-                base_url: "/admin/anime?",
+                base_url: '/admin/anime?',
                 total: totalCount,
-                page: Math.max((req.query["page"] || 1), 1),
+                page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "anime-view"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'anime-view'
             }
         });
     });
 });
 
-router.get("/:animeId", function (req, res) {
-    animeHandlerInstance.findAnimeByRawId(req.params["animeId"]).then((show) => {
-        res.render("./pages/admin/anime/admin_anime_view_single", {
+router.get('/:animeId', function (req, res) {
+    animeHandlerInstance.findAnimeByRawId(req.params['animeId']).then((show) => {
+        res.render('./pages/admin/anime/admin_anime_view_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -83,23 +83,23 @@ router.get("/:animeId", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "anime-view"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'anime-view'
             }
         });
     });
 });
 
-router.get("/:animeId/edit", function (req, res) {
-    animeHandlerInstance.findAnimeByRawId(req.params["animeId"]).then((show) => {
-        res.render("./pages/admin/anime/admin_anime_edit_single", {
+router.get('/:animeId/edit', function (req, res) {
+    animeHandlerInstance.findAnimeByRawId(req.params['animeId']).then((show) => {
+        res.render('./pages/admin/anime/admin_anime_edit_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -107,29 +107,29 @@ router.get("/:animeId/edit", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "anime-edit"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'anime-edit'
             }
         });
     });
 });
 
-router.post("/:animeId/edit", function (req, res) {
+router.post('/:animeId/edit', function (req, res) {
     animeHandlerInstance.editAnime(
-        req.params["animeId"], req.body["show-review"],
-        req.body["show-tags"].split(/, ?/)
+        req.params['animeId'], req.body['show-review'],
+        req.body['show-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/anime/${req.params["animeId"]}`);
+        res.redirect(303, `/admin/anime/${req.params['animeId']}`);
     }, rejection => {
-        res.cookie("anime-update-error", {anime_id: req.params["animeId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/anime/${req.params["animeId"]}`);
+        res.cookie('anime-update-error', {anime_id: req.params['animeId'], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/anime/${req.params['animeId']}`);
     });
 });
 
-router.post("/refresh", function (req, res) {
-    logger.info("Importing new anime into mongo...");
+router.post('/refresh', function (req, res) {
+    logger.info('Importing new anime into mongo...');
     importHandler.importAnimeIntoMongo();
     res.status(200).json({});
 });

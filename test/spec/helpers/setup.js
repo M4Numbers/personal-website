@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-const chai = require("chai");
-const chaiAsPromised = require("chai-as-promised");
-const sinonChai = require("sinon-chai");
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const sinonChai = require('sinon-chai');
 
-process.env.NODE_ENV = "test";
+process.env.NODE_ENV = 'test';
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
-global.sinon = require("sinon");
+global.sinon = require('sinon');
 global.expect = chai.expect;

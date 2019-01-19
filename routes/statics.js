@@ -22,77 +22,77 @@
  * SOFTWARE.
  */
 
-const express = require("express");
-const moment = require("moment");
+const express = require('express');
+const moment = require('moment');
 const router = express.Router();
 
 const envs = process.env;
 
-const StaticHandler = require("../lib/StaticHandler");
+const StaticHandler = require('../lib/StaticHandler');
 const staticHandlerInstance = StaticHandler.getHandler();
-const StaticDocumentTypes = require("../lib/StaticDocumentTypes");
+const StaticDocumentTypes = require('../lib/StaticDocumentTypes');
 
 /* GET home page. */
-router.get("/map", function (req, res, next) {
+router.get('/map', function (req, res, next) {
     staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP).then(sitemapItems => {
         let sortedSiteMap = ((sitemapItems || {}).content || []).sort((a, b) => {
-            return (a["page_name"] > b["page_name"]) ? 1 : ((a["page_name"] < b["page_name"]) ? -1 : 0);
+            return (a['page_name'] > b['page_name']) ? 1 : ((a['page_name'] < b['page_name']) ? -1 : 0);
         });
-        res.render("./pages/sitemap", {
+        res.render('./pages/sitemap', {
             top_page: {
-                title: "Sitemap",
-                tagline: "If you want to get somewhere, why not use the links below to navigate!",
-                fa_type: "fas",
-                fa_choice: "fa-map"
+                title: 'Sitemap',
+                tagline: 'If you want to get somewhere, why not use the links below to navigate!',
+                fa_type: 'fas',
+                fa_choice: 'fa-map'
             },
 
             content: {
-                title: "Sitemap",
+                title: 'Sitemap',
                 site_links: sortedSiteMap || [],
             },
 
             head: {
-                title: "M4Numbers :: Sitemap",
-                description: "Home to the wild things",
-                current_page: "sitemap"
+                title: 'M4Numbers :: Sitemap',
+                description: 'Home to the wild things',
+                current_page: 'sitemap'
             }
         });
     }).catch(caught => {console.log(`Catch during find static :: ${caught}`); next();});
 });
 
-router.get("/about", function (req, res, next) {
+router.get('/about', function (req, res, next) {
     staticHandlerInstance.findStatic(StaticDocumentTypes.ABOUT_ME).then(staticContent => {
-        res.render("./pages/about", {
+        res.render('./pages/about', {
             top_page: {
-                title: "About Me",
-                tagline: "If you were looking for a general overview about yours truly, you've come to the right place!",
-                image_src: "images/handle_logo.png",
-                image_alt: "My logo that I use to represent myself"
+                title: 'About Me',
+                tagline: 'If you were looking for a general overview about yours truly, you\'ve come to the right place!',
+                image_src: 'images/handle_logo.png',
+                image_alt: 'My logo that I use to represent myself'
             },
 
             content: {
-                title: "About Me",
+                title: 'About Me',
                 text: (staticContent || {}).content,
             },
 
             head: {
-                title: "M4Numbers :: About Me",
-                description: "Home to the wild things",
-                current_page: "about"
+                title: 'M4Numbers :: About Me',
+                description: 'Home to the wild things',
+                current_page: 'about'
             }
         });
     }, next);
 });
 
-router.get("/contact", function (req, res, next) {
+router.get('/contact', function (req, res, next) {
     staticHandlerInstance.findStatic(StaticDocumentTypes.CONTACT_ME).then(staticContent => {
-        res.render("./pages/contact", {
+        res.render('./pages/contact', {
             top_page: {
-                title: "Contact Me",
-                tagline: "If, for whatever reason, you want to get in touch with me, use the links below to find my other" +
-                " hidey-holes.",
-                fa_type: "fas",
-                fa_choice: "fa-phone"
+                title: 'Contact Me',
+                tagline: 'If, for whatever reason, you want to get in touch with me, use the links below to find my other' +
+                ' hidey-holes.',
+                fa_type: 'fas',
+                fa_choice: 'fa-phone'
             },
 
             content: {
@@ -100,32 +100,32 @@ router.get("/contact", function (req, res, next) {
             },
 
             head: {
-                title: "M4Numbers :: Contact Me",
-                description: "Home to the wild things",
-                current_page: "contact"
+                title: 'M4Numbers :: Contact Me',
+                description: 'Home to the wild things',
+                current_page: 'contact'
             }
         });
     }, next);
 });
 
-router.get("/stats", (req, res) => {
-    res.render("./pages/stats", {
+router.get('/stats', (req, res) => {
+    res.render('./pages/stats', {
         top_page: {
-            title: "Statistics",
-            tagline: "Some statistics that relate directly to the site",
-            fa_type: "fas",
-            fa_choice: "fa-clipboard-check"
+            title: 'Statistics',
+            tagline: 'Some statistics that relate directly to the site',
+            fa_type: 'fas',
+            fa_choice: 'fa-clipboard-check'
         },
 
         content: {
             time: moment(),
-            version: envs["npm_package_version"]
+            version: envs['npm_package_version']
         },
 
         head: {
-            title: "M4Numbers :: Statistics",
-            description: "Home to the wild things",
-            current_page: "stats"
+            title: 'M4Numbers :: Statistics',
+            description: 'Home to the wild things',
+            current_page: 'stats'
         }
     });
 });

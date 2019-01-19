@@ -22,31 +22,31 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const AnimeHandler = require("../../lib/AnimeHandler");
+const AnimeHandler = require('../../lib/AnimeHandler');
 const animeHandlerInstance = AnimeHandler.getHandler();
 
-router.get("/", function (req, res, next) {
+router.get('/', function (req, res, next) {
     Promise.all([
-        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title.romaji": 1}, req.query["category"]),
-        animeHandlerInstance.getTotalShowCount(req.query["category"] || "")
+        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query['page'] || 1) - 1)) * 12, 12, {'title.romaji': 1}, req.query['category']),
+        animeHandlerInstance.getTotalShowCount(req.query['category'] || '')
     ]).catch(next)
         .then(([allShows, totalCount]) => {
-        let baseUrl = "";
+        let baseUrl = '';
         if (req.query.category) {
             baseUrl += `category=${req.query.category}&`;
         }
         if (req.query.q) {
             baseUrl += `q=${req.query.q}&`;
         }
-        res.render("./pages/anime/anime_all", {
+        res.render('./pages/anime/anime_all', {
             top_page: {
-                title: "My Anime Watchlist",
-                tagline: "A list of all the strange things that I have seen at some point or another",
-                image_src: "/images/handle_logo.png",
-                image_alt: "Main face of the site"
+                title: 'My Anime Watchlist',
+                tagline: 'A list of all the strange things that I have seen at some point or another',
+                image_src: '/images/handle_logo.png',
+                image_alt: 'Main face of the site'
             },
 
             content: {
@@ -56,29 +56,29 @@ router.get("/", function (req, res, next) {
             pagination: {
                 base_url: `/hobbies/anime?${baseUrl}`,
                 total: totalCount,
-                page: Math.max((req.query["page"] || 1), 1),
+                page: Math.max((req.query['page'] || 1), 1),
                 page_size: 12
             },
 
             head: {
-                title: "M4Numbers :: Hobbies :: Anime",
-                description: "Home to the wild things",
-                current_page: "hobbies",
-                current_sub_page: "anime",
-                current_category: req.query["category"] || "all"
+                title: 'M4Numbers :: Hobbies :: Anime',
+                description: 'Home to the wild things',
+                current_page: 'hobbies',
+                current_sub_page: 'anime',
+                current_category: req.query['category'] || 'all'
             }
         });
     }, next);
 });
 
-router.get("/:animeId", (req, res, next) => {
-    animeHandlerInstance.findAnimeByRawId(req.params["animeId"])
+router.get('/:animeId', (req, res, next) => {
+    animeHandlerInstance.findAnimeByRawId(req.params['animeId'])
         .catch(next)
         .then(anime => {
-            res.render("./pages/anime/anime_one", {
+            res.render('./pages/anime/anime_one', {
                 top_page: {
                     title: anime.title.romaji,
-                    tagline: "A list of all the strange things that I have seen at some point or another",
+                    tagline: 'A list of all the strange things that I have seen at some point or another',
                     image_src: anime.cover_img.large,
                     image_alt: anime.title.romaji
                 },
@@ -89,10 +89,10 @@ router.get("/:animeId", (req, res, next) => {
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Anime :: ",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "anime",
+                    title: 'M4Numbers :: Hobbies :: Anime :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'anime',
                 }
             });
         }, next);

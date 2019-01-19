@@ -22,31 +22,31 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const StoryHandler = require("../../lib/StoryHandler");
+const StoryHandler = require('../../lib/StoryHandler');
 const storyHandlerInstance = StoryHandler.getHandler();
 
-const ChapterHandler = require("../../lib/ChapterHandler");
+const ChapterHandler = require('../../lib/ChapterHandler');
 const chapterHandlerInstance = ChapterHandler.getHandler();
 
-const loggingSystem = require("../../lib/Logger");
-const logger = loggingSystem.getLogger("master");
+const loggingSystem = require('../../lib/Logger');
+const logger = loggingSystem.getLogger('master');
 
 // All endpoints below are prefixed with `/admin/stories/:storyId/chapter`
 
-router.get("/:storyId/chapter/new", function (req, res, next) {
-    logger.info(`Searching for story with id ${req.params["storyId"]}`);
-    storyHandlerInstance.findStoryByRawId(req.params["storyId"])
+router.get('/:storyId/chapter/new', function (req, res, next) {
+    logger.info(`Searching for story with id ${req.params['storyId']}`);
+    storyHandlerInstance.findStoryByRawId(req.params['storyId'])
         .catch(next)
         .then(story => {
-            res.render("./pages/admin/stories/admin_chapter_create", {
+            res.render('./pages/admin/stories/admin_chapter_create', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
@@ -54,40 +54,40 @@ router.get("/:storyId/chapter/new", function (req, res, next) {
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "story-edit"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'story-edit'
                 }
             });
         });
 });
 
-router.post("/:storyId/chapter/new", function (req, res) {
+router.post('/:storyId/chapter/new', function (req, res) {
     chapterHandlerInstance.addNewChapter(
-        req.params["storyId"], req.body["chapter-number"],
-        req.body["chapter-title"], req.body["chapter-text"],
-        req.body["chapter-comments"]
+        req.params['storyId'], req.body['chapter-number'],
+        req.body['chapter-title'], req.body['chapter-text'],
+        req.body['chapter-comments']
     )
         .then((uploadedChapter) => {
             return storyHandlerInstance.addChapterToStory(
-                req.params["storyId"], uploadedChapter.chapter_number,
+                req.params['storyId'], uploadedChapter.chapter_number,
                 uploadedChapter._id
             );
         })
         .then(() => {
-            res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}`);
         }, rejection => {
-            logger.warn("story creation error");
+            logger.warn('story creation error');
             logger.warn(rejection);
-            res.redirect(303, `/admin/stories/${req.params["storyId"]}/new`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/new`);
         });
 });
 
-router.get("/:storyId/chapter/:chapterNumber", function (req, res, next) {
+router.get('/:storyId/chapter/:chapterNumber', function (req, res, next) {
     Promise.all([
-        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
-        chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
+        storyHandlerInstance.findStoryByRawId(req.params['storyId']),
+        chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber'])
     ])
         .catch(next)
         .then(([story, chapters]) => {
@@ -99,12 +99,12 @@ router.get("/:storyId/chapter/:chapterNumber", function (req, res, next) {
             }
         })
         .then(storyWithChapter => {
-            res.render("./pages/admin/stories/admin_chapter_view_single", {
+            res.render('./pages/admin/stories/admin_chapter_view_single', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
@@ -112,28 +112,28 @@ router.get("/:storyId/chapter/:chapterNumber", function (req, res, next) {
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "story-view"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'story-view'
                 }
             });
         });
 });
 
-router.get("/:storyId/chapter/:chapterNumber/edit", function (req, res, next) {
+router.get('/:storyId/chapter/:chapterNumber/edit', function (req, res, next) {
     Promise.all([
-        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
-        chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
+        storyHandlerInstance.findStoryByRawId(req.params['storyId']),
+        chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber'])
     ])
         .catch(next)
         .then(([story, chapter]) => {
-            res.render("./pages/admin/stories/admin_chapter_edit_single", {
+            res.render('./pages/admin/stories/admin_chapter_edit_single', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
@@ -142,36 +142,36 @@ router.get("/:storyId/chapter/:chapterNumber/edit", function (req, res, next) {
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "story-edit"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'story-edit'
                 }
             });
         });
 });
 
-router.post("/:storyId/chapter/:chapterNumber/edit", function (req, res) {
+router.post('/:storyId/chapter/:chapterNumber/edit', function (req, res) {
         chapterHandlerInstance.updateExistingChapter(
-            req.body["chapter-id"], req.body["chapter-number"],
-            req.body["chapter-title"], req.body["chapter-text"],
-            req.body["chapter-comments"]
+            req.body['chapter-id'], req.body['chapter-number'],
+            req.body['chapter-title'], req.body['chapter-text'],
+            req.body['chapter-comments']
         ).then(() => {
-            res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`);
         }, rejection => {
-            res.cookie("chapter-update-error", {chapter_id: req.params["chapterNumber"], error: rejection}, {signed: true, maxAge: 1000});
-            res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
+            res.cookie('chapter-update-error', {chapter_id: req.params['chapterNumber'], error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`);
         });
 });
 
-router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
-    chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"]).then((chapter) => {
-        res.render("./pages/admin/stories/admin_chapter_delete_single", {
+router.get('/:storyId/chapter/:chapterNumber/delete', function (req, res) {
+    chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber']).then((chapter) => {
+        res.render('./pages/admin/stories/admin_chapter_delete_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -179,27 +179,27 @@ router.get("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "story-delete"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'story-delete'
             }
         });
     });
 });
 
-router.post("/:storyId/chapter/:chapterNumber/delete", function (req, res) {
+router.post('/:storyId/chapter/:chapterNumber/delete', function (req, res) {
     Promise.all([
-        chapterHandlerInstance.deleteChapter(req.body["chapter-id"]),
-        storyHandlerInstance.removeChapterFromStory(req.params["storyId"], req.body["chapter-id"])
+        chapterHandlerInstance.deleteChapter(req.body['chapter-id']),
+        storyHandlerInstance.removeChapterFromStory(req.params['storyId'], req.body['chapter-id'])
     ])
         .then(() => {
-            res.redirect(303, `/admin/stories/${req.params["storyId"]}`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}`);
         }, rejection => {
-            logger.warn("Failed to delete chapter");
+            logger.warn('Failed to delete chapter');
             logger.warn(rejection);
-            res.cookie("chapter-delete-error", {chapter_id: req.body["chapter-id"], error: rejection}, {signed: true, maxAge: 1000});
-            res.redirect(303, `/admin/stories/${req.params["storyId"]}/chapter/${req.params["chapterNumber"]}`);
+            res.cookie('chapter-delete-error', {chapter_id: req.body['chapter-id'], error: rejection}, {signed: true, maxAge: 1000});
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`);
         });
 });
 

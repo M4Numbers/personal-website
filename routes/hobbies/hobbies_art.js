@@ -22,28 +22,28 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const ArtHandler = require("../../lib/ArtHandler");
+const ArtHandler = require('../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
-router.get("/", function (req, res, next) {
+router.get('/', function (req, res, next) {
     Promise.all([
-        artHandlerInstance.findAllArtPieces(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"date_completed": -1}),
+        artHandlerInstance.findAllArtPieces(Math.max(0, ((req.query['page'] || 1) - 1)) * 12, 12, {'date_completed': -1}),
         artHandlerInstance.getTotalArtPieceCount()
     ]).catch(next)
         .then(([allPictures, totalCount]) => {
-            let baseUrl = "";
+            let baseUrl = '';
             if (req.query.q) {
                 baseUrl += `q=${req.query.q}&`;
             }
-            res.render("./pages/art/art_all", {
+            res.render('./pages/art/art_all', {
                 top_page: {
-                    title: "My Art Scrapbook",
-                    tagline: "A collection of the things that I have attempted to draw at some point or another",
-                    image_src: "/images/handle_logo.png",
-                    image_alt: "Main face of the site"
+                    title: 'My Art Scrapbook',
+                    tagline: 'A collection of the things that I have attempted to draw at some point or another',
+                    image_src: '/images/handle_logo.png',
+                    image_alt: 'Main face of the site'
                 },
 
                 content: {
@@ -53,28 +53,28 @@ router.get("/", function (req, res, next) {
                 pagination: {
                     base_url: `/hobbies/art?${baseUrl}`,
                     total: totalCount,
-                    page: Math.max((req.query["page"] || 1), 1),
+                    page: Math.max((req.query['page'] || 1), 1),
                     page_size: 12
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Art",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "art"
+                    title: 'M4Numbers :: Hobbies :: Art',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'art'
                 }
             });
         }, next);
 });
 
-router.get("/:artId", (req, res, next) => {
-    artHandlerInstance.findArtByRawId(req.params["artId"])
+router.get('/:artId', (req, res, next) => {
+    artHandlerInstance.findArtByRawId(req.params['artId'])
         .catch(next)
         .then(picture => {
-            res.render("./pages/art/art_one", {
+            res.render('./pages/art/art_one', {
                 top_page: {
                     title: picture.title,
-                    tagline: "A collection of the things that I have attempted to draw at some point or another",
+                    tagline: 'A collection of the things that I have attempted to draw at some point or another',
                     image_src: `data:image/png;base64,${picture.image.thumb}`,
                     image_alt: picture.title
                 },
@@ -84,10 +84,10 @@ router.get("/:artId", (req, res, next) => {
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Art :: ",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "art",
+                    title: 'M4Numbers :: Hobbies :: Art :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'art',
                 }
             });
         }, next);

@@ -22,29 +22,29 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const MangaHandler = require("../../lib/MangaHandler");
+const MangaHandler = require('../../lib/MangaHandler');
 const mangaHandlerInstance = MangaHandler.getHandler();
-const importHandler = require("../../lib/ImportHandler");
+const importHandler = require('../../lib/ImportHandler');
 
-const loggingSystem = require("./../../lib/Logger");
-const logger = loggingSystem.getLogger("master");
+const loggingSystem = require('./../../lib/Logger');
+const logger = loggingSystem.getLogger('master');
 
-router.get("/", function (req, res) {
+router.get('/', function (req, res) {
     Promise.all(
         [
-            mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"title.romaji": 1}, false),
+            mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'title.romaji': 1}, false),
             mangaHandlerInstance.getTotalBookCount(false)
         ]
     ).then(([books, totalCount]) => {
-        res.render("./pages/admin/manga/admin_manga_view", {
+        res.render('./pages/admin/manga/admin_manga_view', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -52,30 +52,30 @@ router.get("/", function (req, res) {
             },
 
             pagination: {
-                base_url: "/admin/manga?",
+                base_url: '/admin/manga?',
                 total: totalCount,
-                page: Math.max((req.query["page"] || 1), 1),
+                page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "manga-view"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'manga-view'
             }
         });
     });
 });
 
-router.get("/:mangaId", function (req, res) {
-    mangaHandlerInstance.findMangaByRawId(req.params["mangaId"]).then((book) => {
-        res.render("./pages/admin/manga/admin_manga_view_single", {
+router.get('/:mangaId', function (req, res) {
+    mangaHandlerInstance.findMangaByRawId(req.params['mangaId']).then((book) => {
+        res.render('./pages/admin/manga/admin_manga_view_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -83,23 +83,23 @@ router.get("/:mangaId", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "manga-view"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'manga-view'
             }
         });
     });
 });
 
-router.get("/:mangaId/edit", function (req, res) {
-    mangaHandlerInstance.findMangaByRawId(req.params["mangaId"]).then((book) => {
-        res.render("./pages/admin/manga/admin_manga_edit_single", {
+router.get('/:mangaId/edit', function (req, res) {
+    mangaHandlerInstance.findMangaByRawId(req.params['mangaId']).then((book) => {
+        res.render('./pages/admin/manga/admin_manga_edit_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -107,29 +107,29 @@ router.get("/:mangaId/edit", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "manga-edit"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'manga-edit'
             }
         });
     });
 });
 
-router.post("/:mangaId/edit", function (req, res) {
+router.post('/:mangaId/edit', function (req, res) {
     mangaHandlerInstance.editManga(
-        req.params["mangaId"], req.body["book-review"],
-        req.body["book-tags"].split(/, ?/)
+        req.params['mangaId'], req.body['book-review'],
+        req.body['book-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/manga/${req.params["mangaId"]}`);
+        res.redirect(303, `/admin/manga/${req.params['mangaId']}`);
     }, rejection => {
-        res.cookie("manga-update-error", {manga_id: req.params["mangaId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/manga/${req.params["mangaId"]}`);
+        res.cookie('manga-update-error', {manga_id: req.params['mangaId'], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/manga/${req.params['mangaId']}`);
     });
 });
 
-router.post("/refresh", function (req, res) {
-    logger.info("Importing new manga into mongo...");
+router.post('/refresh', function (req, res) {
+    logger.info('Importing new manga into mongo...');
     importHandler.importMangaIntoMongo();
     res.status(200).json({});
 });

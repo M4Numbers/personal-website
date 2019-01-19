@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const Logger = require("../../lib/Logger");
-const logger = Logger.getLogger("master");
+const Logger = require('../../lib/Logger');
+const logger = Logger.getLogger('master');
 
-const StaticHandler = require("../../lib/StaticHandler");
+const StaticHandler = require('../../lib/StaticHandler');
 const staticHandlerInstance = StaticHandler.getHandler();
-const statics = require("../../lib/StaticDocumentTypes");
+const statics = require('../../lib/StaticDocumentTypes');
 
-router.get("/", (req, res) => {
-    res.render("./pages/admin/statics/admin_statics_view", {
+router.get('/', (req, res) => {
+    res.render('./pages/admin/statics/admin_statics_view', {
         top_page: {
-            title: "Administrator Toolkit",
-            tagline: "All the functions that the administrator of the site has available to them",
-            fa_type: "fas",
-            fa_choice: "fa-toolbox"
+            title: 'Administrator Toolkit',
+            tagline: 'All the functions that the administrator of the site has available to them',
+            fa_type: 'fas',
+            fa_choice: 'fa-toolbox'
         },
 
         content: {
@@ -46,43 +46,43 @@ router.get("/", (req, res) => {
         },
 
         head: {
-            title: "M4Numbers",
-            description: "Home to the wild things",
-            current_page: "admin",
-            current_sub_page: "statics-view"
+            title: 'M4Numbers',
+            description: 'Home to the wild things',
+            current_page: 'admin',
+            current_sub_page: 'statics-view'
         }
     });
 });
 
 const viewSingleTextStaticDocument = (req, res) => {
-    staticHandlerInstance.findStatic(req.params["staticId"])
+    staticHandlerInstance.findStatic(req.params['staticId'])
         .then(staticData => {
             return Promise.resolve(staticData.content);
         })
         .catch(error => {
-            logger.warn("Issue getting static document");
+            logger.warn('Issue getting static document');
             logger.debug(error);
-            return Promise.resolve("");
+            return Promise.resolve('');
         })
         .then(staticData => {
-            res.render("./pages/admin/statics/admin_statics_view_single_text", {
+            res.render('./pages/admin/statics/admin_statics_view_single_text', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
-                    static_id: req.params["staticId"],
+                    static_id: req.params['staticId'],
                     static_detail: staticData
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "statics-view"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'statics-view'
                 }
             });
         });
@@ -90,181 +90,181 @@ const viewSingleTextStaticDocument = (req, res) => {
 
 const cullListItems = (items) => Promise.resolve(
     items.filter(toValidate =>
-        toValidate.page_name !== ""
-        && toValidate.page_link !== ""));
+        toValidate.page_name !== ''
+        && toValidate.page_link !== ''));
 
 const cullContactListItems = (items) => Promise.resolve(
     items.filter(toValidate =>
-        toValidate.contact_method !== ""
-        && toValidate.contact_link !== ""
-        && toValidate.fa_style !== ""
-        && toValidate.fa_icon !== ""));
+        toValidate.contact_method !== ''
+        && toValidate.contact_link !== ''
+        && toValidate.fa_style !== ''
+        && toValidate.fa_icon !== ''));
 
 const viewSingleListContactStaticDocument = (req, res) => {
-    staticHandlerInstance.findStatic(req.params["staticId"])
+    staticHandlerInstance.findStatic(req.params['staticId'])
         .then(staticData => {
             return Promise.resolve(staticData.content);
         })
         .catch(error => {
-            logger.warn("Issue getting static document");
+            logger.warn('Issue getting static document');
             logger.debug(error.message);
-            return Promise.resolve("");
+            return Promise.resolve('');
         })
         .then(staticData => {
-            res.render("./pages/admin/statics/admin_statics_view_single_list_contact", {
+            res.render('./pages/admin/statics/admin_statics_view_single_list_contact', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
-                    static_id: req.params["staticId"],
+                    static_id: req.params['staticId'],
                     static_detail: staticData
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "statics-view"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'statics-view'
                 }
             });
         });
 };
 
 const viewSingleListSiteMapStaticDocument = (req, res) => {
-    staticHandlerInstance.findStatic(req.params["staticId"])
+    staticHandlerInstance.findStatic(req.params['staticId'])
         .then(staticData => {
             return Promise.resolve(staticData.content);
         })
         .catch(error => {
-            logger.warn("Issue getting static document");
+            logger.warn('Issue getting static document');
             logger.debug(error);
-            return Promise.resolve("");
+            return Promise.resolve('');
         })
         .then(staticData => {
-            res.render("./pages/admin/statics/admin_statics_view_single_list_sitemap", {
+            res.render('./pages/admin/statics/admin_statics_view_single_list_sitemap', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
-                    static_id: req.params["staticId"],
+                    static_id: req.params['staticId'],
                     static_detail: staticData
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "statics-view"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'statics-view'
                 }
             });
         });
 };
 
 const editSingleTextStaticDocument = (req, res) => {
-    staticHandlerInstance.findStatic(req.params["staticId"])
+    staticHandlerInstance.findStatic(req.params['staticId'])
         .then(staticData => {
             return Promise.resolve(staticData.content);
         })
         .catch(error => {
-            logger.warn("Issue getting static document");
+            logger.warn('Issue getting static document');
             logger.debug(error);
-            return Promise.resolve("");
+            return Promise.resolve('');
         })
         .then(staticData => {
-            res.render("./pages/admin/statics/admin_statics_edit_single_text", {
+            res.render('./pages/admin/statics/admin_statics_edit_single_text', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
-                    static_id: req.params["staticId"],
+                    static_id: req.params['staticId'],
                     static_detail: staticData
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "statics-edit"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'statics-edit'
                 }
             });
         });
 };
 
 const editSingleListContactStaticDocument = (req, res) => {
-    staticHandlerInstance.findStatic(req.params["staticId"])
+    staticHandlerInstance.findStatic(req.params['staticId'])
         .then(staticData => {
             return Promise.resolve(staticData.content);
         })
         .catch(error => {
-            logger.warn("Issue getting static document");
+            logger.warn('Issue getting static document');
             logger.debug(error);
-            return Promise.resolve("");
+            return Promise.resolve('');
         })
         .then(staticData => {
-            res.render("./pages/admin/statics/admin_statics_edit_single_list_contact", {
+            res.render('./pages/admin/statics/admin_statics_edit_single_list_contact', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
-                    static_id: req.params["staticId"],
+                    static_id: req.params['staticId'],
                     static_detail: staticData
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "statics-edit"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'statics-edit'
                 }
             });
         });
 };
 
 const editSingleListSiteMapStaticDocument = (req, res) => {
-    staticHandlerInstance.findStatic(req.params["staticId"])
+    staticHandlerInstance.findStatic(req.params['staticId'])
         .then(staticData => {
             return Promise.resolve(staticData.content);
         })
         .catch(error => {
-            logger.warn("Issue getting static document");
+            logger.warn('Issue getting static document');
             logger.debug(error);
-            return Promise.resolve("");
+            return Promise.resolve('');
         })
         .then(staticData => {
-            res.render("./pages/admin/statics/admin_statics_edit_single_list_sitemap", {
+            res.render('./pages/admin/statics/admin_statics_edit_single_list_sitemap', {
                 top_page: {
-                    title: "Administrator Toolkit",
-                    tagline: "All the functions that the administrator of the site has available to them",
-                    fa_type: "fas",
-                    fa_choice: "fa-toolbox"
+                    title: 'Administrator Toolkit',
+                    tagline: 'All the functions that the administrator of the site has available to them',
+                    fa_type: 'fas',
+                    fa_choice: 'fa-toolbox'
                 },
 
                 content: {
-                    static_id: req.params["staticId"],
+                    static_id: req.params['staticId'],
                     static_detail: staticData
                 },
 
                 head: {
-                    title: "M4Numbers",
-                    description: "Home to the wild things",
-                    current_page: "admin",
-                    current_sub_page: "statics-edit"
+                    title: 'M4Numbers',
+                    description: 'Home to the wild things',
+                    current_page: 'admin',
+                    current_sub_page: 'statics-edit'
                 }
             });
         });
@@ -272,45 +272,45 @@ const editSingleListSiteMapStaticDocument = (req, res) => {
 
 const editTextDocument = (req, res) => {
     staticHandlerInstance.updateStatic(
-        req.params["staticId"], req.body["document-text"]
+        req.params['staticId'], req.body['document-text']
     ).then(() => {
-        res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+        res.redirect(303, `/admin/statics/${req.params['staticId']}`);
     }, rejection => {
-        res.cookie("static-update-error", {static_id: req.params["staticId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+        res.cookie('static-update-error', {static_id: req.params['staticId'], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/statics/${req.params['staticId']}`);
     });
 };
 
 const editSitemapListDocument = (req, res) => {
-    cullListItems(req.body["sitemap-page"] || [])
+    cullListItems(req.body['sitemap-page'] || [])
         .then(minimisedItems => {
             staticHandlerInstance.updateStatic(
-                req.params["staticId"], minimisedItems
+                req.params['staticId'], minimisedItems
             ).then(() => {
-                res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+                res.redirect(303, `/admin/statics/${req.params['staticId']}`);
             }, rejection => {
-                res.cookie("static-update-error", {static_id: req.params["staticId"], error: rejection}, {
+                res.cookie('static-update-error', {static_id: req.params['staticId'], error: rejection}, {
                     signed: true,
                     maxAge: 1000
                 });
-                res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+                res.redirect(303, `/admin/statics/${req.params['staticId']}`);
             });
         });
 };
 
 const editContactListDocument = (req, res) => {
-    cullContactListItems(req.body["sitemap-page"] || [])
+    cullContactListItems(req.body['sitemap-page'] || [])
         .then(minimisedItems => {
             staticHandlerInstance.updateStatic(
-                req.params["staticId"], minimisedItems
+                req.params['staticId'], minimisedItems
             ).then(() => {
-                res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+                res.redirect(303, `/admin/statics/${req.params['staticId']}`);
             }, rejection => {
-                res.cookie("static-update-error", {static_id: req.params["staticId"], error: rejection}, {
+                res.cookie('static-update-error', {static_id: req.params['staticId'], error: rejection}, {
                     signed: true,
                     maxAge: 1000
                 });
-                res.redirect(303, `/admin/statics/${req.params["staticId"]}`);
+                res.redirect(303, `/admin/statics/${req.params['staticId']}`);
             });
         });
 };

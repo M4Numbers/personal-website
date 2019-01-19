@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 
-const { adminLoginView, adminLoginCompare } = require("../journey/administrator_login");
+const { adminLoginView, adminLoginCompare } = require('../journey/administrator_login');
 
 const router = express.Router();
 
 /* GET home page. */
-router.get("/login", adminLoginView);
-router.post("/login", adminLoginCompare);
+router.get('/login', adminLoginView);
+router.post('/login', adminLoginCompare);
 
 module.exports = router;

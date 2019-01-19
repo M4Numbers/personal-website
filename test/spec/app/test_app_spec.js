@@ -22,4 +22,4 @@
  * SOFTWARE.
  */
 
-describe("The central application", () => {});
+describe('The central application', () => {});

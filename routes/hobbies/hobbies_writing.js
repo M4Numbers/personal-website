@@ -22,31 +22,31 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const StoryHandler = require("../../lib/StoryHandler");
+const StoryHandler = require('../../lib/StoryHandler');
 const storyHandlerInstance = StoryHandler.getHandler();
 
-const ChapterHandler = require("../../lib/ChapterHandler");
+const ChapterHandler = require('../../lib/ChapterHandler');
 const chapterHandlerInstance = ChapterHandler.getHandler();
 
-router.get("/", function (req, res, next) {
+router.get('/', function (req, res, next) {
     Promise.all([
-        storyHandlerInstance.findAllStories(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title": 1}),
+        storyHandlerInstance.findAllStories(Math.max(0, ((req.query['page'] || 1) - 1)) * 12, 12, {'title': 1}),
         storyHandlerInstance.getTotalStoryCount()
     ]).catch(next)
         .then(([allStories, totalCount]) => {
-            let baseUrl = "";
+            let baseUrl = '';
             if (req.query.q) {
                 baseUrl += `q=${req.query.q}&`;
             }
-            res.render("./pages/stories/stories_all", {
+            res.render('./pages/stories/stories_all', {
                 top_page: {
-                    title: "My Writings",
-                    tagline: "A collection of all the things that I've scribbled down at one point or another",
-                    image_src: "/images/handle_logo.png",
-                    image_alt: "Main face of the site"
+                    title: 'My Writings',
+                    tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
+                    image_src: '/images/handle_logo.png',
+                    image_alt: 'Main face of the site'
                 },
 
                 content: {
@@ -56,31 +56,31 @@ router.get("/", function (req, res, next) {
                 pagination: {
                     base_url: `/hobbies/writing?${baseUrl}`,
                     total: totalCount,
-                    page: Math.max((req.query["page"] || 1), 1),
+                    page: Math.max((req.query['page'] || 1), 1),
                     page_size: 12
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Writing",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "writing"
+                    title: 'M4Numbers :: Hobbies :: Writing',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'writing'
                 }
             });
         }, next);
 });
 
-router.get("/:storyId", (req, res, next) => {
+router.get('/:storyId', (req, res, next) => {
     Promise.all([
-        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
-        chapterHandlerInstance.findChaptersByStory(req.params["storyId"], Math.max(0, ((req.query["page"] || 1) - 1)) * 25, 25)
+        storyHandlerInstance.findStoryByRawId(req.params['storyId']),
+        chapterHandlerInstance.findChaptersByStory(req.params['storyId'], Math.max(0, ((req.query['page'] || 1) - 1)) * 25, 25)
     ])
         .catch(next)
         .then(([story, sortedChapterList]) => {
-            res.render("./pages/stories/stories_one", {
+            res.render('./pages/stories/stories_one', {
                 top_page: {
                     title: story.title,
-                    tagline: "A collection of all the things that I've scribbled down at one point or another",
+                    tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
                     image_src: `data:image/png;base64,${story.cover_img}`,
                     image_alt: story.title
                 },
@@ -91,30 +91,30 @@ router.get("/:storyId", (req, res, next) => {
                 },
 
                 pagination: {
-                    base_url: `/hobbies/writing/${req.params["storyId"]}?`,
+                    base_url: `/hobbies/writing/${req.params['storyId']}?`,
                     total: story.chapters.length,
-                    page: Math.max((req.query["page"] || 1), 1),
+                    page: Math.max((req.query['page'] || 1), 1),
                     page_size: 25
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Writing :: ",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "writing",
+                    title: 'M4Numbers :: Hobbies :: Writing :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'writing',
                 }
             });
         }, next);
 });
 
-router.get("/:storyId/chapter/:chapterNumber", (req, res, next) => {
+router.get('/:storyId/chapter/:chapterNumber', (req, res, next) => {
     Promise.all([
-        storyHandlerInstance.findStoryByRawId(req.params["storyId"]),
-        chapterHandlerInstance.findChapterByStoryAndNumber(req.params["storyId"], req.params["chapterNumber"])
+        storyHandlerInstance.findStoryByRawId(req.params['storyId']),
+        chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber'])
     ])
         .catch(next)
         .then(([story, chapter]) => {
-            res.render("./pages/stories/chapters_one", {
+            res.render('./pages/stories/chapters_one', {
                 top_page: {
                     title: story.title,
                     tagline: chapter.chapter_title,
@@ -128,10 +128,10 @@ router.get("/:storyId/chapter/:chapterNumber", (req, res, next) => {
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Writing :: ",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "writing",
+                    title: 'M4Numbers :: Hobbies :: Writing :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'writing',
                 }
             });
         }, next);

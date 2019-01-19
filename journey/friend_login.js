@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-const config = require("config");
-const crypto = require("crypto");
+const config = require('config');
+const crypto = require('crypto');
 
-const CacheFactory = require("../lib/CacheFactory");
+const CacheFactory = require('../lib/CacheFactory');
 
 const getIsFriend = async (ssid) => {
-    if (typeof ssid === "undefined") {
+    if (typeof ssid === 'undefined') {
         Promise.resolve(false);
     } else {
         let cache = CacheFactory();
@@ -38,11 +38,11 @@ const getIsFriend = async (ssid) => {
 
 const testFriendLoggedIn = async (req, res, next) => {
     if (!req.signedCookies.SSID) {
-        res.redirect(303, "/hobbies/me/login");
+        res.redirect(303, '/hobbies/me/login');
     } else {
         const cache = CacheFactory();
         if ((await cache.get(req.signedCookies.SSID)).trust_level < 2) {
-            res.redirect(303, "/hobbies/me/login");
+            res.redirect(303, '/hobbies/me/login');
         } else {
             next();
         }
@@ -51,40 +51,40 @@ const testFriendLoggedIn = async (req, res, next) => {
 
 const friendLoginView = async (req, res) => {
     if (getIsFriend(req.signedCookies.SSID)) {
-        res.redirect(303, "/hobbies/me");
+        res.redirect(303, '/hobbies/me');
     } else {
-        res.render("./pages/me/me_login", {
+        res.render('./pages/me/me_login', {
             top_page: {
-                title: "Test Your Knowledge",
-                tagline: "Log into the site as someone who knows me",
-                fa_type: "fas",
-                fa_choice: "fa-key"
+                title: 'Test Your Knowledge',
+                tagline: 'Log into the site as someone who knows me',
+                fa_type: 'fas',
+                fa_choice: 'fa-key'
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "me_login"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'me_login'
             },
 
             content: {
-                question: config.get("protected.question"),
-                hint: config.get("protected.hint")
+                question: config.get('protected.question'),
+                hint: config.get('protected.hint')
             }
         });
     }
 };
 
 const friendLoginCompare = async (req, res) => {
-    if (req.body["me_password"] && !getIsFriend(req.signedCookies.SSID)) {
-        let hash = crypto.createHash("sha256").update(req.body["me_password"]).digest("hex");
-        if (hash === config.get("protected.hash")) {
+    if (req.body['me_password'] && !getIsFriend(req.signedCookies.SSID)) {
+        let hash = crypto.createHash('sha256').update(req.body['me_password']).digest('hex');
+        if (hash === config.get('protected.hash')) {
             const cache = CacheFactory();
-            await cache.set("trust_level", 1);
+            await cache.set('trust_level', 1);
             cache.quit();
         }
     }
-    res.redirect(303, "/hobbies/me/login");
+    res.redirect(303, '/hobbies/me/login');
 };
 
 module.exports = {

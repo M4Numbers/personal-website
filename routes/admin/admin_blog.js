@@ -22,25 +22,25 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const BlogHandler = require("../../lib/BlogHandler");
+const BlogHandler = require('../../lib/BlogHandler');
 const blogHandlerInstance = BlogHandler.getHandler();
 
-router.get("/", function (req, res) {
+router.get('/', function (req, res) {
     Promise.all(
         [
-            blogHandlerInstance.findBlogs(Math.max(0, ((req.query["page"] || 1) - 1)) * 10, 10, {"time_posted": -1}, false),
+            blogHandlerInstance.findBlogs(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}, false),
             blogHandlerInstance.getTotalBlogCount(false)
         ]
     ).then(([blogs, totalCount]) => {
-        res.render("./pages/admin/blogs/admin_blog_view", {
+        res.render('./pages/admin/blogs/admin_blog_view', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -48,60 +48,60 @@ router.get("/", function (req, res) {
             },
 
             pagination: {
-                base_url: "/admin/blog?",
+                base_url: '/admin/blog?',
                 total: totalCount,
-                page: Math.max((req.query["page"] || 1), 1),
+                page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "blog-view"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'blog-view'
             }
         });
     });
 });
 
-router.get("/new", function (req, res) {
-    res.render("./pages/admin/blogs/admin_blog_create", {
+router.get('/new', function (req, res) {
+    res.render('./pages/admin/blogs/admin_blog_create', {
         top_page: {
-            title: "Administrator Toolkit",
-            tagline: "All the functions that the administrator of the site has available to them",
-            fa_type: "fas",
-            fa_choice: "fa-toolbox"
+            title: 'Administrator Toolkit',
+            tagline: 'All the functions that the administrator of the site has available to them',
+            fa_type: 'fas',
+            fa_choice: 'fa-toolbox'
         },
 
         head: {
-            title: "M4Numbers",
-            description: "Home to the wild things",
-            current_page: "admin",
-            current_sub_page: "blog-edit"
+            title: 'M4Numbers',
+            description: 'Home to the wild things',
+            current_page: 'admin',
+            current_sub_page: 'blog-edit'
         }
     });
 });
 
-router.post("/new", function (req, res) {
+router.post('/new', function (req, res) {
     blogHandlerInstance.insertBlog(
-        req.body["blog-title"], req.body["blog-text"],
-        req.body["blog-visible"] === "Y", req.body["blog-tags"].split(/, ?/)
+        req.body['blog-title'], req.body['blog-text'],
+        req.body['blog-visible'] === 'Y', req.body['blog-tags'].split(/, ?/)
     ).then((savedBlog) => {
         res.redirect(303, `/admin/blog/${savedBlog._id}`);
     }, rejection => {
-        res.cookie("blog-create-error", {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, "/admin/blog/new");
+        res.cookie('blog-create-error', {error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, '/admin/blog/new');
     });
 });
 
-router.get("/:blogId", function (req, res) {
-    blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
-        res.render("./pages/admin/blogs/admin_blog_view_single", {
+router.get('/:blogId', function (req, res) {
+    blogHandlerInstance.findBlog(req.params['blogId']).then((blog) => {
+        res.render('./pages/admin/blogs/admin_blog_view_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -109,23 +109,23 @@ router.get("/:blogId", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "blog-view"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'blog-view'
             }
         });
     });
 });
 
-router.get("/:blogId/edit", function (req, res) {
-    blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
-        res.render("./pages/admin/blogs/admin_blog_edit_single", {
+router.get('/:blogId/edit', function (req, res) {
+    blogHandlerInstance.findBlog(req.params['blogId']).then((blog) => {
+        res.render('./pages/admin/blogs/admin_blog_edit_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -133,36 +133,36 @@ router.get("/:blogId/edit", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "blog-edit"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'blog-edit'
             }
         });
     });
 });
 
-router.post("/:blogId/edit", function (req, res) {
+router.post('/:blogId/edit', function (req, res) {
     blogHandlerInstance.editBlog(
-        req.params["blogId"], req.body["blog-title"],
-        req.body["blog-text"], req.body["blog-visible"] === "Y",
-        req.body["blog-tags"].split(/, ?/)
+        req.params['blogId'], req.body['blog-title'],
+        req.body['blog-text'], req.body['blog-visible'] === 'Y',
+        req.body['blog-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/blog/${req.params["blogId"]}`);
+        res.redirect(303, `/admin/blog/${req.params['blogId']}`);
     }, rejection => {
-        res.cookie("blog-update-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/blog/${req.params["blogId"]}`);
+        res.cookie('blog-update-error', {blog_id: req.params['blogId'], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/blog/${req.params['blogId']}`);
     });
 });
 
-router.get("/:blogId/delete", function (req, res) {
-    blogHandlerInstance.findBlog(req.params["blogId"]).then((blog) => {
-        res.render("./pages/admin/blogs/admin_blog_delete_single", {
+router.get('/:blogId/delete', function (req, res) {
+    blogHandlerInstance.findBlog(req.params['blogId']).then((blog) => {
+        res.render('./pages/admin/blogs/admin_blog_delete_single', {
             top_page: {
-                title: "Administrator Toolkit",
-                tagline: "All the functions that the administrator of the site has available to them",
-                fa_type: "fas",
-                fa_choice: "fa-toolbox"
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
             },
 
             content: {
@@ -170,21 +170,21 @@ router.get("/:blogId/delete", function (req, res) {
             },
 
             head: {
-                title: "M4Numbers",
-                description: "Home to the wild things",
-                current_page: "admin",
-                current_sub_page: "blog-delete"
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'blog-delete'
             }
         });
     });
 });
 
-router.post("/:blogId/delete", function (req, res) {
-    blogHandlerInstance.deleteBlog(req.params["blogId"]).then(() => {
-        res.redirect(303, "/admin/blog/");
+router.post('/:blogId/delete', function (req, res) {
+    blogHandlerInstance.deleteBlog(req.params['blogId']).then(() => {
+        res.redirect(303, '/admin/blog/');
     }, rejection => {
-        res.cookie("blog-delete-error", {blog_id: req.params["blogId"], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/blog/${req.params["blogId"]}`);
+        res.cookie('blog-delete-error', {blog_id: req.params['blogId'], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/blog/${req.params['blogId']}`);
     });
 });
 

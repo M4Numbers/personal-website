@@ -22,31 +22,31 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const MangaHandler = require("../../lib/MangaHandler");
+const MangaHandler = require('../../lib/MangaHandler');
 const mangaHandlerInstance = MangaHandler.getHandler();
 
-router.get("/", function (req, res, next) {
+router.get('/', function (req, res, next) {
     Promise.all([
-        mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query["page"] || 1) - 1)) * 12, 12, {"title.romaji": 1}, req.query.category),
-        mangaHandlerInstance.getTotalBookCount(req.query["category"] || "")
+        mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query['page'] || 1) - 1)) * 12, 12, {'title.romaji': 1}, req.query.category),
+        mangaHandlerInstance.getTotalBookCount(req.query['category'] || '')
     ]).catch(next)
         .then(([allBooks, totalCount]) => {
-        let baseUrl = "";
+        let baseUrl = '';
         if (req.query.category) {
             baseUrl += `category=${req.query.category}&`;
         }
         if (req.query.q) {
             baseUrl += `q=${req.query.q}&`;
         }
-        res.render("./pages/manga/manga_all", {
+        res.render('./pages/manga/manga_all', {
             top_page: {
-                title: "My Manga Readlist",
-                tagline: "A list of all the strange things that I have read at some point or another",
-                image_src: "/images/handle_logo.png",
-                image_alt: "Main face of the site"
+                title: 'My Manga Readlist',
+                tagline: 'A list of all the strange things that I have read at some point or another',
+                image_src: '/images/handle_logo.png',
+                image_alt: 'Main face of the site'
             },
 
             content: {
@@ -56,29 +56,29 @@ router.get("/", function (req, res, next) {
             pagination: {
                 base_url: `/hobbies/manga?${baseUrl}`,
                 total: totalCount,
-                page: Math.max((req.query["page"] || 1), 1),
+                page: Math.max((req.query['page'] || 1), 1),
                 page_size: 12
             },
 
             head: {
-                title: "M4Numbers :: Hobbies :: Manga",
-                description: "Home to the wild things",
-                current_page: "hobbies",
-                current_sub_page: "manga",
-                current_category: req.query["category"] || "all"
+                title: 'M4Numbers :: Hobbies :: Manga',
+                description: 'Home to the wild things',
+                current_page: 'hobbies',
+                current_sub_page: 'manga',
+                current_category: req.query['category'] || 'all'
             }
         });
     }, next);
 });
 
-router.get("/:mangaId", (req, res, next) => {
-    mangaHandlerInstance.findMangaByRawId(req.params["mangaId"])
+router.get('/:mangaId', (req, res, next) => {
+    mangaHandlerInstance.findMangaByRawId(req.params['mangaId'])
         .catch(next)
         .then(manga => {
-            res.render("./pages/manga/manga_one", {
+            res.render('./pages/manga/manga_one', {
                 top_page: {
                     title: manga.title.romaji,
-                    tagline: "A list of all the strange things that I have read at some point or another",
+                    tagline: 'A list of all the strange things that I have read at some point or another',
                     image_src: manga.cover_img.large,
                     image_alt: manga.title.romaji
                 },
@@ -89,10 +89,10 @@ router.get("/:mangaId", (req, res, next) => {
                 },
 
                 head: {
-                    title: "M4Numbers :: Hobbies :: Manga :: ",
-                    description: "Home to the wild things",
-                    current_page: "hobbies",
-                    current_sub_page: "manga",
+                    title: 'M4Numbers :: Hobbies :: Manga :: ',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'manga',
                 }
             });
         }, next);

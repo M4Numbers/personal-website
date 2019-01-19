@@ -22,34 +22,34 @@
  * SOFTWARE.
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const { testAdministratorLoggedIn } = require("../journey/administrator_login");
+const { testAdministratorLoggedIn } = require('../journey/administrator_login');
 
-const blogAdmin = require("./admin/admin_blog");
-const projectAdmin = require("./admin/admin_projects");
-const artAdmin = require("./admin/admin_art");
-const storiesAdmin = require("./admin/admin_stories");
-const chaptersAdmin = require("./admin/admin_chapters");
-const animeAdmin = require("./admin/admin_anime");
-const mangaAdmin = require("./admin/admin_manga");
-const kinkAdmin = require("./admin/admin_kinks");
-const staticAdmin = require("./admin/admin_static");
+const blogAdmin = require('./admin/admin_blog');
+const projectAdmin = require('./admin/admin_projects');
+const artAdmin = require('./admin/admin_art');
+const storiesAdmin = require('./admin/admin_stories');
+const chaptersAdmin = require('./admin/admin_chapters');
+const animeAdmin = require('./admin/admin_anime');
+const mangaAdmin = require('./admin/admin_manga');
+const kinkAdmin = require('./admin/admin_kinks');
+const staticAdmin = require('./admin/admin_static');
 
 router.use(testAdministratorLoggedIn);
 
-router.use("/blog", [blogAdmin]);
-router.use("/projects", [projectAdmin]);
-router.use("/art", [artAdmin]);
-router.use("/stories", [storiesAdmin, chaptersAdmin]);
-router.use("/anime", [animeAdmin]);
-router.use("/manga", [mangaAdmin]);
-router.use("/fetishes", [kinkAdmin]);
-router.use("/statics", [staticAdmin]);
+router.use('/blog', [blogAdmin]);
+router.use('/projects', [projectAdmin]);
+router.use('/art', [artAdmin]);
+router.use('/stories', [storiesAdmin, chaptersAdmin]);
+router.use('/anime', [animeAdmin]);
+router.use('/manga', [mangaAdmin]);
+router.use('/fetishes', [kinkAdmin]);
+router.use('/statics', [staticAdmin]);
 
-router.get("/", function (req, res) {
-    res.redirect(303, "/admin/blog");
+router.get('/', function (req, res) {
+    res.redirect(303, '/admin/blog');
 });
 
 module.exports = router;
