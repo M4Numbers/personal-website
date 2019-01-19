@@ -24,35 +24,7 @@
 
 const router = require('express').Router();
 
-const markdown = require('markdown-it')();
-
-const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
-const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
-
-router.get('/', function (req, res, next) {
-    staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
-        res.render('./pages/me/me_index', {
-            top_page: {
-                title: 'Welcome to Me',
-                tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                image_src: '/images/handle_logo.png',
-                image_alt: 'My logo that I use to represent myself'
-            },
-
-            content: {
-                title: 'Welcome to Me',
-                text: markdown.render((staticContent || {}).content || ''),
-            },
-
-            head: {
-                title: 'M4Numbers :: Welcome to Me',
-                description: 'Home to the wild things',
-                current_page: 'hobbies',
-                current_sub_page: 'me',
-                current_sub_sub_page: 'overview'
-            }
-        });
-    }, next);
-});
+router.get('/', require('../../../journey/hobbies/me/homepage_redirect'));
+router.get('/overview', require('../../../journey/hobbies/me/generate_overview'));
 
 module.exports = router;

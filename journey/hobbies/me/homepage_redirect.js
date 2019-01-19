@@ -22,13 +22,8 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
-const { testFriendLoggedIn } = require('../../../journey/friend_login');
+const homepageRedirect = async (req, res) => {
+    res.redirect(303, '/hobbies/me/overview');
+};
 
-router.use('/', require('./me_auth'));
-router.use(testFriendLoggedIn);
-router.use('/', require('./me_overview'));
-router.use('/extended-blog', require('./me_blog'));
-router.use('/fetishes', require('./me_kinks'));
-
-module.exports = router;
+module.exports = homepageRedirect;
