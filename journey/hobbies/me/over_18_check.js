@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const over18Check = (req, res) => {
+    if (req.body['over_18'] === 'yes') {
+        res.cookie('over_18', req.body['over_18'], {signed: true, maxAge: 360000000});
+    }
+    res.redirect(302, '/hobbies/me/fetishes');
+};
 
-router.post('/', require('../../../journey/hobbies/me/over_18_check'));
-router.use(require('../../../journey/hobbies/me/generate_over_18_page'));
-router.get('/', require('../../../journey/hobbies/me/get_all_kinks'));
-router.get('/:kinkId', require('../../../journey/hobbies/me/get_single_kink'));
-
-module.exports = router;
+module.exports = over18Check;

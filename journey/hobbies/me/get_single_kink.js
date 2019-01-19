@@ -22,12 +22,32 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const kinkHandlerInstance = require('../../../lib/KinkHandler').getHandler();
 
-router.post('/', require('../../../journey/hobbies/me/over_18_check'));
-router.use(require('../../../journey/hobbies/me/generate_over_18_page'));
-router.get('/', require('../../../journey/hobbies/me/get_all_kinks'));
-router.get('/:kinkId', require('../../../journey/hobbies/me/get_single_kink'));
+const getSingleKink = (req, res, next) => {
+    kinkHandlerInstance.findKinkByRawId(req.params['kinkId'])
+        .then(foundKink => {
+            res.render('./pages/me/me_kinks_single', {
+                top_page: {
+                    title: foundKink['kink_name'],
+                    tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
+                    image_src: '/images/handle_logo.png',
+                    image_alt: 'My logo that I use to represent myself'
+                },
 
-module.exports = router;
+                content: {
+                    kink: foundKink
+                },
+
+                head: {
+                    title: 'M4Numbers :: Welcome to Me',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'me',
+                    current_sub_sub_page: 'fetishes'
+                }
+            });
+        }, rejection => next(rejection));
+};
+
+module.exports = getSingleKink;
