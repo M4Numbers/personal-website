@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,11 @@ const router = express.Router();
 
 const markdown = require('markdown-it')();
 
-const StaticHandler = require('../../lib/StaticHandler');
+const StaticHandler = require('../../../lib/StaticHandler');
 const staticHandlerInstance = StaticHandler.getHandler();
-const StaticDocumentTypes = require('../../lib/StaticDocumentTypes');
+const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
-const KinkHandler = require('../../lib/KinkHandler');
+const KinkHandler = require('../../../lib/KinkHandler');
 const kinkHandlerInstance = KinkHandler.getHandler();
 
 router.post('/', function (req, res) {

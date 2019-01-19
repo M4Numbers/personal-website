@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,8 @@
  * SOFTWARE.
  */
 
-const express = require('express');
+const router = require('express').Router();
 
-const { friendLoginView, friendLoginCompare } = require('../../journey/friend_login');
-
-const router = express.Router();
-
-/* GET home page. */
-router.get('/login', friendLoginView);
-router.post('/login', friendLoginCompare);
+router.get('/', require('../../journey/hobbies/generate_homepage'));
 
 module.exports = router;

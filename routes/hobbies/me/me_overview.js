@@ -22,30 +22,14 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 
 const markdown = require('markdown-it')();
 
-const { testFriendLoggedIn } = require('../../journey/friend_login');
+const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
+const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
-const StaticHandler = require('../../lib/StaticHandler');
-const staticHandlerInstance = StaticHandler.getHandler();
-const StaticDocumentTypes = require('../../lib/StaticDocumentTypes');
-
-const blogAdmin = require('./me_blog');
-const kinkCollection = require('./me_kinks');
-
-router.use(testFriendLoggedIn);
-
-router.get('/', function (req, res) {
-    res.redirect(303, '/hobbies/me/overview');
-});
-
-router.use('/extended-blog', [blogAdmin]);
-router.use('/fetishes', [kinkCollection]);
-
-router.get('/overview', function (req, res, next) {
+router.get('/', function (req, res, next) {
     staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
         res.render('./pages/me/me_index', {
             top_page: {
