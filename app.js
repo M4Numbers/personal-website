@@ -98,27 +98,6 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    logger.error(`New error found :: ${err}`);
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('pages/error', {
-        head: {
-            title: `${err.status} :: ${err.message}`,
-            description: 'Home to the wild things'
-        },
-
-        error: {
-            message: err.message,
-            status: err.status,
-            stack: err.stack
-        }
-    });
-});
+app.use(require('./journey/render_error'));
 
 module.exports = app;
