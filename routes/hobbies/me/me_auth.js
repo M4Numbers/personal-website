@@ -22,11 +22,8 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-
+const router = require('express').Router();
 const { friendLoginView, friendLoginCompare } = require('../../../journey/friend_login');
-
-const router = express.Router();
 
 /* GET home page. */
 router.get('/login', friendLoginView);
