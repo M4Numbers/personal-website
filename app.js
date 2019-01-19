@@ -89,13 +89,8 @@ app.use('/blog', [blog]);
 app.use('/hobbies', [hobbies]);
 app.use('/projects', [projects]);
 
-// Static pages to be served
-// app.use("/stats", null);
-
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(new SiteError(404, 'Not Found'));
-});
+app.use(require('./journey/generate_404'));
 
 // error handler
 app.use(require('./journey/render_error'));
