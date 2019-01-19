@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,10 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 
-const blogAdmin = require('./admin/admin_blog');
-const projectAdmin = require('./admin/admin_projects');
-const artAdmin = require('./admin/admin_art');
-const storiesAdmin = require('./admin/admin_stories');
-const chaptersAdmin = require('./admin/admin_chapters');
-const animeAdmin = require('./admin/admin_anime');
-const mangaAdmin = require('./admin/admin_manga');
-const kinkAdmin = require('./admin/admin_kinks');
-const staticAdmin = require('./admin/admin_static');
-
-router.use(require('../journey/misc/test_admin_logged_in'));
-
-router.use('/blog', [blogAdmin]);
-router.use('/projects', [projectAdmin]);
-router.use('/art', [artAdmin]);
-router.use('/stories', [storiesAdmin, chaptersAdmin]);
-router.use('/anime', [animeAdmin]);
-router.use('/manga', [mangaAdmin]);
-router.use('/fetishes', [kinkAdmin]);
-router.use('/statics', [staticAdmin]);
-
-router.get('/', function (req, res) {
-    res.redirect(303, '/admin/blog');
-});
+/* GET home page. */
+router.get('/', require('../../journey/misc/admin_login_view'));
+router.post('/', require('../../journey/misc/admin_login_compare'));
 
 module.exports = router;
