@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,18 @@
  * SOFTWARE.
  */
 
-const router =  require('express').Router();
+const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
-router.get('/', require('../../journey/admin/anime/get_all_anime'));
-router.get('/:animeId', require('../../journey/admin/anime/get_one_anime'));
-router.get('/:animeId/edit', require('../../journey/admin/anime/get_edit_anime'));
-router.post('/:animeId/edit', require('../../journey/admin/anime/post_edit_anime'));
-router.post('/refresh', require('../../journey/admin/anime/refresh_anime'));
+const postEditAnime = async (req, res) => {
+    animeHandlerInstance.editAnime(
+        req.params['animeId'], req.body['show-review'],
+        req.body['show-tags'].split(/, ?/)
+    ).then(() => {
+        res.redirect(303, `/admin/anime/${req.params['animeId']}`);
+    }, rejection => {
+        res.cookie('anime-update-error', {anime_id: req.params['animeId'], error: rejection}, {signed: true, maxAge: 1000});
+        res.redirect(303, `/admin/anime/${req.params['animeId']}`);
+    });
+};
 
-module.exports = router;
+module.exports = postEditAnime;

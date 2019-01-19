@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,30 @@
  * SOFTWARE.
  */
 
-const router =  require('express').Router();
+const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
-router.get('/', require('../../journey/admin/anime/get_all_anime'));
-router.get('/:animeId', require('../../journey/admin/anime/get_one_anime'));
-router.get('/:animeId/edit', require('../../journey/admin/anime/get_edit_anime'));
-router.post('/:animeId/edit', require('../../journey/admin/anime/post_edit_anime'));
-router.post('/refresh', require('../../journey/admin/anime/refresh_anime'));
+const getOneAnime = async (req, res) => {
+    animeHandlerInstance.findAnimeByRawId(req.params['animeId']).then((show) => {
+        res.render('./pages/admin/anime/admin_anime_view_single', {
+            top_page: {
+                title: 'Administrator Toolkit',
+                tagline: 'All the functions that the administrator of the site has available to them',
+                fa_type: 'fas',
+                fa_choice: 'fa-toolbox'
+            },
 
-module.exports = router;
+            content: {
+                show: show
+            },
+
+            head: {
+                title: 'M4Numbers',
+                description: 'Home to the wild things',
+                current_page: 'admin',
+                current_sub_page: 'anime-view'
+            }
+        });
+    });
+};
+
+module.exports = getOneAnime;

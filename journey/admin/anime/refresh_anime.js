@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-const router =  require('express').Router();
+const importHandler = require('../../../lib/ImportHandler');
+const logger = require('../../../lib/Logger').getLogger('master');
 
-router.get('/', require('../../journey/admin/anime/get_all_anime'));
-router.get('/:animeId', require('../../journey/admin/anime/get_one_anime'));
-router.get('/:animeId/edit', require('../../journey/admin/anime/get_edit_anime'));
-router.post('/:animeId/edit', require('../../journey/admin/anime/post_edit_anime'));
-router.post('/refresh', require('../../journey/admin/anime/refresh_anime'));
+const refreshAnime = async function (req, res) {
+    logger.info('Importing new anime into mongo...');
+    await importHandler.importAnimeIntoMongo();
+    res.status(200).json({});
+};
 
-module.exports = router;
+module.exports = refreshAnime;
