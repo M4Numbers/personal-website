@@ -9,7 +9,8 @@
     "start:dev": "node ./bin/mongo_www",
     "build:compile": "gulp build",
     "quality:eslint": "./node_modules/.bin/eslint -c .eslintrc .",
-    "test": "npm run quality:eslint"
+    "test": "npm run quality:eslint && npm run test:mocha",
+    "test:mocha": "nyc --all mocha"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -40,13 +41,19 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^4.12.1",
     "express": "^4.16.4",
     "gulp": "^4.0.0",
     "gulp-babel": "^7.0.0",
     "gulp-sass": "^4.0.1",
+    "mocha": "^5.2.0",
     "mongodb-memory-server": "^2.9.1",
-    "node-sass-tilde-importer": "^1.0.2"
+    "node-sass-tilde-importer": "^1.0.2",
+    "nyc": "^13.1.0",
+    "sinon": "^7.2.3",
+    "sinon-chai": "^3.3.0"
   },
   "files": [
     "bin",

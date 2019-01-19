@@ -1,0 +1,18 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "overrides": [
+    {
+      "files": "*.js",
+      "rules": {
+        "no-undef": "off",
+        "no-unused-expressions": "off"
+      }
+    }
+  ],
+  "globals": {
+    "expect": true,
+    "sinon": true
+  }
+}

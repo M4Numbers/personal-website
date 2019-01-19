@@ -1,3 +1,8 @@
+### Personal
+.nyc_output/
+
+### Generated
+
 **/.DS_Store
 
 # Logs

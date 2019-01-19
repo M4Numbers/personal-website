@@ -1,0 +1,4 @@
+--require test/spec/helpers/setup.js
+test/spec/app
+--recursive
+--exit
