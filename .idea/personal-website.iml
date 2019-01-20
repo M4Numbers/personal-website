@@ -13,7 +13,6 @@
     <orderEntry type="library" name="express-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="gulp-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="jquery-latest" level="application" />
     <orderEntry type="library" name="compass-library" level="project" />
   </component>
 </module>

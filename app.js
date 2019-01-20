@@ -31,8 +31,6 @@ const nunjucksDate = require('nunjucks-date');
 const path = require('path');
 const favicon = require('serve-favicon');
 const morgan = require('morgan');
-const loggingSystem = require('./lib/Logger');
-const logger = loggingSystem.getLogger('master');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 

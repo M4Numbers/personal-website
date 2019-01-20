@@ -13,6 +13,8 @@
   ],
   "globals": {
     "expect": true,
-    "sinon": true
+    "sinon": true,
+    "request": true,
+    "clearRequire": true
   }
 }

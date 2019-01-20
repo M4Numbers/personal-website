@@ -43,6 +43,8 @@
     "babel-preset-stage-3": "^6.24.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "chai-http": "^4.2.1",
+    "clear-require": "^3.0.0",
     "eslint": "^4.12.1",
     "express": "^4.16.4",
     "gulp": "^4.0.0",
@@ -75,7 +77,6 @@
     "package.json",
     "README.md",
     "robots.txt",
-    "sitemap.txt",
-    "yarn.lock"
+    "sitemap.txt"
   ]
 }

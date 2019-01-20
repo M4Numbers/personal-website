@@ -22,4 +22,27 @@
  * SOFTWARE.
  */
 
-describe('The central application', () => {});
+const proxyquire = require('proxyquire');
+
+describe('The central application', () => {
+    describe('default routes', () => {
+        it('should load the home page', () => {
+            return request(proxyquire('../../../app',
+                {
+                    ...require('../helpers/mocks/journey_replacement'),
+                    ...{
+                        './journey/base/homepage': (req, res) => {
+                            res.status(200);
+                            res.end('<html lang="en"></html>');
+                        }
+                    }
+                }
+                ))
+                .get('/')
+                .then(response => {
+                   expect(response).to.have.status(200);
+                   expect(response).to.have.header('content-type', /text\/html/);
+                });
+        });
+    });
+});
