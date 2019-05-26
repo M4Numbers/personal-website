@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "body-parser": "~1.18.2",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "config": "^2.0.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.1",
     "markdown-it": "^8.4.1",
     "moment": "^2.23.0",
     "mongoose": "^5.4.3",
@@ -53,7 +53,7 @@
     "mocha": "^5.2.0",
     "mongodb-memory-server": "^2.9.1",
     "node-sass-tilde-importer": "^1.0.2",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "proxyquire": "^2.1.0",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0"
