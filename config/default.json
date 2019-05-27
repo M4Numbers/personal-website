@@ -20,7 +20,7 @@
     "passphrase": "TO_BE_FILLED_IN_ON_PRODUCTION"
   },
   "database": {
-    "uri": "mongod://user@password:mongodb-server:27017/database"
+    "uri": "mongodb://user@password:mongodb-server:27017/database"
   },
   "logger": {
     "level": "info"

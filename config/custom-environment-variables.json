@@ -1,5 +1,29 @@
 {
   "database": {
     "uri": "DATABASE_URI"
+  },
+  "cache": {
+    "type": "CACHE_TYPE",
+    "redis": {
+      "host": "REDIS_HOST",
+      "port": "REDIS_PORT"
+    }
+  },
+  "cookies": {
+    "domain": "COOKIES_DOMAIN",
+    "secure_domain": "COOKIES_DOMAIN_SEC",
+    "path": "COOKIES_PATH",
+    "passphrase": "COOKIES_PASSPHRASE"
+  },
+  "logger": {
+    "level": "LOGGER_LEVEL"
+  },
+  "admin": {
+    "hash": "ADMIN_HASH"
+  },
+  "protected": {
+    "question": "PROTECTED_QUESTION",
+    "hint": "PROTECTED_HINT",
+    "hash": "PROTECTED_HASH"
   }
 }
