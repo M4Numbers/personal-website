@@ -36,7 +36,7 @@ const getStatistics = async  (req, res) => {
 
         content: {
             time: moment(),
-            version: envs['npm_package_version']
+            version: envs['NPM_PACKAGE_VERSION']
         },
 
         head: {

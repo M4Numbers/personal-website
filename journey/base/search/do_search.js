@@ -24,6 +24,8 @@
 
 const logger = require('../../../lib/Logger').getLogger('master');
 
+const getIsFriend = require('../../misc/get_is_friend');
+
 const animeHandler = require('../../../lib/AnimeHandler').getHandler();
 const artHandler = require('../../../lib/ArtHandler').getHandler();
 const blogHandler = require('../../../lib/BlogHandler').getHandler();
@@ -73,20 +75,20 @@ const doSearch = async (req, res) => {
         };
 
         Promise.all([
-            animeHandler.findAnimeShowsByQuery(query, 0, 10, {'title.romaji': -1}),
-            artHandler.findArtPiecesByQuery(query, 0, 10, {'title': -1}),
-            blogHandler.findBlogsByQuery(query, 0, 10, {'long_title': -1}),
-            kinkHandler.findKinksByQuery(query, 0, 10, {'kink_name': -1}),
-            mangaHandler.findMangaBooksByQuery(query, 0, 10, {'title.romaji': -1}),
-            storyHandler.findStoriesByQuery(query, 0, 10, {'title': -1})
+            animeHandler.findAnimeShowsByQuery({ $or: [ query, { 'title.romaji': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'title.romaji': -1}),
+            artHandler.findArtPiecesByQuery({ $or: [ query, { 'title': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'title': -1}),
+            blogHandler.findBlogsByQuery({ $or: [ query, { 'long_title': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'long_title': -1}),
+            kinkHandler.findKinksByQuery({ $or: [ query, { 'kink_name': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'kink_name': -1}),
+            mangaHandler.findMangaBooksByQuery({ $or: [ query, { 'title.romaji': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'title.romaji': -1}),
+            storyHandler.findStoriesByQuery({ $or: [ query, { 'title': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'title': -1})
         ])
-            .then(([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
-                if (!req.signedCookies.knows_me) {
+            .then(async ([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
+                if (!await getIsFriend(req.signedCookies.SSID)) {
                     logger.debug('Not signed in... filtering unprotected items');
-                    blogItems.filter((item) => item.public);
+                    blogItems = blogItems.filter((item) => item.public);
                     kinkItems = undefined;
                 }
-                return Promise.resolve([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]);
+                return [animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems];
             })
             .then(([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
                 renderVars['content'] = {

@@ -11,8 +11,8 @@ The move to PHP was predominantly due to wanting to try switching tech stacks aw
 previous stack of `PHP`, `MariaDB`, and `Apache`, which wasn't the most scalable.
 
 The new (and probably improved) stack is built with `NodeJS` on top of `express` and
-`MongoDB`. There is also additional scope to add in `Redis` at some point or other if you
-look at the todo list below.
+`MongoDB`. Redis has also been added in as an optional backed session store against the more
+basic file-based store. The plan is to deploy the stack onto an nginx machine eventually...
 
 ## Why is this project here?
 
@@ -51,9 +51,7 @@ deployment, and the map of the site is only split into three authentication leve
 
 ## ToDo list of things
 
-* Refactor routes to delegate into a journey folder
 * Write tests for the website
-* Add in a Redis instance for forcing login expiry and AC
 * Extend the statistics page to have a few more metrics in it
 * Restyle some of the admin background items
 
