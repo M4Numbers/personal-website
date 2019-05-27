@@ -30,7 +30,7 @@ const testFriendLoggedIn = async (req, res, next) => {
     } else {
         const cache = CacheFactory();
         const session = (await cache.get(req.signedCookies.SSID));
-        if (typeof session.trust_level === 'undefined' || session.trust_level < 1) {
+        if (session === null ||  typeof session.trust_level === 'undefined' || session.trust_level < 1) {
             res.redirect(303, '/hobbies/me/login');
         } else {
             next();

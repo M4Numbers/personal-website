@@ -30,7 +30,7 @@ const testAdministratorLoggedIn = async (req, res, next) => {
     } else {
         const cache = CacheFactory();
         const session = await cache.get(req.signedCookies.SSID);
-        if (typeof session.trust_level === 'undefined' || session.trust_level < 2) {
+        if (session === null || typeof session.trust_level === 'undefined' || session.trust_level < 2) {
             res.redirect(303, '/admin/login');
         } else {
             next();

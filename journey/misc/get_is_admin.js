@@ -31,7 +31,8 @@ const getIsAdmin = async (ssid) => {
         let cache = CacheFactory();
         const session = await cache.get(ssid);
         console.log(session);
-        return (typeof session.trust_level !== 'undefined')
+        return (session !== null)
+            && (typeof session.trust_level !== 'undefined')
             && (session.trust_level > 1);
     }
 };

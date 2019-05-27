@@ -30,7 +30,8 @@ const getIsFriend = async (ssid) => {
     } else {
         let cache = CacheFactory();
         const session = await cache.get(ssid);
-        return (typeof session.trust_level !== 'undefined')
+        return (session !== null)
+            && (typeof session.trust_level !== 'undefined')
             && (session.trust_level > 0);
     }
 };
