@@ -1,0 +1,22 @@
+{
+  "lines": 80,
+  "statements": 80,
+  "functions": 80,
+  "branches": 80,
+  "exclude": [
+    ".eslintrc.js",
+    "gulpfile.js",
+    "coverage/**",
+    "src/javascript/**",
+    "node_modules/**",
+    "test/**",
+    "public/**",
+    "config/**"
+  ],
+  "reporter": [
+    "lcov",
+    "cobertura",
+    "text",
+    "text-summary"
+  ]
+}
