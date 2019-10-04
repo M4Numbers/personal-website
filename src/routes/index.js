@@ -4,6 +4,7 @@ const loadHomepageEndpoints = require('./homepage');
 const loadBlogEndpoints = require('./blog');
 const loadProjectEndpoints = require('./projects');
 const loadAdminEndpoints = require('./admin');
+const loadStaticsEndpoints = require('./statics');
 
 // router.use('/', [
 //     require('./statics')
@@ -16,6 +17,7 @@ module.exports = (server) => {
     loadHomepageEndpoints(server);
     loadBlogEndpoints(server);
     loadProjectEndpoints(server);
+    loadStaticsEndpoints(server);
     loadAdminEndpoints(server);
     return server;
 };

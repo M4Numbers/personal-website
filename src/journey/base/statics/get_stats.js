@@ -25,8 +25,12 @@
 const moment = require('moment');
 const envs = process.env;
 
-const getStatistics = async  (req, res) => {
-    res.render('./pages/stats', {
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
+const getStatistics = async  (req, res, next) => {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(renderer.render('pages/stats.njk', {
         top_page: {
             title: 'Statistics',
             tagline: 'Some statistics that relate directly to the site',
@@ -44,7 +48,10 @@ const getStatistics = async  (req, res) => {
             description: 'Home to the wild things',
             current_page: 'stats'
         }
-    });
+    }));
+    next();
 };
 
-module.exports = getStatistics;
+module.exports = (server) => {
+    server.get('/stats', getStatistics)
+};

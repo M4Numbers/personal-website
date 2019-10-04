@@ -22,18 +22,14 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
-
-const Logger = require('../../lib/Logger');
-const logger = Logger.getLogger('master');
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const StaticHandler = require('../../lib/StaticHandler');
 const staticHandlerInstance = StaticHandler.getHandler();
 const statics = require('../../lib/StaticDocumentTypes');
 
-router.get('/', (req, res) => {
-    res.render('./pages/admin/statics/admin_statics_view', {
+const viewAllStatics = (req, res, next) => {
+    res.send(200, renderer.render('./pages/admin/statics/admin_statics_view', {
         top_page: {
             title: 'Administrator Toolkit',
             tagline: 'All the functions that the administrator of the site has available to them',
@@ -51,8 +47,9 @@ router.get('/', (req, res) => {
             current_page: 'admin',
             current_sub_page: 'statics-view'
         }
-    });
-});
+    }));
+    next();
+};
 
 const viewSingleTextStaticDocument = (req, res) => {
     staticHandlerInstance.findStatic(req.params['staticId'])
@@ -315,22 +312,24 @@ const editContactListDocument = (req, res) => {
         });
 };
 
-router.get(`/:staticId(${statics.ABOUT_ME})`, viewSingleTextStaticDocument);
-router.get(`/:staticId(${statics.KINK_WARNING})`, viewSingleTextStaticDocument);
-router.get(`/:staticId(${statics.KNOWING_ME})`, viewSingleTextStaticDocument);
-router.get(`/:staticId(${statics.CONTACT_ME})`, viewSingleListContactStaticDocument);
-router.get(`/:staticId(${statics.SITEMAP})`, viewSingleListSiteMapStaticDocument);
+module.exports = (server) => {
+    server.get('/admin/statics', viewAllStatics);
 
-router.get(`/:staticId(${statics.ABOUT_ME})/edit`, editSingleTextStaticDocument);
-router.get(`/:staticId(${statics.KINK_WARNING})/edit`, editSingleTextStaticDocument);
-router.get(`/:staticId(${statics.KNOWING_ME})/edit`, editSingleTextStaticDocument);
-router.get(`/:staticId(${statics.CONTACT_ME})/edit`, editSingleListContactStaticDocument);
-router.get(`/:staticId(${statics.SITEMAP})/edit`, editSingleListSiteMapStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.ABOUT_ME}`, viewSingleTextStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.KINK_WARNING}`, viewSingleTextStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.KNOWING_ME}`, viewSingleTextStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.CONTACT_ME}`, viewSingleListContactStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.SITEMAP}`, viewSingleListSiteMapStaticDocument);
 
-router.post(`/:staticId(${statics.ABOUT_ME})/edit`, editTextDocument);
-router.post(`/:staticId(${statics.KINK_WARNING})/edit`, editTextDocument);
-router.post(`/:staticId(${statics.KNOWING_ME})/edit`, editTextDocument);
-router.post(`/:staticId(${statics.CONTACT_ME})/edit`, editContactListDocument);
-router.post(`/:staticId(${statics.SITEMAP})/edit`, editSitemapListDocument);
+    server.get(`/admin/statics/:staticId(${statics.ABOUT_ME})/edit`, editSingleTextStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.KINK_WARNING})/edit`, editSingleTextStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.KNOWING_ME})/edit`, editSingleTextStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.CONTACT_ME})/edit`, editSingleListContactStaticDocument);
+    server.get(`/admin/statics/:staticId(${statics.SITEMAP})/edit`, editSingleListSiteMapStaticDocument);
 
-module.exports = router;
+    server.post(`/admin/statics/:staticId(${statics.ABOUT_ME})/edit`, editTextDocument);
+    server.post(`/admin/statics/:staticId(${statics.KINK_WARNING})/edit`, editTextDocument);
+    server.post(`/admin/statics/:staticId(${statics.KNOWING_ME})/edit`, editTextDocument);
+    server.post(`/admin/statics/:staticId(${statics.CONTACT_ME})/edit`, editContactListDocument);
+    server.post(`/admin/statics/:staticId(${statics.SITEMAP})/edit`, editSitemapListDocument);
+};

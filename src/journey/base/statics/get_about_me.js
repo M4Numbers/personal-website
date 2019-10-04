@@ -22,16 +22,20 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const getAboutMe = async (req, res, next) => {
     staticHandlerInstance.findStatic(StaticDocumentTypes.ABOUT_ME).then(staticContent => {
-        res.render('./pages/about', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/about.njk', {
             top_page: {
                 title: 'About Me',
                 tagline: 'If you were looking for a general overview about yours truly, you\'ve come to the right place!',
-                image_src: 'images/handle_logo.png',
+                image_src: '/assets/images/handle_logo.png',
                 image_alt: 'My logo that I use to represent myself'
             },
 
@@ -45,8 +49,11 @@ const getAboutMe = async (req, res, next) => {
                 description: 'Home to the wild things',
                 current_page: 'about'
             }
-        });
+        }));
+        next();
     }, next);
 };
 
-module.exports = getAboutMe;
+module.exports = (server) => {
+    server.get('/about', getAboutMe);
+};

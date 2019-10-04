@@ -22,11 +22,14 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const viewSitemap = require('../journey/base/statics/get_sitemap');
+const viewAboutMe = require('../journey/base/statics/get_about_me');
+const viewContactMe = require('../journey/base/statics/get_contact_me');
+const viewSiteStats = require('../journey/base/statics/get_stats');
 
-router.get('/map', require('../journey/base/statics/get_sitemap'));
-router.get('/about', require('../journey/base/statics/get_about_me'));
-router.get('/contact', require('../journey/base/statics/get_contact_me'));
-router.get('/stats', require('../journey/base/statics/get_stats'));
-
-module.exports = router;
+module.exports = (server) => {
+    viewSitemap(server);
+    viewAboutMe(server);
+    viewContactMe(server);
+    viewSiteStats(server);
+};

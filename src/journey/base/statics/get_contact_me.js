@@ -22,12 +22,16 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const getContactMe = async (req, res, next) => {
     staticHandlerInstance.findStatic(StaticDocumentTypes.CONTACT_ME).then(staticContent => {
-        res.render('./pages/contact', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/contact.njk', {
             top_page: {
                 title: 'Contact Me',
                 tagline: 'If, for whatever reason, you want to get in touch with me, use the links below to find my other' +
@@ -45,8 +49,11 @@ const getContactMe = async (req, res, next) => {
                 description: 'Home to the wild things',
                 current_page: 'contact'
             }
-        });
+        }));
+        next();
     }, next);
 };
 
-module.exports = getContactMe;
+module.exports = (server) => {
+    server.get('/contact', getContactMe);
+};

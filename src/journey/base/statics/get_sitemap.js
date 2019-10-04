@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
@@ -30,7 +32,9 @@ const getSitemap = async (req, res, next) => {
         let sortedSiteMap = ((sitemapItems || {}).content || []).sort((a, b) => {
             return (a['page_name'] > b['page_name']) ? 1 : ((a['page_name'] < b['page_name']) ? -1 : 0);
         });
-        res.render('./pages/sitemap', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/sitemap.njk', {
             top_page: {
                 title: 'Sitemap',
                 tagline: 'If you want to get somewhere, why not use the links below to navigate!',
@@ -48,8 +52,11 @@ const getSitemap = async (req, res, next) => {
                 description: 'Home to the wild things',
                 current_page: 'sitemap'
             }
-        });
-    }).catch(caught => {console.log(`Catch during find static :: ${caught}`); next();});
+        }));
+        next();
+    }).catch(caught => {req.log.warn(`Catch during find static :: ${caught}`); next();});
 };
 
-module.exports = getSitemap;
+module.exports = (server) => {
+    server.get('/map', getSitemap);
+};
