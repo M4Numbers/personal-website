@@ -30,8 +30,7 @@ const oId = mongoose.Types.ObjectId;
 
 const MongoDbHandler = require('./MongoDbHandler');
 
-const loggingSystem = require('./Logger');
-const logger = loggingSystem.getLogger('master');
+const logger = require('./logger').bunyanLogger();
 
 class MangaHandler {
 

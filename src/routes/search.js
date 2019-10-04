@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const doSearch = require('../journey/base/search/do_search');
 
-router.get('/', require('../journey/base/search/do_search'));
-
-module.exports = router;
+module.exports = (server) =>{
+    doSearch(server);
+};

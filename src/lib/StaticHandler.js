@@ -28,8 +28,7 @@ const Schema = mongoose.Schema;
 
 const MongoDbHandler = require('./MongoDbHandler');
 
-const loggingSystem = require('./Logger');
-const logger = loggingSystem.getLogger('master');
+const logger = require('./logger').bunyanLogger();
 
 class StaticHandler {
 

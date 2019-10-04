@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-const logger = require('../../../lib/Logger').getLogger('master');
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const getIsFriend = require('../../misc/get_is_friend');
 
@@ -34,7 +34,7 @@ const mangaHandler = require('../../../lib/MangaHandler').getHandler();
 const storyHandler = require('../../../lib/StoryHandler').getHandler();
 
 // TODO: Fix
-const doSearch = async (req, res) => {
+const doSearch = async (req, res, next) => {
     let renderVars = {
         top_page: {
             title: 'Search',
@@ -83,8 +83,8 @@ const doSearch = async (req, res) => {
             storyHandler.findStoriesByQuery({ $or: [ query, { 'title': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'title': -1})
         ])
             .then(async ([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
-                if (!await getIsFriend(req.signedCookies.SSID)) {
-                    logger.debug('Not signed in... filtering unprotected items');
+                if (!res.nunjucks['logged_in']) {
+                    req.log.debug('Not signed in... filtering unprotected items');
                     blogItems = blogItems.filter((item) => item.public);
                     kinkItems = undefined;
                 }
@@ -104,14 +104,18 @@ const doSearch = async (req, res) => {
                 return Promise.resolve();
             })
             .then(() => {
-                res.render('./pages/search', renderVars);
+                res.send(200, renderer.render('pages/search.njk', renderVars));
+                next();
             });
     } catch (e) {
-        logger.warn('Error when trying to search items');
-        logger.warn(e.message);
+        req.log.warn('Error when trying to search items');
+        req.log.warn(e.message);
         renderVars['error'] = e;
-        res.render('./pages/search', renderVars);
+        res.send(200, renderer.render('pages/search.njk', renderVars));
+        next();
     }
 };
 
-module.exports = doSearch;
+module.exports = (server) => {
+    server.get('/search', doSearch);
+};

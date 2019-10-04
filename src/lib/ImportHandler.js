@@ -28,8 +28,7 @@ const aniListHandlerInstance = require('./AniListHandler').getHandler();
 const mongoAnimeHandlerInstance = require('./AnimeHandler').getHandler();
 const mongoMangaHandlerInstance = require('./MangaHandler').getHandler();
 
-const loggingSystem = require('./Logger');
-const logger = loggingSystem.getLogger('master');
+const logger = require('./logger');
 
 function resolveInsertNewAnime(newAnimetoInsert) {
     logger.info(`Inserting new show with id ${newAnimetoInsert['media']['id']}`);
