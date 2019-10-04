@@ -22,20 +22,24 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const errors = require('restify-errors');
+
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
 
 const BlogHandler = require('../../lib/BlogHandler');
 const blogHandlerInstance = BlogHandler.getHandler();
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
-router.get('/', function (req, res) {
+const viewBlogHome = function (req, res, next) {
     Promise.all(
         [
             blogHandlerInstance.findBlogs(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}, false),
             blogHandlerInstance.getTotalBlogCount(false)
         ]
     ).then(([blogs, totalCount]) => {
-        res.render('./pages/admin/blogs/admin_blog_view', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/blogs/admin_blog_view.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -60,12 +64,15 @@ router.get('/', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'blog-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/new', function (req, res) {
-    res.render('./pages/admin/blogs/admin_blog_create', {
+const createNewBlog = function (req, res, next) {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/blogs/admin_blog_create.njk', {
         top_page: {
             title: 'Administrator Toolkit',
             tagline: 'All the functions that the administrator of the site has available to them',
@@ -79,24 +86,30 @@ router.get('/new', function (req, res) {
             current_page: 'admin',
             current_sub_page: 'blog-edit'
         }
-    });
-});
+    }));
+    next();
+};
 
-router.post('/new', function (req, res) {
+const postNewBlog = function (req, res, next) {
     blogHandlerInstance.insertBlog(
         req.body['blog-title'], req.body['blog-text'],
         req.body['blog-visible'] === 'Y', req.body['blog-tags'].split(/, ?/)
     ).then((savedBlog) => {
-        res.redirect(303, `/admin/blog/${savedBlog._id}`);
+        console.log(savedBlog);
+        res.redirect(303, `/admin/blog/${savedBlog._id}`, next);
+        next();
     }, rejection => {
-        res.cookie('blog-create-error', {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, '/admin/blog/new');
+        req.log.warn({error: rejection});
+        res.redirect(303, '/admin/blog/new', next);
     });
-});
+};
 
-router.get('/:blogId', function (req, res) {
+const viewOneBlog = function (req, res, next) {
+    res.log.info(`Searching for blog of id ${req.params['blogId']}`);
     blogHandlerInstance.findBlog(req.params['blogId']).then((blog) => {
-        res.render('./pages/admin/blogs/admin_blog_view_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        const page = renderer.render('pages/admin/blogs/admin_blog_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -115,12 +128,17 @@ router.get('/:blogId', function (req, res) {
                 current_sub_page: 'blog-view'
             }
         });
-    });
-});
+        res.send(200, page);
+        next();
+    }, reject => next(new errors.InternalServerError(reject)))
+        .catch(rejected => next(new errors.InternalServerError(rejected)));
+};
 
-router.get('/:blogId/edit', function (req, res) {
+const viewEditDetails = function (req, res, next) {
     blogHandlerInstance.findBlog(req.params['blogId']).then((blog) => {
-        res.render('./pages/admin/blogs/admin_blog_edit_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/blogs/admin_blog_edit_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -138,26 +156,29 @@ router.get('/:blogId/edit', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'blog-edit'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:blogId/edit', function (req, res) {
+const postEditDetails = function (req, res, next) {
     blogHandlerInstance.editBlog(
         req.params['blogId'], req.body['blog-title'],
         req.body['blog-text'], req.body['blog-visible'] === 'Y',
         req.body['blog-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/blog/${req.params['blogId']}`);
+        res.redirect(303, `/admin/blog/${req.params['blogId']}`, next);
     }, rejection => {
-        res.cookie('blog-update-error', {blog_id: req.params['blogId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/blog/${req.params['blogId']}`);
+        req.log.warn({blog_id: req.params['blogId'], error: rejection});
+        res.redirect(303, `/admin/blog/${req.params['blogId']}`, next);
     });
-});
+};
 
-router.get('/:blogId/delete', function (req, res) {
+const viewDeleteBlog =  function (req, res, next) {
     blogHandlerInstance.findBlog(req.params['blogId']).then((blog) => {
-        res.render('./pages/admin/blogs/admin_blog_delete_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/blogs/admin_blog_delete_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -175,17 +196,27 @@ router.get('/:blogId/delete', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'blog-delete'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:blogId/delete', function (req, res) {
+const deleteOneBlog = function (req, res, next) {
     blogHandlerInstance.deleteBlog(req.params['blogId']).then(() => {
-        res.redirect(303, '/admin/blog/');
+        res.redirect(303, '/admin/blog/', next);
     }, rejection => {
-        res.cookie('blog-delete-error', {blog_id: req.params['blogId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/blog/${req.params['blogId']}`);
+        req.log.warn({blog_id: req.params['blogId'], error: rejection});
+        res.redirect(303, `/admin/blog/${req.params['blogId']}`, next);
     });
-});
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/blog', testLoggedIn, viewBlogHome);
+    server.get('/admin/blog/new', testLoggedIn, createNewBlog);
+    server.post('/admin/blog/new', testLoggedIn, postNewBlog);
+    server.get('/admin/blog/:blogId', testLoggedIn, viewOneBlog);
+    server.get('/admin/blog/:blogId/edit', testLoggedIn, viewEditDetails);
+    server.post('/admin/blog/:blogId/edit', testLoggedIn, postEditDetails);
+    server.get('/admin/blog/:blogId/delete', testLoggedIn, viewDeleteBlog);
+    server.post('/admin/blog/:blogId/delete', testLoggedIn, deleteOneBlog);
+};

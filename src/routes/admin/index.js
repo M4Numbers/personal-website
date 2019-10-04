@@ -22,24 +22,24 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const handleLoginEndpoints = require('./auth');
+const handleAdminBlogEndpoints = require('./admin_blog');
+const handleAdminHomepage = require('./admin_homepage');
 
-router.use('/login', require('./auth'));
+// router.use('/projects', require('./admin_projects'));
+// router.use('/art', require('./admin_art'));
+// router.use('/stories', [
+//     require('./admin_stories'),
+//     require('./admin_chapters')
+// ]);
+// router.use('/anime', require('./admin_anime'));
+// router.use('/manga', require('./admin_manga'));
+// router.use('/fetishes', require('./admin_kinks'));
+// router.use('/statics', require('./admin_static'));
 
-router.use(require('../../journey/misc/test_admin_logged_in'));
-
-router.use('/blog', require('./admin_blog'));
-router.use('/projects', require('./admin_projects'));
-router.use('/art', require('./admin_art'));
-router.use('/stories', [
-    require('./admin_stories'),
-    require('./admin_chapters')
-]);
-router.use('/anime', require('./admin_anime'));
-router.use('/manga', require('./admin_manga'));
-router.use('/fetishes', require('./admin_kinks'));
-router.use('/statics', require('./admin_static'));
-
-router.use('/', require('./admin_homepage'));
-
-module.exports = router;
+module.exports = (server) => {
+    handleLoginEndpoints(server);
+    handleAdminHomepage(server);
+    handleAdminBlogEndpoints(server);
+    return server;
+};

@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
 
-router.get('/', function (req, res) {
-    res.redirect(303, '/admin/blog');
-});
+const redirectToBlog = (req, res, next) => res.redirect(303, '/admin/blog', next);
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/', testLoggedIn, redirectToBlog);
+};

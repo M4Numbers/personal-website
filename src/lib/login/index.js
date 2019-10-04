@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Jayne Doe
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,41 @@
  * SOFTWARE.
  */
 
-const viewAdminLogin = require('../../journey/misc/admin_login_view');
-const postAdminLogin = require('../../journey/misc/admin_login_compare');
+const fs = require('fs');
+const config = require('config');
+const jwt = require('jsonwebtoken');
 
-module.exports = (server) => {
-    server.get('/admin/login', viewAdminLogin);
-    server.post('/admin/login', postAdminLogin);
+const certificateFile = fs.readFileSync(config.get('jwt.public_cert'));
+const keyFile = fs.readFileSync(config.get('jwt.private_key'));
+
+const decodeToken = async (token) => {
+  try {
+    return jwt.verify(token, certificateFile)
+  } catch (e) {
+    return {};
+  }
+};
+
+const generateSignature = async (payload) =>
+    jwt.sign(payload, keyFile, {
+      algorithm: 'RS256',
+      expiresIn: '60m',
+      issuer: 'J4Numbers',
+    });
+
+const isLoggedIn = async (token) => {
+  if (token === '') {
+    return false;
+  }
+  const decoded = await decodeToken(token);
+  if (!Object.prototype.hasOwnProperty.call(decoded, 'admin')) {
+    return false;
+  }
+  return decoded.admin;
+};
+
+module.exports = {
+  generateSignature,
+  isLoggedIn,
+  decodeToken
 };

@@ -22,13 +22,17 @@
  * SOFTWARE.
  */
 
-const getIsAdmin = require('./get_is_admin');
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
-const adminLoginView = async (req, res) => {
-    if (await getIsAdmin(req.signedCookies.SSID)) {
-        res.redirect(303, '/admin');
+const adminLoginView = async (req, res, next) => {
+    if (res.nunjucks['logged_in']) {
+        res.redirect(303, '/admin', next);
     } else {
-        res.render('./pages/login', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/login.njk', {
+            ...res.nunjucks,
+
             top_page: {
                 title: 'Log in',
                 tagline: 'Log into the site as an administrator',
@@ -41,7 +45,8 @@ const adminLoginView = async (req, res) => {
                 description: 'Home to the wild things',
                 current_page: 'login'
             }
-        });
+        }));
+        next();
     }
 };
 

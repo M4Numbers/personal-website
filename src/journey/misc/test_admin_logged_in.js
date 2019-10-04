@@ -22,19 +22,11 @@
  * SOFTWARE.
  */
 
-const CacheFactory = require('../../lib/CacheFactory');
-
 const testAdministratorLoggedIn = async (req, res, next) => {
-    if (!req.signedCookies.SSID) {
-        res.redirect(303, '/admin/login');
+    if (!res.nunjucks['logged_in']) {
+        res.redirect(303, '/admin/login', next);
     } else {
-        const cache = CacheFactory();
-        const session = await cache.get(req.signedCookies.SSID);
-        if (session === null || typeof session.trust_level === 'undefined' || session.trust_level < 2) {
-            res.redirect(303, '/admin/login');
-        } else {
-            next();
-        }
+        next();
     }
 };
 

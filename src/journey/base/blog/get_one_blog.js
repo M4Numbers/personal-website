@@ -33,7 +33,7 @@ const getOneBlog = async (req, res, next) => {
             if (blogPost !== null) {
                 res.contentType = 'text/html';
                 res.header('content-type', 'text/html');
-                res.render(200, renderer.render('pages/blog_single.njk', {
+                res.send(200, renderer.render('pages/blog_single.njk', {
                     ...res.nunjucks,
 
                     top_page: {

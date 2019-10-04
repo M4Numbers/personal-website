@@ -24,16 +24,16 @@
 
 const requestIdHandler = require('./request_id');
 const localsStarter = require('./locals_starter');
-// const cookiesConverter = require('./login_cookie_translater');
-// const confirmLoggedIn = require('./login_checker');
+const cookiesConverter = require('./login_cookie_translater');
+const confirmLoggedIn = require('./login_checker');
 const inboundLogger = require('./inbound_logger');
 
 const loadHandlers = (server) => {
   server.pre(requestIdHandler);
   server.pre(inboundLogger);
   server.pre(localsStarter);
-  // server.pre(cookiesConverter);
-  // server.pre(confirmLoggedIn);
+  server.pre(cookiesConverter);
+  server.pre(confirmLoggedIn);
   return server;
 };
 

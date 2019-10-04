@@ -23,14 +23,15 @@
  */
 
 const config = require('config');
-const RedisCache = require('./RedisCache');
+// const RedisCache = require('./RedisCache');
 const FileCache = require('./FileCache');
 
 module.exports = () => {
-    const cacheProps = config.get('cache');
-    if (cacheProps.type === 'redis') {
-        return new RedisCache(cacheProps.redis);
-    } else {
-        return new FileCache(cacheProps.file);
-    }
+    // const cacheProps = config.get('cache');
+    // if (cacheProps.type === 'redis') {
+    //     return new RedisCache(cacheProps.redis);
+    // } else {
+    //     return new FileCache(cacheProps.file);
+    // }
+    return new FileCache(cacheProps.file);
 };

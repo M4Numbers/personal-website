@@ -9,6 +9,10 @@ module.exports = {
     hostname: 'localhost',
     port: '8080',
   },
+  jwt: {
+    public_cert: '/path/to/cert/file',
+    private_key: '/path/to/key/file',
+  },
   cache: {
     type: 'file',
     file: {
@@ -21,7 +25,9 @@ module.exports = {
     },
   },
   nunjucks: {
-    options: {},
+    options: {
+      autoescape: true,
+    },
   },
   functionality: {},
   cookies: {

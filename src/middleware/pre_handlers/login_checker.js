@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-const tokenHandler = require('../../login');
+const tokenHandler = require('../../lib/login');
 
 const confirmLoggedIn = async (req, res, next) => {
   res.nunjucks['logged_in'] = await tokenHandler.isLoggedIn(res.cookies['login-token']);
