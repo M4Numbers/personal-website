@@ -22,7 +22,10 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const getAllBlogs = async (req, res, next) => {
     Promise.all(
@@ -31,11 +34,14 @@ const getAllBlogs = async (req, res, next) => {
             blogHandlerInstance.getTotalBlogCount()
         ]
     ).then(([blogs, totalCount]) => {
-        res.render('./pages/blog_all', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/blog_all.njk', {
+            ...res.nunjucks,
             top_page: {
                 title: 'My Blog',
                 tagline: 'A list of scribbled things that have been made over the years.',
-                image_src: '/images/handle_logo.png',
+                image_src: '/assets/images/handle_logo.png',
                 image_alt: 'Main face of the site'
             },
 
@@ -55,9 +61,10 @@ const getAllBlogs = async (req, res, next) => {
                 description: 'Home to the wild things',
                 current_page: 'blog'
             }
-        });
+        }));
+        next();
     }, rejection => {
-        next(rejection);
+        next(new errors.InternalServerError(rejection));
     });
 };
 

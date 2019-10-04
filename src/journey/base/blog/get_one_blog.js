@@ -22,18 +22,24 @@
  * SOFTWARE.
  */
 
-const SiteError = require('../../../lib/SiteError');
+const errors = require('restify-errors');
+
 const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const getOneBlog = async (req, res, next) => {
     blogHandlerInstance.findBlog(req.params['blogId'])
         .then(blogPost => {
             if (blogPost !== null) {
-                res.render('./pages/blog_single', {
+                res.contentType = 'text/html';
+                res.header('content-type', 'text/html');
+                res.render(200, renderer.render('pages/blog_single.njk', {
+                    ...res.nunjucks,
+
                     top_page: {
                         title: blogPost.long_title,
                         blog_tags: blogPost.tags,
-                        image_src: '/images/handle_logo.png',
+                        image_src: '/assets/images/handle_logo.png',
                         image_alt: 'Main face of the site',
                     },
 
@@ -46,12 +52,13 @@ const getOneBlog = async (req, res, next) => {
                         description: 'Home to the wild things',
                         current_page: 'blog'
                     }
-                });
+                }));
+                next();
             } else {
-                next(new SiteError(404, 'Not Found'));
+                next(new errors.NotFoundError());
             }
         }, rejection => {
-            next(rejection);
+            next(new errors.InternalServerError(rejection));
         });
 };
 

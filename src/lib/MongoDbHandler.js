@@ -25,8 +25,7 @@
 const config = require('config');
 const mongoose = require('mongoose');
 
-const Logger = require('./Logger');
-const logger = Logger.getLogger('master');
+const logger = require('./logger').bunyanLogger();
 
 class MongoDbHandler {
 

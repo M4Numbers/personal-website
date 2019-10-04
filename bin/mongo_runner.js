@@ -30,5 +30,5 @@ mongod.getConnectionString()
     .then(connectionUri => {
         console.log(`Started up database server on ${connectionUri}`);
         process.env["DATABASE_URI"] = connectionUri;
-        require("./www");
+        require("../src/app");
     });

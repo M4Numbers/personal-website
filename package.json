@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./src/app",
-    "start:dev": "node ./bin/mongo_www",
+    "start:dev": "node bin/mongo_runner.js",
     "build": "gulp build",
     "generate-certs": "openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout test/spec/helpers/certs/localhost-privkey.pem -out test/spec/helpers/certs/localhost-cert.pem",
     "quality:eslint": "./node_modules/.bin/eslint -c .eslintrc.js .",

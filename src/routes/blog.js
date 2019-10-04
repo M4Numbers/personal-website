@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Jayne Doe
+ * Copyright (c) 2019 Jayne Doe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const getAllBlogs = require('../journey/base/blog/get_all_blogs');
+const getOneBlog = require('../journey/base/blog/get_one_blog');
 
-/* GET all blog posts */
-router.get('/', require('../journey/base/blog/get_all_blogs'));
-
-/* GET single blog post page. */
-router.get('/:blogId', require('../journey/base/blog/get_one_blog'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/blog', getAllBlogs);
+    server.get('/blog/:blogId', getOneBlog);
+    return server;
+};
