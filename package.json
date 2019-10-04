@@ -1,7 +1,7 @@
 {
   "name": "personal-website",
-  "description": "This is the personal website of Matthew D. Ball (otherwise known as M4Numbers)",
-  "author": "Matthew D. Ball <m4numbers@gmail.com>",
+  "description": "This is the personal website of Jayne Doe (otherwise known as J4Numbers)",
+  "author": "Jayne Doe <j4numbers@gmail.com>",
   "version": "1.0.0",
   "private": true,
   "scripts": {

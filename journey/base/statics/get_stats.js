@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Matthew D. Ball
+ * Copyright (c) 2019 Jayne Doe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ const getStatistics = async  (req, res) => {
         },
 
         head: {
-            title: 'M4Numbers :: Statistics',
+            title: 'J4Numbers :: Statistics',
             description: 'Home to the wild things',
             current_page: 'stats'
         }

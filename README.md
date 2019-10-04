@@ -1,6 +1,6 @@
 # Personal Website
 
-This is a repository containing the work around my personal website, [m4numbers.co.uk][1]
+This is a repository containing the work around my personal website, [j4numbers.co.uk][1]
 (may or may not be live at time of viewing).
 
 The website itself is built in NodeJS, after a long and arduous period where it was in PHP,
@@ -55,5 +55,5 @@ deployment, and the map of the site is only split into three authentication leve
 * Extend the statistics page to have a few more metrics in it
 * Restyle some of the admin background items
 
-[1]: https://m4numbers.co.uk
+[1]: https://j4numbers.co.uk
 [2]: https://anilist.co

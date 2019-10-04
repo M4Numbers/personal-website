@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Matthew D. Ball
+ * Copyright (c) 2019 Jayne Doe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ const doSearch = async (req, res) => {
         },
 
         head: {
-            title: 'M4Numbers :: Search',
+            title: 'J4Numbers :: Search',
             description: 'Home to the wild things',
             current_page: 'search',
             current_category: req.query['category'] || 'all'

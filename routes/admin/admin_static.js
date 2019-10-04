@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Matthew D. Ball
+ * Copyright (c) 2018 Jayne Doe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ router.get('/', (req, res) => {
         },
 
         head: {
-            title: 'M4Numbers',
+            title: 'J4Numbers',
             description: 'Home to the wild things',
             current_page: 'admin',
             current_sub_page: 'statics-view'
@@ -79,7 +79,7 @@ const viewSingleTextStaticDocument = (req, res) => {
                 },
 
                 head: {
-                    title: 'M4Numbers',
+                    title: 'J4Numbers',
                     description: 'Home to the wild things',
                     current_page: 'admin',
                     current_sub_page: 'statics-view'
@@ -125,7 +125,7 @@ const viewSingleListContactStaticDocument = (req, res) => {
                 },
 
                 head: {
-                    title: 'M4Numbers',
+                    title: 'J4Numbers',
                     description: 'Home to the wild things',
                     current_page: 'admin',
                     current_sub_page: 'statics-view'
@@ -159,7 +159,7 @@ const viewSingleListSiteMapStaticDocument = (req, res) => {
                 },
 
                 head: {
-                    title: 'M4Numbers',
+                    title: 'J4Numbers',
                     description: 'Home to the wild things',
                     current_page: 'admin',
                     current_sub_page: 'statics-view'
@@ -193,7 +193,7 @@ const editSingleTextStaticDocument = (req, res) => {
                 },
 
                 head: {
-                    title: 'M4Numbers',
+                    title: 'J4Numbers',
                     description: 'Home to the wild things',
                     current_page: 'admin',
                     current_sub_page: 'statics-edit'
@@ -227,7 +227,7 @@ const editSingleListContactStaticDocument = (req, res) => {
                 },
 
                 head: {
-                    title: 'M4Numbers',
+                    title: 'J4Numbers',
                     description: 'Home to the wild things',
                     current_page: 'admin',
                     current_sub_page: 'statics-edit'
@@ -261,7 +261,7 @@ const editSingleListSiteMapStaticDocument = (req, res) => {
                 },
 
                 head: {
-                    title: 'M4Numbers',
+                    title: 'J4Numbers',
                     description: 'Home to the wild things',
                     current_page: 'admin',
                     current_sub_page: 'statics-edit'

@@ -22,25 +22,25 @@
         "contact_method": "YouTube",
         "fa_style": "fab",
         "fa_icon": "fa-youtube",
-        "contact_link": "https://youtube.com/M4Numbers"
+        "contact_link": "https://youtube.com/J4Numbers"
       },
       {
         "contact_method": "Twitter",
         "fa_style": "fab",
         "fa_icon": "fa-twitter",
-        "contact_link": "https://twitter.com/m4numbers"
+        "contact_link": "https://twitter.com/j4numbers"
       },
       {
         "contact_method": "Email",
         "fa_style": "fas",
         "fa_icon": "fa-at",
-        "contact_link": "mailto:m4numbers@gmail.com"
+        "contact_link": "mailto:j4numbers@gmail.com"
       },
       {
         "contact_method": "Facebook",
         "fa_style": "fab",
         "fa_icon": "fa-facebook-f",
-        "contact_link": "https://facebook.com/m4numbers"
+        "contact_link": "https://facebook.com/j4numbers"
       },
       {
         "contact_method": "Steam",
@@ -52,13 +52,13 @@
         "contact_method": "GitHub",
         "fa_style": "fab",
         "fa_icon": "fa-github",
-        "contact_link": "https://github.com/m4numbers"
+        "contact_link": "https://github.com/j4numbers"
       },
       {
         "contact_method": "Twitch",
         "fa_style": "fab",
         "fa_icon": "fa-twitch",
-        "contact_link": "https://twitch.tv/m477h3w1012"
+        "contact_link": "https://twitch.tv/j4numbers"
       }
     ]
   },
