@@ -22,18 +22,22 @@
  * SOFTWARE.
  */
 
-const SiteError = require('../../../lib/SiteError');
+const errors = require('restify-errors');
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const projectHandlerInstance = require('../../../lib/ProjectHandler').getHandler();
 
 const getOneProject = async (req, res, next) => {
     projectHandlerInstance.findProject(req.params['projectId'])
         .then(project => {
             if (project !== null) {
-                res.render('./pages/project_single', {
+                res.contentType = 'text/html';
+                res.header('content-type', 'text/html');
+                res.send(200, renderer.render('pages/project_single.njk', {
                     top_page: {
                         title: project.long_title,
                         project_tags: project.tags,
-                        image_src: '/images/handle_logo.png',
+                        image_src: '/assets/images/handle_logo.png',
                         image_alt: 'Main face of the site',
                     },
 
@@ -46,13 +50,16 @@ const getOneProject = async (req, res, next) => {
                         description: 'Home to the wild things',
                         current_page: 'projects'
                     }
-                });
+                }));
+                next();
             } else {
-                next(new SiteError(404, 'Not Found'));
+                next(new errors.NotFoundError());
             }
         }, rejection => {
-            next(rejection);
+            next(new errors.InternalServerError(rejection));
         });
 };
 
-module.exports = getOneProject;
+module.exports = (server) => {
+    server.get('/projects/:projectId', getOneProject);
+};

@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const projectHandlerInstance = require('../../../lib/ProjectHandler').getHandler();
 
 const getAllProjects = async (req, res, next) => {
@@ -31,11 +33,13 @@ const getAllProjects = async (req, res, next) => {
             projectHandlerInstance.getTotalProjectCount()
         ]
     ).then(([projects, totalCount]) => {
-        res.render('./pages/project_all', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/project_all.njk', {
             top_page: {
                 title: 'My Projects',
                 tagline: 'A list of things that I have made in my spare time at some point or another.',
-                image_src: '/images/handle_logo.png',
+                image_src: '/assets/images/handle_logo.png',
                 image_alt: 'Main face of the site'
             },
 
@@ -55,10 +59,13 @@ const getAllProjects = async (req, res, next) => {
                 description: 'Home to the wild things',
                 current_page: 'projects'
             }
-        });
+        }));
+        next();
     }, rejection => {
         next(rejection);
     });
 };
 
-module.exports = getAllProjects;
+module.exports = (server) => {
+    server.get('/projects', getAllProjects);
+};

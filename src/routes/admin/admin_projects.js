@@ -22,20 +22,23 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const ProjectHandler = require('../../lib/ProjectHandler');
 const projectHandlerInstance = ProjectHandler.getHandler();
 
-router.get('/', function (req, res) {
+const viewAllProjects = function (req, res, next) {
     Promise.all(
         [
             projectHandlerInstance.findProjects(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}, false),
             projectHandlerInstance.getTotalProjectCount(false)
         ]
     ).then(([projects, totalCount]) => {
-        res.render('./pages/admin/projects/admin_project_view', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/projects/admin_project_view.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -60,12 +63,15 @@ router.get('/', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'project-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/new', function (req, res) {
-    res.render('./pages/admin/projects/admin_project_create', {
+const createNewProject = function (req, res, next) {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/projects/admin_project_create.njk', {
         top_page: {
             title: 'Administrator Toolkit',
             tagline: 'All the functions that the administrator of the site has available to them',
@@ -79,24 +85,27 @@ router.get('/new', function (req, res) {
             current_page: 'admin',
             current_sub_page: 'project-edit'
         }
-    });
-});
+    }));
+    next()
+};
 
-router.post('/new', function (req, res) {
+const postNewProject = function (req, res, next) {
     projectHandlerInstance.insertProject(
         req.body['project-title'], req.body['project-text'],
         req.body['project-visible'] === 'Y', req.body['project-tags'].split(/, */)
     ).then((savedProject) => {
-        res.redirect(303, `/admin/projects/${savedProject._id}`);
+        res.redirect(303, `/admin/projects/${savedProject._id}`, next);
     }, rejection => {
-        res.cookie('project-create-error', {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, '/admin/projects/new');
+        req.log.warn({error: rejection});
+        res.redirect(303, '/admin/projects/new', next);
     });
-});
+};
 
-router.get('/:projectId', function (req, res) {
+const getOneProject = function (req, res, next) {
     projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
-        res.render('./pages/admin/projects/admin_project_view_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/projects/admin_project_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -114,13 +123,16 @@ router.get('/:projectId', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'project-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/:projectId/edit', function (req, res) {
+const editOneProject = function (req, res, next) {
     projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
-        res.render('./pages/admin/projects/admin_project_edit_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/projects/admin_project_edit_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -138,26 +150,29 @@ router.get('/:projectId/edit', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'project-edit'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:projectId/edit', function (req, res) {
+const postProjectEdits = function (req, res, next) {
     projectHandlerInstance.editProject(
         req.params['projectId'], req.body['project-title'],
         req.body['project-text'], req.body['project-visible'] === 'Y',
         req.body['project-tags'].split(/, */)
     ).then(() => {
-        res.redirect(303, `/admin/projects/${req.params['projectId']}`);
+        res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
     }, rejection => {
-        res.cookie('project-update-error', {blog_id: req.params['projectId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/projects/${req.params['projectId']}`);
+        req.log.warn({blog_id: req.params['projectId'], error: rejection});
+        res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
     });
-});
+};
 
-router.get('/:project/delete', function (req, res) {
+const viewDeleteProject = function (req, res, next) {
     projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
-        res.render('./pages/admin/projects/admin_project_delete_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/projects/admin_project_delete_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -175,17 +190,27 @@ router.get('/:project/delete', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'project-delete'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:projectId/delete', function (req, res) {
+const deleteSingleProject =  function (req, res, next) {
     projectHandlerInstance.deleteProject(req.params['projectId']).then(() => {
-        res.redirect(303, '/admin/projects');
+        res.redirect(303, '/admin/projects', next);
     }, rejection => {
-        res.cookie('project-delete-error', {project_id: req.params['projectId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/projects/${req.params['projectId']}`);
+        req.log.warn({project_id: req.params['projectId'], error: rejection});
+        res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
     });
-});
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/projects', testLoggedIn, viewAllProjects);
+    server.get('/admin/projects/new', testLoggedIn, createNewProject);
+    server.post('/admin/projects/new', testLoggedIn, postNewProject);
+    server.get('/admin/projects/:projectId', testLoggedIn, getOneProject);
+    server.get('/admin/projects/:projectId/edit', testLoggedIn, editOneProject);
+    server.post('/admin/projects/:projectId/edit', testLoggedIn, postProjectEdits);
+    server.get('/admin/projects/:projectId/delete', testLoggedIn, viewDeleteProject);
+    server.post('/admin/projects/:projectId/delete', testLoggedIn, deleteSingleProject);
+};

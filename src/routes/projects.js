@@ -22,12 +22,10 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const getAllProjects = require('../journey/base/projects/get_all_projects');
+const getOneProject = require('../journey/base/projects/get_one_project');
 
-/* GET all projects posts */
-router.get('/', require('../journey/base/projects/get_all_projects'));
-
-/* GET single blog post page. */
-router.get('/:projectId', require('../journey/base/projects/get_one_project'));
-
-module.exports = router;
+module.exports = (server) => {
+    getAllProjects(server);
+    getOneProject(server);
+};

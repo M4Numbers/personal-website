@@ -23,8 +23,9 @@
  */
 
 const handleLoginEndpoints = require('./auth');
-const handleAdminBlogEndpoints = require('./admin_blog');
 const handleAdminHomepage = require('./admin_homepage');
+const handleAdminBlogEndpoints = require('./admin_blog');
+const handleAdminProjectEndpoints = require('./admin_projects');
 
 // router.use('/projects', require('./admin_projects'));
 // router.use('/art', require('./admin_art'));
@@ -41,5 +42,6 @@ module.exports = (server) => {
     handleLoginEndpoints(server);
     handleAdminHomepage(server);
     handleAdminBlogEndpoints(server);
+    handleAdminProjectEndpoints(server);
     return server;
 };
