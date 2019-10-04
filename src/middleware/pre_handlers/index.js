@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Jayne Doe
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,19 @@
  * SOFTWARE.
  */
 
-const config = require('config');
-const winston = require('winston');
+const requestIdHandler = require('./request_id');
+const localsStarter = require('./locals_starter');
+// const cookiesConverter = require('./login_cookie_translater');
+// const confirmLoggedIn = require('./login_checker');
+const inboundLogger = require('./inbound_logger');
 
-function startUp() {
-    winston.loggers.options.transports = [
-        new winston.transports.Console({
-            level: config.get('logger.level'),
-            colorize: true
-        })
-    ];
-
-    createLogger('master');
-}
-
-function createLogger(loggerName, options = {}) {
-    winston.loggers.add(loggerName, options);
-}
-
-function getLogger(loggerName, options = {}) {
-    if (winston.loggers.get(loggerName) === undefined) {
-        createLogger(loggerName, options);
-    }
-    return winston.loggers.get(loggerName);
-}
-
-module.exports = {
-    startUp,
-    getLogger: getLogger
+const loadHandlers = (server) => {
+  server.pre(requestIdHandler);
+  server.pre(inboundLogger);
+  server.pre(localsStarter);
+  // server.pre(cookiesConverter);
+  // server.pre(confirmLoggedIn);
+  return server;
 };
+
+module.exports = loadHandlers;

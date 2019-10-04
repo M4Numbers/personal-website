@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Jayne Doe
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,33 @@
  * SOFTWARE.
  */
 
-const homepageJourney = require('../journey/base/homepage');
+const path = require('path');
+const nunjucks = require('nunjucks');
+const nunjucksDate = require('nunjucks-date');
+const markdown = require('markdown-it');
+const config = require('config');
+const metadata = require('../../../package');
 
-module.exports = (server) => {
-    server.get('/', homepageJourney);
+let renderer;
+
+const renderMarkdown = (input) => markdown.render(input || '');
+
+const createRenderer = () => {
+  const nunjucksEnv = new nunjucks.Environment([
+    new nunjucks.FileSystemLoader(path.join(process.cwd(), '/src/views')),
+  ], config.get('nunjucks.options'));
+  nunjucksEnv.addGlobal('functionality', config.get('functionality'));
+  nunjucksEnv.addGlobal('metadata', metadata);
+
+  nunjucksEnv.addFilter('date', nunjucksDate);
+  nunjucksEnv.addFilter('markdown', renderMarkdown);
+
+  return nunjucksEnv;
+};
+
+module.exports = () => {
+  if (renderer === undefined) {
+    renderer = createRenderer();
+  }
+  return renderer;
 };

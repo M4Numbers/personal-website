@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Jayne Doe
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,11 @@
  * SOFTWARE.
  */
 
-const homepageJourney = require('../journey/base/homepage');
+const tokenHandler = require('../../login');
 
-module.exports = (server) => {
-    server.get('/', homepageJourney);
+const confirmLoggedIn = async (req, res, next) => {
+  res.nunjucks['logged_in'] = await tokenHandler.isLoggedIn(res.cookies['login-token']);
+  next();
 };
+
+module.exports = confirmLoggedIn;

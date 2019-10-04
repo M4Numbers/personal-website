@@ -43,7 +43,7 @@ gulp.task('sass', () => gulp
     .pipe(gulp.dest('./public/stylesheets')));
 
 gulp.task('babel', () => gulp
-    .src([npath.resolve(srcDir, 'src/javascript/**/*.js')])
+    .src([npath.resolve(srcDir, 'src/js/**/*.js')])
     .pipe(babel({
         presets: ['@babel/env'],
     }))
@@ -53,14 +53,16 @@ gulp.task('babel', () => gulp
 gulp.task('copy-scripts', () => gulp
     .src([
         './node_modules/bootstrap/dist/js/*.js',
-        // './javascript/**/*.js',
+        './node_modules/jquery/dist/jquery.*.js',
+        './node_modules/popper.js/dist/*.js',
+        // './src/js/**/*.js',
     ])
     .pipe(gulp.dest('./public/javascript')));
 
 // Copies images to public folder
 gulp.task('copy-images', () => gulp
     .src([
-        './src/images/*.{png,ico,gif,jpg,svg}',
+        './src/images/**/*.{png,ico,gif,jpg,svg}',
     ])
     .pipe(gulp.dest('./public/images')));
 

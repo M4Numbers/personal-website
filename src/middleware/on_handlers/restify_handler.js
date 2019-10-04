@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Jayne Doe
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,17 @@
  * SOFTWARE.
  */
 
-const homepageJourney = require('../journey/base/homepage');
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
-module.exports = (server) => {
-    server.get('/', homepageJourney);
+const restifyHandler = (req, res, err, callback) => {
+  req.log.info(`Error thrown within restify: ${err}`);
+  res.header('content-type', 'text/html');
+  err.toHTML = () => renderer.render('pages/error.njk', { error: err });
+  err.toJSON = () => ({
+    message: err.message,
+    statusCode: res.statusCode,
+  });
+  return callback();
 };
+
+module.exports = restifyHandler;
