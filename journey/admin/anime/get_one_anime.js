@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Matthew D. Ball
+ * Copyright (c) 2019 Jayne Doe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ const getOneAnime = async (req, res) => {
             },
 
             head: {
-                title: 'M4Numbers',
+                title: 'J4Numbers',
                 description: 'Home to the wild things',
                 current_page: 'admin',
                 current_sub_page: 'anime-view'

@@ -9,7 +9,7 @@ services:
     image: redis
     ports:
       - "6379:6379"
-  m4numbers:
+  j4numbers:
     build:
       dockerfile: Dockerfile
       context: ./
