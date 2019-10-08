@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const StoryHandler = require('../../lib/StoryHandler');
 const storyHandlerInstance = StoryHandler.getHandler();
@@ -31,17 +31,16 @@ const storyHandlerInstance = StoryHandler.getHandler();
 const ChapterHandler = require('../../lib/ChapterHandler');
 const chapterHandlerInstance = ChapterHandler.getHandler();
 
-const loggingSystem = require('../../lib/Logger');
-const logger = loggingSystem.getLogger('master');
-
 // All endpoints below are prefixed with `/admin/stories/:storyId/chapter`
 
-router.get('/:storyId/chapter/new', function (req, res, next) {
-    logger.info(`Searching for story with id ${req.params['storyId']}`);
+const viewCreateNewChapter = function (req, res, next) {
+    req.log.info(`Searching for story with id ${req.params['storyId']}`);
     storyHandlerInstance.findStoryByRawId(req.params['storyId'])
         .catch(next)
         .then(story => {
-            res.render('./pages/admin/stories/admin_chapter_create', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/admin/stories/admin_chapter_create.njk', {
                 top_page: {
                     title: 'Administrator Toolkit',
                     tagline: 'All the functions that the administrator of the site has available to them',
@@ -59,11 +58,12 @@ router.get('/:storyId/chapter/new', function (req, res, next) {
                     current_page: 'admin',
                     current_sub_page: 'story-edit'
                 }
-            });
+            }));
+            next();
         });
-});
+};
 
-router.post('/:storyId/chapter/new', function (req, res) {
+const createNewChapter = function (req, res, next) {
     chapterHandlerInstance.addNewChapter(
         req.params['storyId'], req.body['chapter-number'],
         req.body['chapter-title'], req.body['chapter-text'],
@@ -76,15 +76,15 @@ router.post('/:storyId/chapter/new', function (req, res) {
             );
         })
         .then(() => {
-            res.redirect(303, `/admin/stories/${req.params['storyId']}`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}`, next);
         }, rejection => {
-            logger.warn('story creation error');
-            logger.warn(rejection);
-            res.redirect(303, `/admin/stories/${req.params['storyId']}/new`);
+            req.log.warn('story creation error');
+            req.log.warn(rejection);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/new`, next);
         });
-});
+};
 
-router.get('/:storyId/chapter/:chapterNumber', function (req, res, next) {
+const viewSingleChapter = function (req, res, next) {
     Promise.all([
         storyHandlerInstance.findStoryByRawId(req.params['storyId']),
         chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber'])
@@ -99,7 +99,9 @@ router.get('/:storyId/chapter/:chapterNumber', function (req, res, next) {
             }
         })
         .then(storyWithChapter => {
-            res.render('./pages/admin/stories/admin_chapter_view_single', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/admin/stories/admin_chapter_view_single.njk', {
                 top_page: {
                     title: 'Administrator Toolkit',
                     tagline: 'All the functions that the administrator of the site has available to them',
@@ -117,18 +119,21 @@ router.get('/:storyId/chapter/:chapterNumber', function (req, res, next) {
                     current_page: 'admin',
                     current_sub_page: 'story-view'
                 }
-            });
+            }));
+            next();
         });
-});
+};
 
-router.get('/:storyId/chapter/:chapterNumber/edit', function (req, res, next) {
+const viewEditSingleChapter = function (req, res, next) {
     Promise.all([
         storyHandlerInstance.findStoryByRawId(req.params['storyId']),
         chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber'])
     ])
         .catch(next)
         .then(([story, chapter]) => {
-            res.render('./pages/admin/stories/admin_chapter_edit_single', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/admin/stories/admin_chapter_edit_single.njk', {
                 top_page: {
                     title: 'Administrator Toolkit',
                     tagline: 'All the functions that the administrator of the site has available to them',
@@ -147,26 +152,29 @@ router.get('/:storyId/chapter/:chapterNumber/edit', function (req, res, next) {
                     current_page: 'admin',
                     current_sub_page: 'story-edit'
                 }
-            });
+            }));
+            next();
         });
-});
+};
 
-router.post('/:storyId/chapter/:chapterNumber/edit', function (req, res) {
+const editSingleChapter = function (req, res, next) {
         chapterHandlerInstance.updateExistingChapter(
             req.body['chapter-id'], req.body['chapter-number'],
             req.body['chapter-title'], req.body['chapter-text'],
             req.body['chapter-comments']
         ).then(() => {
-            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`, next);
         }, rejection => {
-            res.cookie('chapter-update-error', {chapter_id: req.params['chapterNumber'], error: rejection}, {signed: true, maxAge: 1000});
-            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`);
+            req.log.warn({ chapter_id: req.params['chapterNumber'], error: rejection });
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`, next);
         });
-});
+};
 
-router.get('/:storyId/chapter/:chapterNumber/delete', function (req, res) {
+const viewDeleteSingleChapter = function (req, res, next) {
     chapterHandlerInstance.findChapterByStoryAndNumber(req.params['storyId'], req.params['chapterNumber']).then((chapter) => {
-        res.render('./pages/admin/stories/admin_chapter_delete_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/stories/admin_chapter_delete_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -184,23 +192,31 @@ router.get('/:storyId/chapter/:chapterNumber/delete', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'story-delete'
             }
-        });
+        }));
+        next()
     });
-});
+};
 
-router.post('/:storyId/chapter/:chapterNumber/delete', function (req, res) {
+const deleteSingleChapter = function (req, res, next) {
     Promise.all([
         chapterHandlerInstance.deleteChapter(req.body['chapter-id']),
         storyHandlerInstance.removeChapterFromStory(req.params['storyId'], req.body['chapter-id'])
     ])
         .then(() => {
-            res.redirect(303, `/admin/stories/${req.params['storyId']}`);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}`, next);
         }, rejection => {
-            logger.warn('Failed to delete chapter');
-            logger.warn(rejection);
-            res.cookie('chapter-delete-error', {chapter_id: req.body['chapter-id'], error: rejection}, {signed: true, maxAge: 1000});
-            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`);
+            req.log.warn('Failed to delete chapter');
+            req.log.warn(rejection);
+            res.redirect(303, `/admin/stories/${req.params['storyId']}/chapter/${req.params['chapterNumber']}`, next);
         });
-});
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/stories/:storyId/chapter/new', testLoggedIn, viewCreateNewChapter);
+    server.post('/admin/stories/:storyId/chapter/new', testLoggedIn, createNewChapter);
+    server.get('/admin/stories/:storyId/chapter/:chapterNumber', testLoggedIn, viewSingleChapter);
+    server.get('/admin/stories/:storyId/chapter/:chapterNumber/edit', testLoggedIn, viewEditSingleChapter);
+    server.post('/admin/stories/:storyId/chapter/:chapterNumber/edit', testLoggedIn, editSingleChapter);
+    server.get('/admin/stories/:storyId/chapter/:chapterNumber/delete', testLoggedIn, viewDeleteSingleChapter);
+    server.post('/admin/stories/:storyId/chapter/:chapterNumber/delete', testLoggedIn, deleteSingleChapter);
+};
