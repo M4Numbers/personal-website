@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const artHandlerInstance = require('../../../lib/ArtHandler').getHandler();
 
 const getAllArt = async (req, res, next) => {
@@ -34,11 +35,13 @@ const getAllArt = async (req, res, next) => {
             if (req.query.q) {
                 baseUrl += `q=${req.query.q}&`;
             }
-            res.render('./pages/art/art_all', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/art/art_all.njk', {
                 top_page: {
                     title: 'My Art Scrapbook',
                     tagline: 'A collection of the things that I have attempted to draw at some point or another',
-                    image_src: '/images/handle_logo.png',
+                    image_src: '/assets/images/handle_logo.png',
                     image_alt: 'Main face of the site'
                 },
 
@@ -59,7 +62,8 @@ const getAllArt = async (req, res, next) => {
                     current_page: 'hobbies',
                     current_sub_page: 'art'
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 Jayne Doe
+ * Copyright (c) 2019 Jayne Doe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const getAllArtPieces = require('../../journey/hobbies/art/get_all_art');
+const getOneArtPiece = require('../../journey/hobbies/art/get_one_art');
 
-router.get('/', require('../../journey/hobbies/art/get_all_art'));
-router.get('/:artId', require('../../journey/hobbies/art/get_one_art'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/art', getAllArtPieces);
+    server.get('/hobbies/art/:artId', getOneArtPiece);
+};

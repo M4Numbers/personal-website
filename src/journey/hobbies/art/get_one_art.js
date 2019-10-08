@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const artHandlerInstance = require('../../../lib/ArtHandler').getHandler();
 
 const getOneArt = async (req, res, next) => {
     artHandlerInstance.findArtByRawId(req.params['artId'])
         .catch(next)
         .then(picture => {
-            res.render('./pages/art/art_one', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/art/art_one.njk', {
                 top_page: {
                     title: picture.title,
                     tagline: 'A collection of the things that I have attempted to draw at some point or another',
@@ -46,7 +49,8 @@ const getOneArt = async (req, res, next) => {
                     current_page: 'hobbies',
                     current_sub_page: 'art',
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

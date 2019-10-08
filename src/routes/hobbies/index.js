@@ -24,14 +24,15 @@
 
 // router.use('/me', require('./me/'));
 // router.use('/writing', require('./hobbies_writing'));
-// router.use('/art', require('./hobbies_art'));
 // router.use('/manga', require('./hobbies_manga'))
 
 const hobbiesHomeEndpoint = require('./hobbies_home');
+const artHomeEndpoint = require('./hobbies_art');
 const animeHomeEndpoint = require('./hobbies_anime');
 
 module.exports = (server) => {
     hobbiesHomeEndpoint(server);
+    artHomeEndpoint(server);
     animeHomeEndpoint(server);
     return server;
 };

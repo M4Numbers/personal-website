@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+
 const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const StaticHandler = require('../../lib/StaticHandler');
@@ -332,23 +334,23 @@ const extractStatic = (req, res, next) => {
 };
 
 module.exports = (server) => {
-    server.get('/admin/statics', viewAllStatics);
+    server.get('/admin/statics', testLoggedIn, viewAllStatics);
 
-    server.get(`/admin/statics/${statics.ABOUT_ME}`, extractStatic, viewSingleTextStaticDocument);
-    server.get(`/admin/statics/${statics.KINK_WARNING}`, extractStatic, viewSingleTextStaticDocument);
-    server.get(`/admin/statics/${statics.KNOWING_ME}`, extractStatic, viewSingleTextStaticDocument);
-    server.get(`/admin/statics/${statics.CONTACT_ME}`, extractStatic, viewSingleListContactStaticDocument);
-    server.get(`/admin/statics/${statics.SITEMAP}`, extractStatic, viewSingleListSiteMapStaticDocument);
+    server.get(`/admin/statics/${statics.ABOUT_ME}`, testLoggedIn, extractStatic, viewSingleTextStaticDocument);
+    server.get(`/admin/statics/${statics.KINK_WARNING}`, testLoggedIn, extractStatic, viewSingleTextStaticDocument);
+    server.get(`/admin/statics/${statics.KNOWING_ME}`, testLoggedIn, extractStatic, viewSingleTextStaticDocument);
+    server.get(`/admin/statics/${statics.CONTACT_ME}`, testLoggedIn, extractStatic, viewSingleListContactStaticDocument);
+    server.get(`/admin/statics/${statics.SITEMAP}`, testLoggedIn, extractStatic, viewSingleListSiteMapStaticDocument);
 
-    server.get(`/admin/statics/${statics.ABOUT_ME}/edit`, extractStatic, editSingleTextStaticDocument);
-    server.get(`/admin/statics/${statics.KINK_WARNING}/edit`, extractStatic, editSingleTextStaticDocument);
-    server.get(`/admin/statics/${statics.KNOWING_ME}/edit`, extractStatic, editSingleTextStaticDocument);
-    server.get(`/admin/statics/${statics.CONTACT_ME}/edit`, extractStatic, editSingleListContactStaticDocument);
-    server.get(`/admin/statics/${statics.SITEMAP}/edit`, extractStatic, editSingleListSiteMapStaticDocument);
+    server.get(`/admin/statics/${statics.ABOUT_ME}/edit`, testLoggedIn, extractStatic, editSingleTextStaticDocument);
+    server.get(`/admin/statics/${statics.KINK_WARNING}/edit`, testLoggedIn, extractStatic, editSingleTextStaticDocument);
+    server.get(`/admin/statics/${statics.KNOWING_ME}/edit`, testLoggedIn, extractStatic, editSingleTextStaticDocument);
+    server.get(`/admin/statics/${statics.CONTACT_ME}/edit`, testLoggedIn, extractStatic, editSingleListContactStaticDocument);
+    server.get(`/admin/statics/${statics.SITEMAP}/edit`, testLoggedIn, extractStatic, editSingleListSiteMapStaticDocument);
 
-    server.post(`/admin/statics/${statics.ABOUT_ME}/edit`, extractStatic, editTextDocument);
-    server.post(`/admin/statics/${statics.KINK_WARNING}/edit`, extractStatic, editTextDocument);
-    server.post(`/admin/statics/${statics.KNOWING_ME}/edit`, extractStatic, editTextDocument);
-    server.post(`/admin/statics/${statics.CONTACT_ME}/edit`, extractStatic, editContactListDocument);
-    server.post(`/admin/statics/${statics.SITEMAP}/edit`, extractStatic, editSitemapListDocument);
+    server.post(`/admin/statics/${statics.ABOUT_ME}/edit`, testLoggedIn, extractStatic, editTextDocument);
+    server.post(`/admin/statics/${statics.KINK_WARNING}/edit`, testLoggedIn, extractStatic, editTextDocument);
+    server.post(`/admin/statics/${statics.KNOWING_ME}/edit`, testLoggedIn, extractStatic, editTextDocument);
+    server.post(`/admin/statics/${statics.CONTACT_ME}/edit`, testLoggedIn, extractStatic, editContactListDocument);
+    server.post(`/admin/statics/${statics.SITEMAP}/edit`, testLoggedIn, extractStatic, editSitemapListDocument);
 };

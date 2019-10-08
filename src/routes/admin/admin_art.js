@@ -22,26 +22,25 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+
+const renderer = require('../../lib/renderer').nunjucksRenderer();
+
 const fs = require('fs');
-const Multer = require('multer');
-const uploads = Multer({dest: '../../tmp/uploads'});
 
 const ArtHandler = require('../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
-const loggingSystem = require('../../lib/Logger');
-const logger = loggingSystem.getLogger('master');
-
-router.get('/', function (req, res) {
+const viewAllArtPieces = function (req, res, next) {
     Promise.all(
         [
             artHandlerInstance.findAllArtPieces(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'date_completed': -1}),
             artHandlerInstance.getTotalArtPieceCount()
         ]
     ).then(([pictures, totalCount]) => {
-        res.render('./pages/admin/art/admin_art_view', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/art/admin_art_view.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -66,12 +65,15 @@ router.get('/', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'art-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/new', function (req, res) {
-    res.render('./pages/admin/art/admin_art_create', {
+const viewCreateNewArtPiece = function (req, res, next) {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/art/admin_art_create.njk', {
         top_page: {
             title: 'Administrator Toolkit',
             tagline: 'All the functions that the administrator of the site has available to them',
@@ -85,27 +87,30 @@ router.get('/new', function (req, res) {
             current_page: 'admin',
             current_sub_page: 'art-edit'
         }
-    });
-});
+    }));
+    next();
+};
 
-router.post('/new', uploads.single('art-image'), function (req, res) {
-    logger.info(`Reading in new image from ${req.file.path}`);
-    let imageAsBase64 = fs.readFileSync(req.file.path, 'base64');
+const postNewArtPiece = function (req, res, next) {
+    req.log.info(`Reading in new image from ${req.files['art-image'].path}`);
+    let imageAsBase64 = fs.readFileSync(req.files['art-image'].path, 'base64');
     artHandlerInstance.addNewArtItem(
         req.body['art-title'], req.body['art-completed-date'],
         imageAsBase64, req.body['art-tags'].split(/, ?/),
         req.body['art-notes']
     ).then((savedArt) => {
-        res.redirect(303, `/admin/art/${savedArt._id}`);
+        res.redirect(303, `/admin/art/${savedArt._id}`, next);
     }, rejection => {
-        res.cookie('art-create-error', {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, '/admin/art/new');
+        req.log.warn({ error: rejection });
+        res.redirect(303, '/admin/art/new', next);
     });
-});
+};
 
-router.get('/:artId', function (req, res) {
+const viewArtPiece = function (req, res, next) {
     artHandlerInstance.findArtByRawId(req.params['artId']).then((picture) => {
-        res.render('./pages/admin/art/admin_art_view_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/art/admin_art_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -123,13 +128,16 @@ router.get('/:artId', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'art-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/:artId/edit', function (req, res) {
+const viewEditArtPiece = function (req, res, next) {
     artHandlerInstance.findArtByRawId(req.params['artId']).then((picture) => {
-        res.render('./pages/admin/art/admin_art_edit_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/art/admin_art_edit_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -147,26 +155,29 @@ router.get('/:artId/edit', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'art-edit'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:artId/edit', uploads.single('art-image'), function (req, res) {
+const submitEditedArtPiece = function (req, res, next) {
     artHandlerInstance.updateExistingArtPiece(
         req.params['artId'], req.body['art-title'],
-        req.body['art-completed-date'], req.file['art-image'],
+        req.body['art-completed-date'], req.files['art-image'],
         req.body['art-tags'].split(/, ?/), req.body['art-notes']
     ).then(() => {
-        res.redirect(303, `/admin/art/${req.params['artId']}`);
+        res.redirect(303, `/admin/art/${req.params['artId']}`, next);
     }, rejection => {
-        res.cookie('art-update-error', {art_id: req.params['artId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/art/${req.params['artId']}`);
+        req.log.warn({ art_id: req.params['artId'], error: rejection });
+        res.redirect(303, `/admin/art/${req.params['artId']}`, next);
     });
-});
+};
 
-router.get('/:artId/delete', function (req, res) {
+const viewDeleteArtPiece = function (req, res, next) {
     artHandlerInstance.findArtByRawId(req.params['artId']).then((picture) => {
-        res.render('./pages/admin/art/admin_art_delete_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/art/admin_art_delete_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -184,17 +195,27 @@ router.get('/:artId/delete', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'art-delete'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:artId/delete', function (req, res) {
+const deleteArtPiece = function (req, res, next) {
     artHandlerInstance.deleteArt(req.params['artId']).then(() => {
-        res.redirect(303, '/admin/art/');
+        res.redirect(303, '/admin/art/', next);
     }, rejection => {
-        res.cookie('art-delete-error', {art_id: req.params['artId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/art/${req.params['artId']}`);
+        req.log.warn({ art_id: req.params['artId'], error: rejection });
+        res.redirect(303, `/admin/art/${req.params['artId']}`, next);
     });
-});
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/art', testLoggedIn, viewAllArtPieces);
+    server.get('/admin/art/new', testLoggedIn, viewCreateNewArtPiece);
+    server.post('/admin/art/new', testLoggedIn, postNewArtPiece);
+    server.get('/admin/art/:artId', testLoggedIn, viewArtPiece);
+    server.get('/admin/art/:artId/edit', testLoggedIn, viewEditArtPiece);
+    server.post('/admin/art/:artId/edit', testLoggedIn, submitEditedArtPiece);
+    server.get('/admin/art/:artId/delete', testLoggedIn, viewDeleteArtPiece);
+    server.post('/admin/art/:artId/delete', testLoggedIn, deleteArtPiece);
+};
