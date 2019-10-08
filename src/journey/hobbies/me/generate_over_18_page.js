@@ -24,38 +24,37 @@
 
 const markdown = require('markdown-it')();
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const generateOver18Page = function (req, res, next) {
-    if (!req.signedCookies['over_18']) {
-        staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)
-            .then(kinkWarning => {
-                res.render('./pages/me/me_kinks_warn', {
-                    top_page: {
-                        title: 'Welcome to Me',
-                        tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                        image_src: '/images/handle_logo.png',
-                        image_alt: 'My logo that I use to represent myself'
-                    },
+    staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING)
+        .then(kinkWarning => {
+            res.send(200, renderer.render('pages/me/me_kinks_warn.njk', {
+                top_page: {
+                    title: 'Welcome to Me',
+                    tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
+                    image_src: '/assets/images/handle_logo.png',
+                    image_alt: 'My logo that I use to represent myself'
+                },
 
-                    content: {
-                        title: 'A warning, dear reader',
-                        content: markdown.render((kinkWarning || {}).content || '')
-                    },
+                content: {
+                    title: 'A warning, dear reader',
+                    content: markdown.render((kinkWarning || {}).content || '')
+                },
 
-                    head: {
-                        title: 'J4Numbers :: Welcome to Me',
-                        description: 'Home to the wild things',
-                        current_page: 'hobbies',
-                        current_sub_page: 'me',
-                        current_sub_sub_page: 'fetishes'
-                    }
-                });
-            }, next);
-    } else {
-        next();
-    }
+                head: {
+                    title: 'J4Numbers :: Welcome to Me',
+                    description: 'Home to the wild things',
+                    current_page: 'hobbies',
+                    current_sub_page: 'me',
+                    current_sub_sub_page: 'fetishes'
+                }
+            }));
+            next();
+        }, next);
 };
 
 module.exports = generateOver18Page;

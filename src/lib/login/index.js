@@ -55,8 +55,20 @@ const isLoggedIn = async (token) => {
   return decoded.admin;
 };
 
+const isFriendly = async (token) => {
+    if (token === '') {
+        return false;
+    }
+    const decoded = await decodeToken(token);
+    if (!Object.prototype.hasOwnProperty.call(decoded, 'friendly')) {
+        return false;
+    }
+    return decoded.friendly;
+};
+
 module.exports = {
   generateSignature,
   isLoggedIn,
-  decodeToken
+  isFriendly,
+  decodeToken,
 };

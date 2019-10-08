@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 
 const getAllExtendedBlogs = (req, res, next) => {
@@ -31,11 +33,13 @@ const getAllExtendedBlogs = (req, res, next) => {
             blogHandlerInstance.getTotalBlogCount()
         ]
     ).then(([blogs, totalCount]) => {
-        res.render('./pages/me/me_blog_all', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/me/me_blog_all.njk', {
             top_page: {
                 title: 'My Private Blog',
                 tagline: 'A list of scribbled things that have been made over the years.',
-                image_src: '/images/handle_logo.png',
+                image_src: '/assets/images/handle_logo.png',
                 image_alt: 'Main face of the site'
             },
 
@@ -57,7 +61,8 @@ const getAllExtendedBlogs = (req, res, next) => {
                 current_sub_page: 'me',
                 current_sub_sub_page: 'extended-blog'
             }
-        });
+        }));
+        next();
     }, rejection => {
         next(rejection);
     });

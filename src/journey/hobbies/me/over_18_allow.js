@@ -1,6 +1,7 @@
 /*
  * MIT License
  *
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +22,23 @@
  * SOFTWARE.
  */
 
-const CacheFactory = require('../../lib/CacheFactory');
+const config = require('config');
 
-const getIsFriend = async (ssid) => {
-    if (typeof ssid === 'undefined') {
-        return false;
+const over18Check = (req, res, next) => {
+    if (req.body['over_18'] === 'yes') {
+        res.header(
+            'Set-Cookie',
+            `over-18=yes; `
+            + `Max-Age=3600; `
+            + `Domain=${config.get('app.hostname')}; `
+            + `Secure; `
+            + `HttpOnly; `
+            + `SameSite=Strict`
+        );
+        res.redirect(303, '/hobbies/me/fetishes', next);
     } else {
-        let cache = CacheFactory();
-        const session = await cache.get(ssid);
-        return (session !== null)
-            && (typeof session.trust_level !== 'undefined')
-            && (session.trust_level > 0);
+        res.redirect(303, '/hobbies/me/over-18', next);
     }
 };
 
-module.exports = getIsFriend;
-
+module.exports = over18Check;

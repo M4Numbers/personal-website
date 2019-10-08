@@ -24,15 +24,13 @@
 
 const config = require('config');
 
-const getIsFriend = require('./get_is_friend');
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
-const friendLoginView = async (req, res) => {
-    const isFriend = await getIsFriend(req.signedCookies.SSID);
-    console.log(isFriend);
-    if (isFriend) {
-        res.redirect(303, '/hobbies/me');
+const friendLoginView = async (req, res, next) => {
+    if (res.nunjucks['friendly']) {
+        res.redirect(303, '/hobbies/me', next);
     } else {
-        res.render('./pages/me/me_login', {
+        res.send(200, renderer.render('pages/me/me_login.njk', {
             top_page: {
                 title: 'Test Your Knowledge',
                 tagline: 'Log into the site as someone who knows me',
@@ -50,7 +48,8 @@ const friendLoginView = async (req, res) => {
                 question: config.get('protected.question'),
                 hint: config.get('protected.hint')
             }
-        });
+        }));
+        next();
     }
 };
 

@@ -24,8 +24,6 @@
 
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
-const getIsFriend = require('../../misc/get_is_friend');
-
 const animeHandler = require('../../../lib/AnimeHandler').getHandler();
 const artHandler = require('../../../lib/ArtHandler').getHandler();
 const blogHandler = require('../../../lib/BlogHandler').getHandler();
@@ -83,7 +81,7 @@ const doSearch = async (req, res, next) => {
             storyHandler.findStoriesByQuery({ $or: [ query, { 'title': { $regex: renderVars.search, $options: 'i' } } ] }, 0, 10, {'title': -1})
         ])
             .then(async ([animeItems, artItems, blogItems, kinkItems, mangaItems, storyItems]) => {
-                if (!res.nunjucks['logged_in']) {
+                if (!res.nunjucks['friendly']) {
                     req.log.debug('Not signed in... filtering unprotected items');
                     blogItems = blogItems.filter((item) => item.public);
                     kinkItems = undefined;

@@ -22,9 +22,12 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const testFriendLoggedIn = require('../../../journey/misc/test_friend_logged_in');
 
-router.get('/', require('../../../journey/hobbies/me/homepage_redirect'));
-router.get('/overview', require('../../../journey/hobbies/me/generate_overview'));
+const homepageRadar = require('../../../journey/hobbies/me/homepage_redirect');
+const viewOverviewPage = require('../../../journey/hobbies/me/generate_overview');
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/me/', testFriendLoggedIn, homepageRadar);
+    server.get('/hobbies/me/overview', testFriendLoggedIn, viewOverviewPage);
+};

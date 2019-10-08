@@ -22,16 +22,19 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const kinkHandlerInstance = require('../../../lib/KinkHandler').getHandler();
 
 const getSingleKink = (req, res, next) => {
     kinkHandlerInstance.findKinkByRawId(req.params['kinkId'])
         .then(foundKink => {
-            res.render('./pages/me/me_kinks_single', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/me/me_kinks_single.njk', {
                 top_page: {
                     title: foundKink['kink_name'],
                     tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                    image_src: '/images/handle_logo.png',
+                    image_src: '/assets/images/handle_logo.png',
                     image_alt: 'My logo that I use to represent myself'
                 },
 
@@ -46,7 +49,8 @@ const getSingleKink = (req, res, next) => {
                     current_sub_page: 'me',
                     current_sub_sub_page: 'fetishes'
                 }
-            });
+            }));
+            next();
         }, rejection => next(rejection));
 };
 

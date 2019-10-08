@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const testFriendLoggedIn = require('../../../journey/misc/test_friend_logged_in');
 
-/* GET all blog posts */
-router.get('/', require('../../../journey/hobbies/me/get_all_extended_blog'));
+const getAllBlogPosts = require('../../../journey/hobbies/me/get_all_extended_blog');
+const getSingleBlogPost = require('../../../journey/hobbies/me/get_single_extended_blog');
 
-/* GET single blog post page. */
-router.get('/:blogId', require('../../../journey/hobbies/me/get_single_extended_blog'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/me/extended-blog', testFriendLoggedIn, getAllBlogPosts);
+    server.get('/hobbies/me/extended-blog/:blogId', testFriendLoggedIn, getSingleBlogPost);
+};

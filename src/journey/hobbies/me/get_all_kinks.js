@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const kinkHandlerInstance = require('../../../lib/KinkHandler').getHandler();
 
 const getAllKinks = (req, res, next) => {
@@ -31,11 +33,13 @@ const getAllKinks = (req, res, next) => {
             kinkHandlerInstance.getTotalKinkCount(false)
         ]
     ).then(([kinks, totalCount]) => {
-        res.render('./pages/me/me_kinks_all', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/me/me_kinks_all.njk', {
             top_page: {
                 title: 'Welcome to Me',
                 tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                image_src: '/images/handle_logo.png',
+                image_src: '/assets/images/handle_logo.png',
                 image_alt: 'My logo that I use to represent myself'
             },
 
@@ -59,7 +63,8 @@ const getAllKinks = (req, res, next) => {
                 current_sub_sub_page: 'fetishes',
                 current_category: req.query['category']
             }
-        });
+        }));
+        next();
     }, rejection => next(rejection));
 };
 

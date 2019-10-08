@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
-const over18Check = (req, res) => {
-    if (req.body['over_18'] === 'yes') {
-        res.cookie('over_18', req.body['over_18'], {signed: true, maxAge: 360000000});
+const over18Check = (req, res, next) => {
+    if (res.cookies['over-18'] === 'yes') {
+        next();
+    } else {
+        res.redirect(303, '/hobbies/me/over-18', next);
     }
-    res.redirect(302, '/hobbies/me/fetishes');
 };
 
 module.exports = over18Check;

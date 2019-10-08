@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-const homepageRedirect = async (req, res) => {
-    res.redirect(303, '/hobbies/me/overview');
+const homepageRedirect = async (req, res, next) => {
+    res.redirect(303, '/hobbies/me/overview', next);
 };
 
 module.exports = homepageRedirect;

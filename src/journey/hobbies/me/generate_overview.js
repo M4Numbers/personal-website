@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const markdown = require('markdown-it')();
 
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
@@ -29,11 +31,13 @@ const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const generateOverview = (req, res, next) => {
     staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
-        res.render('./pages/me/me_index', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/me/me_index.njk', {
             top_page: {
                 title: 'Welcome to Me',
                 tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                image_src: '/images/handle_logo.png',
+                image_src: '/assets/images/handle_logo.png',
                 image_alt: 'My logo that I use to represent myself'
             },
 
@@ -49,7 +53,8 @@ const generateOverview = (req, res, next) => {
                 current_sub_page: 'me',
                 current_sub_sub_page: 'overview'
             }
-        });
+        }));
+        next();
     }, next);
 };
 

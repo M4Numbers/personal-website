@@ -22,12 +22,23 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testFriendLoggedIn = require('../../../journey/misc/test_friend_logged_in');
+const over18Check = require('../../../journey/hobbies/me/over_18_check');
 
-router.post('/', require('../../../journey/hobbies/me/over_18_check'));
-router.use(require('../../../journey/hobbies/me/generate_over_18_page'));
-router.get('/', require('../../../journey/hobbies/me/get_all_kinks'));
-router.get('/:kinkId', require('../../../journey/hobbies/me/get_single_kink'));
+const generateOver18Page = require('../../../journey/hobbies/me/generate_over_18_page');
+const evaluateOver18 = require('../../../journey/hobbies/me/over_18_allow');
 
-module.exports = router;
+// router.post('/', require('../../../journey/hobbies/me/over_18_check'));
+// router.use(require('../../../journey/hobbies/me/generate_over_18_page'));
+// router.get('/', require('../../../journey/hobbies/me/get_all_kinks'));
+// router.get('/:kinkId', require('../../../journey/hobbies/me/get_single_kink'));
+
+const getAllKinks = require('../../../journey/hobbies/me/get_all_kinks');
+const getSingleKink = require('../../../journey/hobbies/me/get_single_kink');
+
+module.exports = (server) => {
+    server.get('/hobbies/me/over-18', testFriendLoggedIn, generateOver18Page);
+    server.post('/hobbies/me/over-18', testFriendLoggedIn, evaluateOver18);
+    server.get('/hobbies/me/fetishes', testFriendLoggedIn, over18Check, getAllKinks);
+    server.get('/hobbies/me/fetishes/:kinkId', testFriendLoggedIn, over18Check, getSingleKink);
+};

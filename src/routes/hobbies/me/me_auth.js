@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const viewFriendLogin = require('../../../journey/misc/friend_login_view');
+const submitFriendLogin = require('../../../journey/misc/friend_login_compare');
 
-/* GET home page. */
-router.get('/login', require('../../../journey/misc/friend_login_view'));
-router.post('/login', require('../../../journey/misc/friend_login_compare'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/me/login', viewFriendLogin);
+    server.post('/hobbies/me/login', submitFriendLogin);
+};

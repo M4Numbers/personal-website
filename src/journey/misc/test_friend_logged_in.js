@@ -22,19 +22,11 @@
  * SOFTWARE.
  */
 
-const CacheFactory = require('../../lib/CacheFactory');
-
 const testFriendLoggedIn = async (req, res, next) => {
-    if (!req.signedCookies.SSID) {
-        res.redirect(303, '/hobbies/me/login');
+    if (!res.nunjucks['friendly']) {
+        res.redirect(303, '/hobbies/me/login', next);
     } else {
-        const cache = CacheFactory();
-        const session = (await cache.get(req.signedCookies.SSID));
-        if (session === null ||  typeof session.trust_level === 'undefined' || session.trust_level < 1) {
-            res.redirect(303, '/hobbies/me/login');
-        } else {
-            next();
-        }
+        next();
     }
 };
 

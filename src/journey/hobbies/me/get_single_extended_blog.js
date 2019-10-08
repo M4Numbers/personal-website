@@ -22,19 +22,24 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const markdown = require('markdown-it')();
-const SiteError = require('../../../lib/SiteError');
+const errors = require('restify-errors');
+
 const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 
 const getSingleExtendedBlog = (req, res, next) => {
     blogHandlerInstance.findBlog(req.params['blogId'])
         .then(blogPost => {
             if (blogPost !== null) {
-                res.render('./pages/me/me_blog_single', {
+                res.contentType = 'text/html';
+                res.header('content-type', 'text/html');
+                res.send(200, renderer.render('pages/me/me_blog_single.njk', {
                     top_page: {
                         title: blogPost.long_title,
                         blog_tags: blogPost.tags,
-                        image_src: '/images/handle_logo.png',
+                        image_src: '/assets/images/handle_logo.png',
                         image_alt: 'Main face of the site',
                     },
 
@@ -49,9 +54,10 @@ const getSingleExtendedBlog = (req, res, next) => {
                         current_sub_page: 'me',
                         current_sub_sub_page: 'extended-blog'
                     }
-                });
+                }));
+                next();
             } else {
-                next(new SiteError(404, 'Not Found'));
+                next(new errors.NotFoundError('Blog post not found'));
             }
         }, rejection => {
             next(rejection);

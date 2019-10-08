@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
-const testFriendLoggedIn = require('../../../journey/misc/test_friend_logged_in');
+const handleFriendLoginEndpoints = require('./me_auth');
+const handleOverviewEndpoints = require('./me_overview');
+const handleExtendedBlogEndpoints = require('./me_blog');
+const handleKinkEndpoints = require('./me_kinks');
 
-router.use('/', require('./me_auth'));
-router.use(testFriendLoggedIn);
-router.use('/', require('./me_overview'));
-router.use('/extended-blog', require('./me_blog'));
-router.use('/fetishes', require('./me_kinks'));
-
-module.exports = router;
+module.exports = (server) => {
+    handleFriendLoginEndpoints(server);
+    handleOverviewEndpoints(server);
+    handleExtendedBlogEndpoints(server);
+    handleKinkEndpoints(server);
+};

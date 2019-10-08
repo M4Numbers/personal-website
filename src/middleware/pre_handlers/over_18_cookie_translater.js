@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Jayne Doe
+ * Copyright (c) 2019 Matthew D. Ball
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,12 @@
  * SOFTWARE.
  */
 
-const CacheFactory = require('../../lib/CacheFactory');
-
-const getIsAdmin = async (ssid) => {
-    if (typeof ssid === 'undefined') {
-        return false;
-    } else {
-        let cache = CacheFactory();
-        const session = await cache.get(ssid);
-        console.log(session);
-        return (session !== null)
-            && (typeof session.trust_level !== 'undefined')
-            && (session.trust_level > 1);
-    }
+const cookiesConverter = (req, res, next) => {
+  res.cookies = typeof res.cookies === 'undefined' ? {} : res.cookies;
+  const regex = /over-18=([^ ;]*)/i;
+  const tokenHeader = regex.exec(req.header('cookie'));
+  res.cookies['over-18'] = tokenHeader === null ? '' : tokenHeader[1];
+  next();
 };
 
-module.exports = getIsAdmin;
+module.exports = cookiesConverter;

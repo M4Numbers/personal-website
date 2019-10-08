@@ -24,7 +24,8 @@
 
 const requestIdHandler = require('./request_id');
 const localsStarter = require('./locals_starter');
-const cookiesConverter = require('./login_cookie_translater');
+const loginCookiesConverter = require('./login_cookie_translater');
+const over18CookiesConverter = require('./over_18_cookie_translater');
 const confirmLoggedIn = require('./login_checker');
 const inboundLogger = require('./inbound_logger');
 
@@ -32,7 +33,8 @@ const loadHandlers = (server) => {
   server.pre(requestIdHandler);
   server.pre(inboundLogger);
   server.pre(localsStarter);
-  server.pre(cookiesConverter);
+  server.pre(loginCookiesConverter);
+  server.pre(over18CookiesConverter);
   server.pre(confirmLoggedIn);
   return server;
 };

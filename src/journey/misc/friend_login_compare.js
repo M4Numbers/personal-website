@@ -25,19 +25,24 @@
 const config = require('config');
 const crypto = require('crypto');
 
-const CacheFactory = require('../../lib/CacheFactory');
-const getIsFriend = require('./get_is_friend');
+const tokenHandler = require('../../lib/login');
 
-const friendLoginCompare = async (req, res) => {
-    if (req.body['me_password'] && !(await getIsFriend(req.signedCookies.SSID))) {
+const friendLoginCompare = async (req, res, next) => {
+    if (req.body['me_password'] && !(res.nunjucks['friendly'])) {
         let hash = crypto.createHash('sha256').update(req.body['me_password']).digest('hex');
         if (hash === config.get('protected.hash')) {
-            const cache = CacheFactory();
-            await cache.set(req.signedCookies.SSID, { trust_level: 1 });
-            cache.quit();
+            res.header(
+                'Set-Cookie',
+                `login-token=${await tokenHandler.generateSignature({ friendly: true })}; `
+                + `Max-Age=3600; `
+                + `Domain=${config.get('app.hostname')}; `
+                + `Secure; `
+                + `HttpOnly; `
+                + `SameSite=Strict`
+            );
         }
     }
-    res.redirect(303, '/hobbies/me/login');
+    res.redirect(303, '/hobbies/me/login', next);
 };
 
 module.exports = friendLoginCompare;
