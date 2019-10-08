@@ -28,12 +28,14 @@ const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const getAllBlogs = async (req, res, next) => {
-    Promise.all(
-        [
-            blogHandlerInstance.findBlogs(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}),
-            blogHandlerInstance.getTotalBlogCount()
-        ]
-    ).then(([blogs, totalCount]) => {
+    try {
+        const blogPosts = await blogHandlerInstance.findBlogs(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+            10,
+            {'time_posted': -1}
+        );
+        const totalBlogCount = await blogHandlerInstance.getTotalBlogCount();
+
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/blog_all.njk', {
@@ -46,12 +48,12 @@ const getAllBlogs = async (req, res, next) => {
             },
 
             content: {
-                blogs: blogs
+                blogs: blogPosts
             },
 
             pagination: {
                 base_url: '/blog?',
-                total: totalCount,
+                total: totalBlogCount,
                 page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
@@ -63,9 +65,9 @@ const getAllBlogs = async (req, res, next) => {
             }
         }));
         next();
-    }, rejection => {
-        next(new errors.InternalServerError(rejection));
-    });
+    } catch (e) {
+        next(new errors.InternalServerError(e));
+    }
 };
 
 module.exports = getAllBlogs;

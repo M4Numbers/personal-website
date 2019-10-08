@@ -28,38 +28,39 @@ const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const getOneBlog = async (req, res, next) => {
-    blogHandlerInstance.findBlog(req.params['blogId'])
-        .then(blogPost => {
-            if (blogPost !== null) {
-                res.contentType = 'text/html';
-                res.header('content-type', 'text/html');
-                res.send(200, renderer.render('pages/blog_single.njk', {
-                    ...res.nunjucks,
+    try {
+        const blogPost = await blogHandlerInstance.findBlog(req.params['blogId']);
 
-                    top_page: {
-                        title: blogPost.long_title,
-                        blog_tags: blogPost.tags,
-                        image_src: '/assets/images/handle_logo.png',
-                        image_alt: 'Main face of the site',
-                    },
+        if (blogPost !== null) {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/blog_single.njk', {
+                ...res.nunjucks,
 
-                    content: {
-                        blog_text: blogPost.full_text
-                    },
+                top_page: {
+                    title: blogPost.long_title,
+                    blog_tags: blogPost.tags,
+                    image_src: '/assets/images/handle_logo.png',
+                    image_alt: 'Main face of the site',
+                },
 
-                    head: {
-                        title: `J4Numbers :: ${blogPost.long_title}`,
-                        description: 'Home to the wild things',
-                        current_page: 'blog'
-                    }
-                }));
-                next();
-            } else {
-                next(new errors.NotFoundError());
-            }
-        }, rejection => {
-            next(new errors.InternalServerError(rejection));
-        });
+                content: {
+                    blog_text: blogPost.full_text
+                },
+
+                head: {
+                    title: `J4Numbers :: ${blogPost.long_title}`,
+                    description: 'Home to the wild things',
+                    current_page: 'blog'
+                }
+            }));
+            next();
+        } else {
+            next(new errors.NotFoundError());
+        }
+    } catch (rejection) {
+        next(new errors.InternalServerError(rejection));
+    }
 };
 
 module.exports = getOneBlog;
