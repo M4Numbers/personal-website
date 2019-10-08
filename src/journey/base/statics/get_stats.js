@@ -30,7 +30,7 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const getStatistics = async  (req, res, next) => {
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
-    res.send(renderer.render('pages/stats.njk', {
+    res.send(200, renderer.render('pages/stats.njk', {
         top_page: {
             title: 'Statistics',
             tagline: 'Some statistics that relate directly to the site',
