@@ -22,20 +22,23 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const KinkHandler = require('../../lib/KinkHandler');
 const kinkHandlerInstance = KinkHandler.getHandler();
 
-router.get('/', function (req, res) {
+const viewAllKinks = function (req, res, next) {
     Promise.all(
         [
             kinkHandlerInstance.findKinks(Math.max(0, ((req.query['page'] || 1) - 1)) * 20, 20, {'time_posted': -1}, false),
             kinkHandlerInstance.getTotalKinkCount(false)
         ]
     ).then(([kinks, totalCount]) => {
-        res.render('./pages/admin/kinks/admin_kink_view', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/kinks/admin_kink_view.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -60,12 +63,15 @@ router.get('/', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'kink-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/new', function (req, res) {
-    res.render('./pages/admin/kinks/admin_kink_create', {
+const viewCreateNewKink = function (req, res, next) {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/kinks/admin_kink_create.njk', {
         top_page: {
             title: 'Administrator Toolkit',
             tagline: 'All the functions that the administrator of the site has available to them',
@@ -79,25 +85,28 @@ router.get('/new', function (req, res) {
             current_page: 'admin',
             current_sub_page: 'kink-edit'
         }
-    });
-});
+    }));
+    next();
+};
 
-router.post('/new', function (req, res) {
+const createNewKink = function (req, res, next) {
     kinkHandlerInstance.addNewKink(
         req.body['kink-name'], req.body['kink-description'],
         req.body['kink-status'], req.body['kink-experience'],
         req.body['kink-image'], req.body['kink-tags'].split(/, ?/)
     ).then((savedKink) => {
-        res.redirect(303, `/admin/fetishes/${savedKink._id}`);
+        res.redirect(303, `/admin/fetishes/${savedKink._id}`, next);
     }, rejection => {
-        res.cookie('kink-create-error', {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, '/admin/fetishes/new');
+        req.log.warn({ error: rejection });
+        res.redirect(303, '/admin/fetishes/new', next);
     });
-});
+};
 
-router.get('/:kinkId', function (req, res) {
+const viewSingleKink = function (req, res, next) {
     kinkHandlerInstance.findKinkByRawId(req.params['kinkId']).then((kink) => {
-        res.render('./pages/admin/kinks/admin_kink_view_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/kinks/admin_kink_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -115,13 +124,16 @@ router.get('/:kinkId', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'kink-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/:kinkId/edit', function (req, res) {
+const viewEditSingleKink = function (req, res, next) {
     kinkHandlerInstance.findKinkByRawId(req.params['kinkId']).then((kink) => {
-        res.render('./pages/admin/kinks/admin_kink_edit_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/kinks/admin_kink_edit_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -139,27 +151,30 @@ router.get('/:kinkId/edit', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'kink-edit'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:kinkId/edit', function (req, res) {
+const editSingleKink = function (req, res, next) {
     kinkHandlerInstance.updateExistingKink(
         req.params['kinkId'], req.body['kink-name'],
         req.body['kink-description'], req.body['kink-status'],
         req.body['kink-experience'], req.body['kink-image'],
         req.body['kink-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/fetishes/${req.params['kinkId']}`);
+        res.redirect(303, `/admin/fetishes/${req.params['kinkId']}`, next);
     }, rejection => {
-        res.cookie('kink-update-error', {blog_id: req.params['kinkId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/fetishes/${req.params['kinkId']}`);
+        req.log.warn({ kink_id: req.params['kinkId'], error: rejection });
+        res.redirect(303, `/admin/fetishes/${req.params['kinkId']}`, next);
     });
-});
+};
 
-router.get('/:kinkId/delete', function (req, res) {
+const viewDeleteSingleKink = function (req, res, next) {
     kinkHandlerInstance.findKinkByRawId(req.params['kinkId']).then((kink) => {
-        res.render('./pages/admin/kinks/admin_kink_delete_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/kinks/admin_kink_delete_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -177,17 +192,27 @@ router.get('/:kinkId/delete', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'kink-delete'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:kinkId/delete', function (req, res) {
+const deleteSingleKink = function (req, res, next) {
     kinkHandlerInstance.deleteKink(req.params['kinkId']).then(() => {
-        res.redirect(303, '/admin/fetishes/');
+        res.redirect(303, '/admin/fetishes/', next);
     }, rejection => {
-        res.cookie('kink-delete-error', {blog_id: req.params['kinkId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/fetishes/${req.params['kinkId']}`);
+        req.log.warn({ kink_id: req.params['kinkId'], error: rejection });
+        res.redirect(303, `/admin/fetishes/${req.params['kinkId']}`, next);
     });
-});
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/fetishes', testLoggedIn, viewAllKinks);
+    server.get('/admin/fetishes/new', testLoggedIn, viewCreateNewKink);
+    server.post('/admin/fetishes/new', testLoggedIn, createNewKink);
+    server.get('/admin/fetishes/:kinkId', testLoggedIn, viewSingleKink);
+    server.get('/admin/fetishes/:kinkId/edit', testLoggedIn, viewEditSingleKink);
+    server.post('/admin/fetishes/:kinkId/edit', testLoggedIn, editSingleKink);
+    server.get('/admin/fetishes/:kinkId/delete', testLoggedIn, viewDeleteSingleKink);
+    server.post('/admin/fetishes/:kinkId/delete', testLoggedIn, deleteSingleKink);
+};

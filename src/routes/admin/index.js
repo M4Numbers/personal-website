@@ -29,7 +29,7 @@ const handleAdminProjectEndpoints = require('./admin_projects');
 const handleAdminArtEndpoints = require('./admin_art');
 const handleAdminStoryEndpoints = require('./admin_stories');
 const handleAdminChapterEndpoints = require('./admin_chapters');
-// const handleAdminKinkEndpoints = require('./admin_kinks');
+const handleAdminKinkEndpoints = require('./admin_kinks');
 const handleAdminAnimeEndpoints = require('./admin_anime');
 const handleAdminMangaEndpoints = require('./admin_manga');
 const handleAdminStaticEndpoints = require('./admin_static');
@@ -42,7 +42,7 @@ module.exports = (server) => {
     handleAdminArtEndpoints(server);
     handleAdminStoryEndpoints(server);
     handleAdminChapterEndpoints(server);
-    // handleAdminKinkEndpoints(server);
+    handleAdminKinkEndpoints(server);
     handleAdminAnimeEndpoints(server);
     handleAdminMangaEndpoints(server);
     handleAdminStaticEndpoints(server);
