@@ -29,8 +29,7 @@ const request = require('request-promise-native');
 const MediaTypes = require('./MediaTypes');
 const SiteError = require('./SiteError');
 
-const loggingSystem = require('./Logger');
-const logger = loggingSystem.getLogger('master');
+const logger = require('./logger').bunyanLogger();
 
 class AniListHandler {
 

@@ -23,12 +23,14 @@
  */
 
 const importHandler = require('../../../lib/ImportHandler');
-const logger = require('../../../lib/Logger').getLogger('master');
 
-const refreshAnime = async function (req, res) {
-    logger.info('Importing new anime into mongo...');
+const refreshAnime = async function (req, res, next) {
+    req.log.info('Importing new anime into mongo...');
     await importHandler.importAnimeIntoMongo();
-    res.status(200).json({});
+    res.contentType = 'application/json';
+    res.header('content-type', 'application/json');
+    res.send(200, {});
+    next();
 };
 
 module.exports = refreshAnime;

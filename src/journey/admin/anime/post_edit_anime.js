@@ -24,15 +24,15 @@
 
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
-const postEditAnime = async (req, res) => {
+const postEditAnime = async (req, res, next) => {
     animeHandlerInstance.editAnime(
         req.params['animeId'], req.body['show-review'],
         req.body['show-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/anime/${req.params['animeId']}`);
+        res.redirect(303, `/admin/anime/${req.params['animeId']}`, next);
     }, rejection => {
-        res.cookie('anime-update-error', {anime_id: req.params['animeId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/anime/${req.params['animeId']}`);
+        req.log.warn({ anime_id: req.params['animeId'], error: rejection });
+        res.redirect(303, `/admin/anime/${req.params['animeId']}`, next);
     });
 };
 

@@ -22,11 +22,14 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
-const getOneAnime = async (req, res) => {
+const getOneAnime = async (req, res, next) => {
     animeHandlerInstance.findAnimeByRawId(req.params['animeId']).then((show) => {
-        res.render('./pages/admin/anime/admin_anime_view_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/anime/admin_anime_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -44,7 +47,8 @@ const getOneAnime = async (req, res) => {
                 current_page: 'admin',
                 current_sub_page: 'anime-view'
             }
-        });
+        }));
+        next();
     });
 };
 

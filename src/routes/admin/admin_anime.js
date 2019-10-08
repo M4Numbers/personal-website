@@ -22,12 +22,16 @@
  * SOFTWARE.
  */
 
-const router =  require('express').Router();
+const adminViewAllAnime = require('../../journey/admin/anime/get_all_anime');
+const adminViewOneAnime = require('../../journey/admin/anime/get_one_anime');
+const adminViewEditOneAnime = require('../../journey/admin/anime/get_edit_anime');
+const adminEditOneAnime = require('../../journey/admin/anime/post_edit_anime');
+const adminRefreshAnimeList = require('../../journey/admin/anime/refresh_anime');
 
-router.get('/', require('../../journey/admin/anime/get_all_anime'));
-router.get('/:animeId', require('../../journey/admin/anime/get_one_anime'));
-router.get('/:animeId/edit', require('../../journey/admin/anime/get_edit_anime'));
-router.post('/:animeId/edit', require('../../journey/admin/anime/post_edit_anime'));
-router.post('/refresh', require('../../journey/admin/anime/refresh_anime'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/anime', adminViewAllAnime);
+    server.get('/admin/anime/:animeId', adminViewOneAnime);
+    server.get('/admin/anime/:animeId/edit', adminViewEditOneAnime);
+    server.post('/admin/anime/:animeId/edit', adminEditOneAnime);
+    server.post('/admin/anime/refresh', adminRefreshAnimeList);
+};
