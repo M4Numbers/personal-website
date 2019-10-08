@@ -22,12 +22,16 @@
  * SOFTWARE.
  */
 
-const generateHomepage = (req, res) => {
-    res.render('./pages/hobbies_all', {
+const renderer = require('../../lib/renderer').nunjucksRenderer();
+
+const generateHomepage = (req, res, next) => {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/hobbies_all.njk', {
         top_page: {
             title: 'My Hobbies',
             tagline: 'I have several hobbies and interests... Some of them are somewhat worrying',
-            image_src: '/images/handle_logo.png',
+            image_src: '/assets/images/handle_logo.png',
             image_alt: 'Main face of the site'
         },
 
@@ -37,7 +41,8 @@ const generateHomepage = (req, res) => {
             current_page: 'hobbies',
             current_sub_page: 'index'
         }
-    });
+    }));
+    next();
 };
 
 module.exports = generateHomepage;

@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+// router.use('/me', require('./me/'));
+// router.use('/writing', require('./hobbies_writing'));
+// router.use('/art', require('./hobbies_art'));
+// router.use('/manga', require('./hobbies_manga'))
 
-router.use('/', require('./hobbies_home'));
-router.use('/me', require('./me/'));
-router.use('/writing', require('./hobbies_writing'));
-router.use('/art', require('./hobbies_art'));
-router.use('/anime', require('./hobbies_anime'));
-router.use('/manga', require('./hobbies_manga'));
+const hobbiesHomeEndpoint = require('./hobbies_home');
+const animeHomeEndpoint = require('./hobbies_anime');
 
-module.exports = router;
+module.exports = (server) => {
+    hobbiesHomeEndpoint(server);
+    animeHomeEndpoint(server);
+    return server;
+};

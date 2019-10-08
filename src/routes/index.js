@@ -3,13 +3,9 @@ const loadSearchEndpoint = require('./search');
 const loadHomepageEndpoints = require('./homepage');
 const loadBlogEndpoints = require('./blog');
 const loadProjectEndpoints = require('./projects');
+const loadHobbiesEndpoints = require('./hobbies');
 const loadAdminEndpoints = require('./admin');
 const loadStaticsEndpoints = require('./statics');
-
-// router.use('/', [
-//     require('./statics')
-// ]);
-// router.use('/hobbies', require('./hobbies/'));
 
 module.exports = (server) => {
     loadAssetEndpoints(server);
@@ -17,6 +13,7 @@ module.exports = (server) => {
     loadHomepageEndpoints(server);
     loadBlogEndpoints(server);
     loadProjectEndpoints(server);
+    loadHobbiesEndpoints(server);
     loadStaticsEndpoints(server);
     loadAdminEndpoints(server);
     return server;

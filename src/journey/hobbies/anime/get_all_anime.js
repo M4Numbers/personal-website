@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const getAllAnime = async (req, res, next) => {
@@ -37,11 +38,13 @@ const getAllAnime = async (req, res, next) => {
             if (req.query.q) {
                 baseUrl += `q=${req.query.q}&`;
             }
-            res.render('./pages/anime/anime_all', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/anime/anime_all.njk', {
                 top_page: {
                     title: 'My Anime Watchlist',
                     tagline: 'A list of all the strange things that I have seen at some point or another',
-                    image_src: '/images/handle_logo.png',
+                    image_src: '/assets/images/handle_logo.png',
                     image_alt: 'Main face of the site'
                 },
 
@@ -63,7 +66,8 @@ const getAllAnime = async (req, res, next) => {
                     current_sub_page: 'anime',
                     current_category: req.query['category'] || 'all'
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

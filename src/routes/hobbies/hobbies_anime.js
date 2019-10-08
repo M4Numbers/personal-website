@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const viewAllAnime = require('../../journey/hobbies/anime/get_all_anime');
+const viewOneAnime = require('../../journey/hobbies/anime/get_one_anime');
 
-router.get('/', require('../../journey/hobbies/anime/get_all_anime'));
-router.get('/:animeId', require('../../journey/hobbies/anime/get_one_anime'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/anime', viewAllAnime);
+    server.get('/hobbies/anime/:animeId', viewOneAnime);
+};

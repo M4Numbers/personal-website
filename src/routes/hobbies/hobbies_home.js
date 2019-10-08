@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const viewHobbiesPage = require('../../journey/hobbies/generate_homepage');
 
-router.get('/', require('../../journey/hobbies/generate_homepage'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/', viewHobbiesPage)
+};
