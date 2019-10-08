@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
+
 const storyHandlerInstance = require('../../../lib/StoryHandler').getHandler();
 const chapterHandlerInstance = require('../../../lib/ChapterHandler').getHandler();
 
@@ -32,7 +34,9 @@ const getOneStory = async (req, res, next) => {
     ])
         .catch(next)
         .then(([story, sortedChapterList]) => {
-            res.render('./pages/stories/stories_one', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/stories/stories_one.njk', {
                 top_page: {
                     title: story.title,
                     tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
@@ -58,7 +62,8 @@ const getOneStory = async (req, res, next) => {
                     current_page: 'hobbies',
                     current_sub_page: 'writing',
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

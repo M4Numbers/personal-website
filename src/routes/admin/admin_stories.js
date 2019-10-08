@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+
+const renderer = require('../../lib/renderer').nunjucksRenderer();
+
 const fs = require('fs');
-const Multer = require('multer');
-const uploads = Multer({dest: '../../tmp/uploads'});
 
 const StoryHandler = require('../../lib/StoryHandler');
 const storyHandlerInstance = StoryHandler.getHandler();
@@ -34,17 +34,14 @@ const storyHandlerInstance = StoryHandler.getHandler();
 const ChapterHandler = require('../../lib/ChapterHandler');
 const chapterHandlerInstance = ChapterHandler.getHandler();
 
-const loggingSystem = require('../../lib/Logger');
-const logger = loggingSystem.getLogger('master');
-
-router.get('/', function (req, res) {
+const viewAllStories = function (req, res, next) {
     Promise.all(
         [
             storyHandlerInstance.findAllStories(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'title': 1}),
             storyHandlerInstance.getTotalStoryCount()
         ]
     ).then(([stories, totalCount]) => {
-        res.render('./pages/admin/stories/admin_story_view', {
+        res.send(200, renderer.render('pages/admin/stories/admin_story_view.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -69,12 +66,15 @@ router.get('/', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'story-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/new', function (req, res) {
-    res.render('./pages/admin/stories/admin_story_create', {
+const viewCreateNewStory = function (req, res, next) {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/stories/admin_story_create.njk', {
         top_page: {
             title: 'Administrator Toolkit',
             tagline: 'All the functions that the administrator of the site has available to them',
@@ -88,35 +88,38 @@ router.get('/new', function (req, res) {
             current_page: 'admin',
             current_sub_page: 'story-edit'
         }
-    });
-});
+    }));
+    next();
+};
 
-router.post('/new', uploads.single('story-image'), function (req, res) {
+const createNewStory = function (req, res, next) {
     let imageAsBase64 = '';
-    if (typeof req.file !== 'undefined') {
-        logger.info(`Reading in new image from ${req.file.path}`);
-        imageAsBase64 = fs.readFileSync(req.file.path, 'base64');
+    if (typeof req.files['story-image'] !== 'undefined') {
+        req.log.info(`Reading in new image from ${req.files['story-image'].path}`);
+        imageAsBase64 = fs.readFileSync(req.files['story-image'].path, 'base64');
     }
     storyHandlerInstance.addNewStory(
         req.body['story-title'], req.body['story-status'], req.body['story-type'],
         req.body['story-synopsis'], imageAsBase64, req.body['story-tags'].split(/, ?/),
         req.body['story-notes']
     ).then((savedStory) => {
-        res.redirect(303, `/admin/stories/${savedStory._id}`);
+        res.redirect(303, `/admin/stories/${savedStory._id}`, next);
     }, rejection => {
-        res.cookie('story-create-error', {error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, '/admin/stories/new');
+        req.log.warn({ error: rejection });
+        res.redirect(303, '/admin/stories/new', next);
     });
-});
+};
 
-router.get('/:storyId', function (req, res, next) {
+const viewSingleStory = function (req, res, next) {
     Promise.all([
         storyHandlerInstance.findStoryByRawId(req.params['storyId']),
         chapterHandlerInstance.findChaptersByStory(req.params['storyId'], Math.max(0, ((req.query['page'] || 1) - 1)) * 25, 25)
     ])
         .catch(next)
         .then(([story, sortedChapterList]) => {
-            res.render('./pages/admin/stories/admin_story_view_single', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/admin/stories/admin_story_view_single.njk', {
                 top_page: {
                     title: 'Administrator Toolkit',
                     tagline: 'All the functions that the administrator of the site has available to them',
@@ -142,13 +145,16 @@ router.get('/:storyId', function (req, res, next) {
                     current_page: 'admin',
                     current_sub_page: 'story-view'
                 }
-            });
+            }));
+            next();
         });
-});
+};
 
-router.get('/:storyId/edit', function (req, res) {
+const viewEditSingleStory = function (req, res, next) {
     storyHandlerInstance.findStoryByRawId(req.params['storyId']).then((story) => {
-        res.render('./pages/admin/stories/admin_story_edit_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/stories/admin_story_edit_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -166,15 +172,16 @@ router.get('/:storyId/edit', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'story-edit'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:storyId/edit', uploads.single('story-image'), function (req, res) {
+const editSingleStory = function (req, res, next) {
     let imageAsBase64 = '';
-    if (typeof req.file !== 'undefined') {
-        logger.info(`Reading in new image from ${req.file.path}`);
-        imageAsBase64 = fs.readFileSync(req.file.path, 'base64');
+    if (typeof req.files['story-image'] !== 'undefined') {
+        req.log.info(`Reading in new image from ${req.files['story-image'].path}`);
+        imageAsBase64 = fs.readFileSync(req.files['story-image'].path, 'base64');
     }
     storyHandlerInstance.updateExistingStory(
         req.params['storyId'], req.body['story-title'],
@@ -182,16 +189,18 @@ router.post('/:storyId/edit', uploads.single('story-image'), function (req, res)
         req.body['story-synopsis'], imageAsBase64,
         req.body['story-tags'].split(/, ?/), req.body['story-notes']
     ).then(() => {
-        res.redirect(303, `/admin/stories/${req.params['storyId']}`);
+        res.redirect(303, `/admin/stories/${req.params['storyId']}`, next);
     }, rejection => {
-        res.cookie('story-update-error', {art_id: req.params['storyId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/stories/${req.params['storyId']}`);
+        req.log.warn({ story_id: req.params['storyId'], error: rejection });
+        res.redirect(303, `/admin/stories/${req.params['storyId']}`, next);
     });
-});
+};
 
-router.get('/:storyId/delete', function (req, res) {
+const viewDeleteSingleStory = function (req, res, next) {
     storyHandlerInstance.findStoryByRawId(req.params['storyId']).then((story) => {
-        res.render('./pages/admin/stories/admin_story_delete_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/stories/admin_story_delete_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -209,17 +218,26 @@ router.get('/:storyId/delete', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'story-delete'
             }
-        });
+        }));
+        next();
     });
-});
-
-router.post('/:storyId/delete', function (req, res) {
+};
+const deleteSingleStory = function (req, res, next) {
     storyHandlerInstance.deleteStory(req.params['storyId']).then(() => {
-        res.redirect(303, '/admin/stories/');
+        res.redirect(303, '/admin/stories/', next);
     }, rejection => {
-        res.cookie('story-delete-error', {art_id: req.params['storyId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/stories/${req.params['storyId']}`);
+        req.log.warn({ story_id: req.params['storyId'], error: rejection });
+        res.redirect(303, `/admin/stories/${req.params['storyId']}`, next);
     });
-});
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/stories', testLoggedIn, viewAllStories);
+    server.get('/admin/stories/new', testLoggedIn, viewCreateNewStory);
+    server.post('/admin/stories/new', testLoggedIn, createNewStory);
+    server.get('/admin/stories/:storyId', testLoggedIn, viewSingleStory);
+    server.get('/admin/stories/:storyId/edit', testLoggedIn, viewEditSingleStory);
+    server.post('/admin/stories/:storyId/edit', testLoggedIn, editSingleStory);
+    server.get('/admin/stories/:storyId/delete', testLoggedIn, viewDeleteSingleStory);
+    server.post('/admin/stories/:storyId/delete', testLoggedIn, deleteSingleStory);
+};

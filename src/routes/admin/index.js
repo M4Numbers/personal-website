@@ -27,15 +27,14 @@ const handleAdminHomepage = require('./admin_homepage');
 const handleAdminBlogEndpoints = require('./admin_blog');
 const handleAdminProjectEndpoints = require('./admin_projects');
 const handleAdminArtEndpoints = require('./admin_art');
+const handleAdminStoryEndpoints = require('./admin_stories');
 const handleAdminAnimeEndpoints = require('./admin_anime');
 const handleAdminMangaEndpoints = require('./admin_manga');
 const handleAdminStaticEndpoints = require('./admin_static');
 
 // router.use('/stories', [
-//     require('./admin_stories'),
 //     require('./admin_chapters')
 // ]);
-// router.use('/manga', require('./admin_manga'));
 // router.use('/fetishes', require('./admin_kinks'));
 
 module.exports = (server) => {
@@ -44,6 +43,7 @@ module.exports = (server) => {
     handleAdminBlogEndpoints(server);
     handleAdminProjectEndpoints(server);
     handleAdminArtEndpoints(server);
+    handleAdminStoryEndpoints(server);
     handleAdminAnimeEndpoints(server);
     handleAdminMangaEndpoints(server);
     handleAdminStaticEndpoints(server);

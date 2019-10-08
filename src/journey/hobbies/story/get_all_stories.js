@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const storyHandlerInstance = require('../../../lib/StoryHandler').getHandler();
 
 const getAllStories = async (req, res, next) => {
@@ -34,11 +35,13 @@ const getAllStories = async (req, res, next) => {
             if (req.query.q) {
                 baseUrl += `q=${req.query.q}&`;
             }
-            res.render('./pages/stories/stories_all', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/stories/stories_all.njk', {
                 top_page: {
                     title: 'My Writings',
                     tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
-                    image_src: '/images/handle_logo.png',
+                    image_src: '/assets/images/handle_logo.png',
                     image_alt: 'Main face of the site'
                 },
 
@@ -59,7 +62,8 @@ const getAllStories = async (req, res, next) => {
                     current_page: 'hobbies',
                     current_sub_page: 'writing'
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

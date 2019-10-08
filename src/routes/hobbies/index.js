@@ -23,17 +23,18 @@
  */
 
 // router.use('/me', require('./me/'));
-// router.use('/writing', require('./hobbies_writing'));
 // router.use('/manga', require('./hobbies_manga'))
 
 const hobbiesHomeEndpoint = require('./hobbies_home');
 const artHomeEndpoint = require('./hobbies_art');
+const writingHomeEndpoint = require('./hobbies_writing');
 const animeHomeEndpoint = require('./hobbies_anime');
 const mangaHomeEndpoint = require('./hobbies_manga');
 
 module.exports = (server) => {
     hobbiesHomeEndpoint(server);
     artHomeEndpoint(server);
+    writingHomeEndpoint(server);
     animeHomeEndpoint(server);
     mangaHomeEndpoint(server);
     return server;

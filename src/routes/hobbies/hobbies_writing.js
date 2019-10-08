@@ -22,10 +22,12 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const getAllStories = require('../../journey/hobbies/story/get_all_stories');
+const getOneStory = require('../../journey/hobbies/story/get_one_story');
+const getOneChapter = require('../../journey/hobbies/story/get_one_chapter');
 
-router.get('/', require('../../journey/hobbies/story/get_all_stories'));
-router.get('/:storyId', require('../../journey/hobbies/story/get_one_story'));
-router.get('/:storyId/chapter/:chapterNumber', require('../../journey/hobbies/story/get_one_chapter'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/writing', getAllStories);
+    server.get('/hobbies/writing/:storyId', getOneStory);
+    server.get('/hobbies/writing/:storyId/chapter/:chapterNumber', getOneChapter);
+};
