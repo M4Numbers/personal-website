@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const mangaHandlerInstance = require('../../../lib/MangaHandler').getHandler();
 
 const getOneManga = async (req, res, next) => {
     mangaHandlerInstance.findMangaByRawId(req.params['mangaId'])
         .catch(next)
         .then(manga => {
-            res.render('./pages/manga/manga_one', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/manga/manga_one.njk', {
                 top_page: {
                     title: manga.title.romaji,
                     tagline: 'A list of all the strange things that I have read at some point or another',
@@ -47,7 +50,8 @@ const getOneManga = async (req, res, next) => {
                     current_page: 'hobbies',
                     current_sub_page: 'manga',
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

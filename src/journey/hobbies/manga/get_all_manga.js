@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const mangaHandlerInstance = require('../../../lib/MangaHandler').getHandler();
 
 const getAllManga = async (req, res, next) => {
@@ -37,11 +38,13 @@ const getAllManga = async (req, res, next) => {
             if (req.query.q) {
                 baseUrl += `q=${req.query.q}&`;
             }
-            res.render('./pages/manga/manga_all', {
+            res.contentType = 'text/html';
+            res.header('content-type', 'text/html');
+            res.send(200, renderer.render('pages/manga/manga_all.njk', {
                 top_page: {
                     title: 'My Manga Readlist',
                     tagline: 'A list of all the strange things that I have read at some point or another',
-                    image_src: '/images/handle_logo.png',
+                    image_src: '/assets/images/handle_logo.png',
                     image_alt: 'Main face of the site'
                 },
 
@@ -63,7 +66,8 @@ const getAllManga = async (req, res, next) => {
                     current_sub_page: 'manga',
                     current_category: req.query['category'] || 'all'
                 }
-            });
+            }));
+            next();
         }, next);
 };
 

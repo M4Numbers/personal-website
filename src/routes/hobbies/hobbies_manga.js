@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-const router = require('express').Router();
+const getAllManga = require('../../journey/hobbies/manga/get_all_manga');
+const getSingleManga = require('../../journey/hobbies/manga/get_one_manga');
 
-router.get('/', require('../../journey/hobbies/manga/get_all_manga'));
-router.get('/:mangaId', require('../../journey/hobbies/manga/get_one_manga'));
-
-module.exports = router;
+module.exports = (server) => {
+    server.get('/hobbies/manga', getAllManga);
+    server.get('/hobbies/manga/:mangaId', getSingleManga);
+};

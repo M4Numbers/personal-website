@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-const express = require('express');
-const router = express.Router();
+const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const MangaHandler = require('../../lib/MangaHandler');
 const mangaHandlerInstance = MangaHandler.getHandler();
 const importHandler = require('../../lib/ImportHandler');
 
-const loggingSystem = require('./../../lib/Logger');
-const logger = loggingSystem.getLogger('master');
-
-router.get('/', function (req, res) {
+const viewAllManga = function (req, res, next) {
     Promise.all(
         [
             mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'title.romaji': 1}, false),
             mangaHandlerInstance.getTotalBookCount(false)
         ]
     ).then(([books, totalCount]) => {
-        res.render('./pages/admin/manga/admin_manga_view', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/manga/admin_manga_view.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -64,13 +63,16 @@ router.get('/', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'manga-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/:mangaId', function (req, res) {
+const viewSingleManga = function (req, res, next) {
     mangaHandlerInstance.findMangaByRawId(req.params['mangaId']).then((book) => {
-        res.render('./pages/admin/manga/admin_manga_view_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/manga/admin_manga_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -88,13 +90,16 @@ router.get('/:mangaId', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'manga-view'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.get('/:mangaId/edit', function (req, res) {
+const viewEditSingleManga = function (req, res, next) {
     mangaHandlerInstance.findMangaByRawId(req.params['mangaId']).then((book) => {
-        res.render('./pages/admin/manga/admin_manga_edit_single', {
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/admin/manga/admin_manga_edit_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -112,26 +117,36 @@ router.get('/:mangaId/edit', function (req, res) {
                 current_page: 'admin',
                 current_sub_page: 'manga-edit'
             }
-        });
+        }));
+        next();
     });
-});
+};
 
-router.post('/:mangaId/edit', function (req, res) {
+const editSingleManga = function (req, res, next) {
     mangaHandlerInstance.editManga(
         req.params['mangaId'], req.body['book-review'],
         req.body['book-tags'].split(/, ?/)
     ).then(() => {
-        res.redirect(303, `/admin/manga/${req.params['mangaId']}`);
+        res.redirect(303, `/admin/manga/${req.params['mangaId']}`, next);
     }, rejection => {
-        res.cookie('manga-update-error', {manga_id: req.params['mangaId'], error: rejection}, {signed: true, maxAge: 1000});
-        res.redirect(303, `/admin/manga/${req.params['mangaId']}`);
+        req.log.warn({ manga_id: req.params['mangaId'], error: rejection });
+        res.redirect(303, `/admin/manga/${req.params['mangaId']}`, next);
     });
-});
+};
 
-router.post('/refresh', function (req, res) {
-    logger.info('Importing new manga into mongo...');
-    importHandler.importMangaIntoMongo();
-    res.status(200).json({});
-});
+const refreshMangaDatabase = async function (req, res, next) {
+    req.log.info('Importing new manga into mongo...');
+    await importHandler.importMangaIntoMongo();
+    res.contentType = 'application/json';
+    res.header('content-type', 'application/json');
+    res.send(200, {});
+    next();
+};
 
-module.exports = router;
+module.exports = (server) => {
+    server.get('/admin/manga', testLoggedIn, viewAllManga);
+    server.get('/admin/manga/:mangaId', testLoggedIn, viewSingleManga);
+    server.get('/admin/manga/:mangaId/edit', testLoggedIn, viewEditSingleManga);
+    server.post('/admin/manga/:mangaId/edit', testLoggedIn, editSingleManga);
+    server.post('/admin/manga/refresh', testLoggedIn, refreshMangaDatabase);
+};
