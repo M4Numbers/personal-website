@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const getAboutMe = async (req, res, next) => {
-    staticHandlerInstance.findStatic(StaticDocumentTypes.ABOUT_ME).then(staticContent => {
+    try {
+        const staticContent = await staticHandlerInstance.findStatic(StaticDocumentTypes.ABOUT_ME);
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/about.njk', {
@@ -51,7 +54,9 @@ const getAboutMe = async (req, res, next) => {
             }
         }));
         next();
-    }, next);
+    } catch (rejection) {
+        next(new errors.InternalServerError(rejection.message));
+    }
 };
 
 module.exports = (server) => {

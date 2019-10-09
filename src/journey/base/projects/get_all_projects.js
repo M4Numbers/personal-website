@@ -22,17 +22,21 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const projectHandlerInstance = require('../../../lib/ProjectHandler').getHandler();
 
 const getAllProjects = async (req, res, next) => {
-    Promise.all(
-        [
-            projectHandlerInstance.findProjects(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}),
-            projectHandlerInstance.getTotalProjectCount()
-        ]
-    ).then(([projects, totalCount]) => {
+    try {
+        const allProjects = await projectHandlerInstance.findProjects(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+            10,
+            {'time_posted': -1}
+        );
+        const allProjectCounts = await projectHandlerInstance.getTotalProjectCount();
+
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/project_all.njk', {
@@ -44,12 +48,12 @@ const getAllProjects = async (req, res, next) => {
             },
 
             content: {
-                projects: projects
+                projects: allProjects
             },
 
             pagination: {
                 base_url: '/projects?',
-                total: totalCount,
+                total: allProjectCounts,
                 page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
@@ -61,9 +65,9 @@ const getAllProjects = async (req, res, next) => {
             }
         }));
         next();
-    }, rejection => {
-        next(rejection);
-    });
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = (server) => {

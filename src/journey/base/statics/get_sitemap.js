@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const getSitemap = async (req, res, next) => {
-    staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP).then(sitemapItems => {
+    try {
+        const sitemapItems = await staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP);
         let sortedSiteMap = ((sitemapItems || {}).content || []).sort((a, b) => {
             return (a['page_name'] > b['page_name']) ? 1 : ((a['page_name'] < b['page_name']) ? -1 : 0);
         });
@@ -54,7 +57,10 @@ const getSitemap = async (req, res, next) => {
             }
         }));
         next();
-    }).catch(caught => {req.log.warn(`Catch during find static :: ${caught}`); next();});
+    } catch (caught) {
+        req.log.warn(`Catch during find static :: ${caught}`);
+        next(new errors.InternalServerError(caught.message));
+    }
 };
 
 module.exports = (server) => {
