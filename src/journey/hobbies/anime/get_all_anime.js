@@ -22,53 +22,61 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const getAllAnime = async (req, res, next) => {
-    Promise.all([
-        animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query['page'] || 1) - 1)) * 12, 12, {'title.romaji': 1}, req.query['category']),
-        animeHandlerInstance.getTotalShowCount(req.query['category'] || '')
-    ]).catch(next)
-        .then(([allShows, totalCount]) => {
-            let baseUrl = '';
-            if (req.query.category) {
-                baseUrl += `category=${req.query.category}&`;
+    try {
+        const allShows = await animeHandlerInstance.findAnimeShows(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 12,
+            12,
+            {'title.romaji': 1},
+            req.query['category']
+        );
+        const allShowCount = await animeHandlerInstance.getTotalShowCount(req.query['category'] || '');
+
+        let baseUrl = '';
+        if (req.query.category) {
+            baseUrl += `category=${req.query.category}&`;
+        }
+        if (req.query.q) {
+            baseUrl += `q=${req.query.q}&`;
+        }
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/anime/anime_all.njk', {
+            top_page: {
+                title: 'My Anime Watchlist',
+                tagline: 'A list of all the strange things that I have seen at some point or another',
+                image_src: '/assets/images/handle_logo.png',
+                image_alt: 'Main face of the site'
+            },
+
+            content: {
+                shows: allShows
+            },
+
+            pagination: {
+                base_url: `/hobbies/anime?${baseUrl}`,
+                total: allShowCount,
+                page: Math.max((req.query['page'] || 1), 1),
+                page_size: 12
+            },
+
+            head: {
+                title: 'J4Numbers :: Hobbies :: Anime',
+                description: 'Home to the wild things',
+                current_page: 'hobbies',
+                current_sub_page: 'anime',
+                current_category: req.query['category'] || 'all'
             }
-            if (req.query.q) {
-                baseUrl += `q=${req.query.q}&`;
-            }
-            res.contentType = 'text/html';
-            res.header('content-type', 'text/html');
-            res.send(200, renderer.render('pages/anime/anime_all.njk', {
-                top_page: {
-                    title: 'My Anime Watchlist',
-                    tagline: 'A list of all the strange things that I have seen at some point or another',
-                    image_src: '/assets/images/handle_logo.png',
-                    image_alt: 'Main face of the site'
-                },
-
-                content: {
-                    shows: allShows
-                },
-
-                pagination: {
-                    base_url: `/hobbies/anime?${baseUrl}`,
-                    total: totalCount,
-                    page: Math.max((req.query['page'] || 1), 1),
-                    page_size: 12
-                },
-
-                head: {
-                    title: 'J4Numbers :: Hobbies :: Anime',
-                    description: 'Home to the wild things',
-                    current_page: 'hobbies',
-                    current_sub_page: 'anime',
-                    current_category: req.query['category'] || 'all'
-                }
-            }));
-            next();
-        }, next);
+        }));
+        next();
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = getAllAnime;
