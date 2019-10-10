@@ -27,7 +27,6 @@ const path = require('path');
 const request = require('request-promise-native');
 
 const MediaTypes = require('./MediaTypes');
-const SiteError = require('./SiteError');
 
 const logger = require('./logger').bunyanLogger();
 
@@ -45,29 +44,21 @@ class AniListHandler {
         this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
     }
 
-    getMangaQueryTemplate() {
-        return new Promise(resolve => {
-            if (this.aniListMangaQuery === undefined) {
-                this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
-                resolve(this.aniListMangaQuery);
-            } else {
-                resolve(this.aniListMangaQuery);
-            }
-        });
+    async getMangaQueryTemplate() {
+        if (this.aniListMangaQuery === undefined) {
+            this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
+        }
+        return this.aniListMangaQuery;
     }
 
-    getAnimeQueryTemplate() {
-        return new Promise(resolve => {
-            if (this.aniListAnimeQuery === undefined) {
-                this.aniListAnimeQuery = this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'animeAniList.gql'), {encoding: 'utf-8'});
-                resolve(this.aniListAnimeQuery);
-            } else {
-                resolve(this.aniListAnimeQuery);
-            }
-        });
+    async getAnimeQueryTemplate() {
+        if (this.aniListAnimeQuery === undefined) {
+            this.aniListAnimeQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'animeAniList.gql'), {encoding: 'utf-8'});
+        }
+        return this.aniListAnimeQuery;
     }
 
-    performRequest(body) {
+    async performRequest(body) {
         return request({
             url: 'https://graphql.anilist.co',
             method: 'POST',
@@ -80,44 +71,40 @@ class AniListHandler {
         });
     }
 
-    getPageOfAniListAnimeResults(page=0) {
-        return new Promise((resolve, reject) => {
-            this.getAnimeQueryTemplate()
-                .then(query => {
-                    let variables = {
-                        page: page,
-                        mediaType: MediaTypes.ANIME
-                    };
-                    this.performRequest({
-                        query: query,
-                        variables: variables
-                    }).then(resolve, reject)
-                        .catch(reason => {
-                            logger.warn(`Unhandled exception when requesting aniList data :: ${reason}`);
-                            throw new SiteError(500, reason);
-                        });
-                });
-        });
+    async getPageOfAniListAnimeResults(page=0) {
+        try {
+            const query = await this.getAnimeQueryTemplate();
+            let variables = {
+                page: page,
+                mediaType: MediaTypes.ANIME
+            };
+
+            await this.performRequest({
+                query: query,
+                variables: variables
+            });
+        } catch (e) {
+            logger.warn(`Unhandled exception when requesting aniList data :: ${e.message}`);
+            throw e;
+        }
     }
 
-    getPageOfAniListMangaResults(page=0) {
-        return new Promise((resolve, reject) => {
-            this.getMangaQueryTemplate()
-                .then(query => {
-                    let variables = {
-                        page: page,
-                        mediaType: MediaTypes.MANGA
-                    };
-                    this.performRequest({
-                        query: query,
-                        variables: variables
-                    }).then(resolve, reject)
-                        .catch(reason => {
-                            logger.warn(`Unhandled exception when requesting aniList data :: ${reason}`);
-                            throw new SiteError(500, reason);
-                        });
-                });
-        });
+    async getPageOfAniListMangaResults(page=0) {
+        try {
+            const query = await this.getMangaQueryTemplate();
+            let variables = {
+                page: page,
+                mediaType: MediaTypes.MANGA
+            };
+
+            await this.performRequest({
+                query: query,
+                variables: variables
+            });
+        } catch (e) {
+            logger.warn(`Unhandled exception when requesting aniList data :: ${e.message}`);
+            throw e;
+        }
     }
 
 }

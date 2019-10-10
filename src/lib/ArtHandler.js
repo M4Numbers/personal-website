@@ -60,50 +60,49 @@ class ArtHandler {
         this.ArtPieceModel = this.mongoDbInstance.bootModel('ArtPiece', this.ArtPiece);
     }
 
-    findArtByRawId(rawId) {
+    async findArtByRawId(rawId) {
         return this.mongoDbInstance.findById(this.ArtPieceModel, rawId);
     }
 
-    findAllArtPieces(skip, limit, sort) {
+    async findAllArtPieces(skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.ArtPieceModel, {}, skip, limit, sort);
     }
 
-    findArtPiecesByQuery(query, skip, limit, sort) {
+    async findArtPiecesByQuery(query, skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.ArtPieceModel, query, skip, limit, sort);
     }
 
-    getTotalArtPieceCount() {
+    async getTotalArtPieceCount() {
         return this.mongoDbInstance.getTotalCountFromQuery(this.ArtPieceModel, {});
     }
 
-    upsertArt (pieceToUpsert) {
+    async upsertArt (pieceToUpsert) {
         return this.mongoDbInstance.upsertItem(pieceToUpsert);
     }
 
-    deleteArt (artIdToRemove) {
+    async deleteArt (artIdToRemove) {
         return this.mongoDbInstance.deleteById(this.ArtPieceModel, artIdToRemove);
     }
 
-    updateExistingArtPiece(originalId, title, completedDate, image, tags, notes) {
-        return new Promise((resolve, reject) => {
-            this.findArtByRawId(originalId).then(oldArtItem => {
-                if (typeof oldArtItem === 'undefined') {
-                    reject(new Error('Could not find given art piece to update'));
-                } else {
-                    oldArtItem = this.fillInArtMetadata(oldArtItem, title, completedDate, image, tags, notes);
-                    this.upsertArt(oldArtItem).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async updateExistingArtPiece(originalId, title, completedDate, image, tags, notes) {
+        let oldArtItem = await this.findArtByRawId(originalId)
+        if (typeof oldArtItem === 'undefined') {
+            throw new Error('Could not find given art piece to update');
+        } else {
+            oldArtItem = this.fillInArtMetadata(
+                oldArtItem, title, completedDate, image, tags, notes,
+            );
+            await this.upsertArt(oldArtItem);
+        }
     }
 
-    addNewArtItem(title, completedDate, image, tags, notes) {
-        return new Promise((resolve, reject) => {
-            let newArtPiece = new this.ArtPieceModel();
-            newArtPiece._id = oId();
-            newArtPiece = this.fillInArtMetadata(newArtPiece, title, completedDate, image, tags, notes);
-            this.upsertArt(newArtPiece).then(resolve, reject).catch(reject);
-        });
+    async addNewArtItem(title, completedDate, image, tags, notes) {
+        let newArtPiece = new this.ArtPieceModel();
+        newArtPiece._id = oId();
+        newArtPiece = this.fillInArtMetadata(
+            newArtPiece, title, completedDate, image, tags, notes
+        );
+        await this.upsertArt(newArtPiece);
     }
 
     fillInArtMetadata(artPieceToUpdate, title, completedDate, image, tags, notes) {

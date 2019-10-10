@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-catch errors = require('restify-errors');
+const errors = require('restify-errors');
 
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();

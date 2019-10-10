@@ -44,76 +44,66 @@ class MongoDbHandler {
         return this.connection.model(modelName, model);
     }
 
-    findById (model, id) {
-        return new Promise((resolve, reject) => {
-            model.findById(id, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    reject(err);
-                }
-                resolve(result);
-            });
-        });
+    async findById (model, id) {
+        try {
+            return await model.findById(id)
+        } catch (e) {
+            logger.warn(e.message);
+            throw e;
+        }
     }
 
-    findOrCreate (model, id) {
-        return new Promise((resolve, reject) => {
-            model.findOneAndUpdate({'_id': id}, {}, {upsert: true, new: true}, (err, result) => {
-                if (err) {
-                    logger.warn(err.message);
-                    reject(err);
-                }
-                resolve(result);
-            });
-        });
+    async findOrCreate (model, id) {
+        try {
+            return await model.findOneAndUpdate(
+                {'_id': id},
+                {},
+                {upsert: true, new: true}
+            );
+        } catch (err) {
+            logger.warn(err.message);
+            throw err;
+        }
     }
 
-    deleteById (model, id) {
-        return new Promise((resolve, reject) => {
-            model.deleteOne({'_id': id}, function(err) {
-                if (err) {
-                    logger.warn(err);
-                    reject(err);
-                }
-                resolve();
-            });
-        });
+    async deleteById (model, id) {
+        try {
+            return await model.deleteOne({'_id': id})
+        } catch (e) {
+            logger.warn(e.message);
+            throw e;
+        }
     }
 
-    findFromQuery (model, query, skip, limit, sort) {
-        return new Promise((resolve, reject) => {
-            model.find(query, {}, {skip: skip, limit: limit, sort: sort}, (err, results) => {
-                if (err) {
-                    logger.warn(err);
-                    reject(err);
-                }
-                resolve(results);
-            });
-        });
+    async findFromQuery (model, query, skip, limit, sort) {
+        try {
+            return await model.find(
+                query,
+                {},
+                {skip: skip, limit: limit, sort: sort}
+            );
+        } catch (e) {
+            logger.warn(e.message);
+            throw e;
+        }
     }
 
-    getTotalCountFromQuery(model, query) {
-        return new Promise(((resolve, reject) => {
-            model.countDocuments(query, (err, count) => {
-                if (err) {
-                    logger.warn(err);
-                    reject(err);
-                }
-                resolve(count);
-            });
-        }));
+    async getTotalCountFromQuery(model, query) {
+        try {
+            return await model.countDocuments(query);
+        } catch (e) {
+            logger.warn(e.message);
+            throw e;
+        }
     }
 
-    upsertItem(itemToSave) {
-        return new Promise((resolve, reject) => {
-            itemToSave.save((err, itemToSave) => {
-                if (err) {
-                    logger.warn(err.message);
-                    reject(err);
-                }
-                resolve(itemToSave);
-            });
-        });
+    async upsertItem(itemToSave) {
+        try {
+            return await itemToSave.save();
+        } catch (e) {
+            logger.warn(e.message);
+            throw e;
+        }
     }
 
 }

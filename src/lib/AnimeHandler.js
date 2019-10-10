@@ -75,11 +75,11 @@ class AnimeHandler {
         this.AnimeShowModel = this.mongoDbInstance.bootModel('AnimeShow', this.AnimeShow);
     }
 
-    findAnimeByAniListId(aniListId) {
+    async findAnimeByAniListId(aniListId) {
         return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, {'anime_id.ani_list': aniListId}, 0, 1, {});
     }
 
-    findAnimeByRawId(rawId) {
+    async findAnimeByRawId(rawId) {
         return this.mongoDbInstance.findById(this.AnimeShowModel, rawId);
     }
 
@@ -108,33 +108,30 @@ class AnimeHandler {
         return query;
     }
 
-    findAnimeShows(skip, limit, sort, category = '') {
+    async findAnimeShows(skip, limit, sort, category = '') {
         return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, this.buildQuery(category), skip, limit, sort);
     }
 
-    findAnimeShowsByQuery(query, skip, limit, sort) {
+    async findAnimeShowsByQuery(query, skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, query, skip, limit, sort);
     }
 
-    getTotalShowCount(category = '') {
+    async getTotalShowCount(category = '') {
         return this.mongoDbInstance.getTotalCountFromQuery(this.AnimeShowModel, this.buildQuery(category));
     }
 
-    upsertAnime (animeToUpsert) {
+    async upsertAnime (animeToUpsert) {
         return this.mongoDbInstance.upsertItem(animeToUpsert);
     }
 
-    editAnime(animeId, reviewText, tagList) {
-        return new Promise((resolve, reject) => {
-            this.findAnimeByRawId(animeId).then(oldAnimeShow => {
-                if (typeof oldAnimeShow === 'undefined') {
-                    reject(new Error('Could not find given show to update'));
-                } else {
-                    oldAnimeShow = this.fillInAnime(oldAnimeShow, reviewText, tagList);
-                    this.upsertAnime(oldAnimeShow).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async editAnime(animeId, reviewText, tagList) {
+        let oldAnimeShow = await this.findAnimeByRawId(animeId);
+        if (typeof oldAnimeShow === 'undefined') {
+            throw new Error('Could not find given show to update');
+        } else {
+            oldAnimeShow = this.fillInAnime(oldAnimeShow, reviewText, tagList);
+            await this.upsertAnime(oldAnimeShow);
+        }
     }
 
     fillInAnime (animeToUpdate, reviewText, tagList) {
@@ -144,26 +141,33 @@ class AnimeHandler {
         return animeToUpdate;
     }
 
-    updateExistingAnime(originalId, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash) {
-        return new Promise((resolve, reject) => {
-            this.findAnimeByRawId(originalId).then(oldAnimeItem => {
-                if (typeof oldAnimeItem === 'undefined') {
-                    reject(new Error('Could not find given anime to update'));
-                } else {
-                    oldAnimeItem = this.fillInAnimeMetadata(oldAnimeItem, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash);
-                    this.upsertAnime(oldAnimeItem).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async updateExistingAnime(
+        originalId, ids, titles, myStatus, score, currentEps, totalEps,
+        airingStatus, synopsis, coverImgs, hash,
+    ) {
+        let oldAnimeItem = await this.findAnimeByRawId(originalId);
+        if (typeof oldAnimeItem === 'undefined') {
+            throw new Error('Could not find given anime to update');
+        } else {
+            oldAnimeItem = this.fillInAnimeMetadata(
+                oldAnimeItem, ids, titles, myStatus, score, currentEps,
+                totalEps, airingStatus, synopsis, coverImgs, hash,
+            );
+            await this.upsertAnime(oldAnimeItem);
+        }
     }
 
-    addNewAnime(ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash) {
-        return new Promise((resolve, reject) => {
-            let newAnime = new this.AnimeShowModel();
-            newAnime._id = oId();
-            newAnime = this.fillInAnimeMetadata(newAnime, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash);
-            this.upsertAnime(newAnime).then(resolve, reject).catch(reject);
-        });
+    async addNewAnime(
+        ids, titles, myStatus, score, currentEps, totalEps, airingStatus,
+        synopsis, coverImgs, hash,
+    ) {
+        let newAnime = new this.AnimeShowModel();
+        newAnime._id = oId();
+        newAnime = this.fillInAnimeMetadata(
+            newAnime, ids, titles, myStatus, score, currentEps,
+            totalEps, airingStatus, synopsis, coverImgs, hash,
+        );
+        await this.upsertAnime(newAnime).then(resolve, reject).catch(reject);
     }
 
     fillInAnimeMetadata(animeToUpdate, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash) {
