@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const kinkHandlerInstance = require('../../../lib/KinkHandler').getHandler();
 
-const getAllKinks = (req, res, next) => {
-    Promise.all(
-        [
-            kinkHandlerInstance.findKinks(Math.max(0, ((req.query['page'] || 1) - 1)) * 20, 20, {'kink_name': 1}, req.query['category']),
-            kinkHandlerInstance.getTotalKinkCount(false)
-        ]
-    ).then(([kinks, totalCount]) => {
+const getAllKinks = async (req, res, next) => {
+    try {
+        const kinks = await kinkHandlerInstance.findKinks(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 20,
+            20,
+            {'kink_name': 1},
+            req.query['category'],
+        );
+        const kinkCount = await kinkHandlerInstance.getTotalKinkCount(false);
+
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/me/me_kinks_all.njk', {
@@ -50,7 +55,7 @@ const getAllKinks = (req, res, next) => {
 
             pagination: {
                 base_url: '/hobbies/me/fetishes?',
-                total: totalCount,
+                total: kinkCount,
                 page: Math.max((req.query['page'] || 1), 1),
                 page_size: 20
             },
@@ -65,7 +70,9 @@ const getAllKinks = (req, res, next) => {
             }
         }));
         next();
-    }, rejection => next(rejection));
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = getAllKinks;

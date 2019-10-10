@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const markdown = require('markdown-it')();
@@ -30,7 +32,8 @@ const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler()
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const generateOverview = (req, res, next) => {
-    staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME).then(staticContent => {
+    try {
+        const staticContent = staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME);
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/me/me_index.njk', {
@@ -55,7 +58,9 @@ const generateOverview = (req, res, next) => {
             }
         }));
         next();
-    }, next);
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = generateOverview;

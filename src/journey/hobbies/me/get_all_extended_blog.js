@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 
 const getAllExtendedBlogs = (req, res, next) => {
-    Promise.all(
-        [
-            blogHandlerInstance.findBlogs(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}, false),
-            blogHandlerInstance.getTotalBlogCount()
-        ]
-    ).then(([blogs, totalCount]) => {
+    try {
+        const blogs = blogHandlerInstance.findBlogs(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+            10,
+            {'time_posted': -1},
+            false,
+        );
+        const blogCount = blogHandlerInstance.getTotalBlogCount();
+
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/me/me_blog_all.njk', {
@@ -49,7 +54,7 @@ const getAllExtendedBlogs = (req, res, next) => {
 
             pagination: {
                 base_url: '/hobbies/me/extended-blog?',
-                total: totalCount,
+                total: blogCount,
                 page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
@@ -63,9 +68,9 @@ const getAllExtendedBlogs = (req, res, next) => {
             }
         }));
         next();
-    }, rejection => {
-        next(rejection);
-    });
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = getAllExtendedBlogs;

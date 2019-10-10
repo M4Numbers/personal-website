@@ -22,49 +22,55 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const storyHandlerInstance = require('../../../lib/StoryHandler').getHandler();
 const chapterHandlerInstance = require('../../../lib/ChapterHandler').getHandler();
 
 const getOneStory = async (req, res, next) => {
-    Promise.all([
-        storyHandlerInstance.findStoryByRawId(req.params['storyId']),
-        chapterHandlerInstance.findChaptersByStory(req.params['storyId'], Math.max(0, ((req.query['page'] || 1) - 1)) * 25, 25)
-    ])
-        .catch(next)
-        .then(([story, sortedChapterList]) => {
-            res.contentType = 'text/html';
-            res.header('content-type', 'text/html');
-            res.send(200, renderer.render('pages/stories/stories_one.njk', {
-                top_page: {
-                    title: story.title,
-                    tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
-                    image_src: `data:image/png;base64,${story.cover_img}`,
-                    image_alt: story.title
-                },
+    try {
+        const story = await storyHandlerInstance.findStoryByRawId(req.params['storyId']);
+        const sortedChapterList = await chapterHandlerInstance.findChaptersByStory(
+            req.params['storyId'],
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 25,
+            25,
+        );
 
-                content: {
-                    story: story,
-                    chapters: sortedChapterList
-                },
+        res.contentType = 'text/html';
+        res.header('content-type', 'text/html');
+        res.send(200, renderer.render('pages/stories/stories_one.njk', {
+            top_page: {
+                title: story.title,
+                tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
+                image_src: `data:image/png;base64,${story.cover_img}`,
+                image_alt: story.title
+            },
 
-                pagination: {
-                    base_url: `/hobbies/writing/${req.params['storyId']}?`,
-                    total: story.chapters.length,
-                    page: Math.max((req.query['page'] || 1), 1),
-                    page_size: 25
-                },
+            content: {
+                story: story,
+                chapters: sortedChapterList
+            },
 
-                head: {
-                    title: 'J4Numbers :: Hobbies :: Writing :: ',
-                    description: 'Home to the wild things',
-                    current_page: 'hobbies',
-                    current_sub_page: 'writing',
-                }
-            }));
-            next();
-        }, next);
+            pagination: {
+                base_url: `/hobbies/writing/${req.params['storyId']}?`,
+                total: story.chapters.length,
+                page: Math.max((req.query['page'] || 1), 1),
+                page_size: 25
+            },
+
+            head: {
+                title: 'J4Numbers :: Hobbies :: Writing :: ',
+                description: 'Home to the wild things',
+                current_page: 'hobbies',
+                current_sub_page: 'writing',
+            }
+        }));
+        next();
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = getOneStory;
