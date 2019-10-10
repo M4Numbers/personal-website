@@ -30,9 +30,9 @@ const mongoMangaHandlerInstance = require('./MangaHandler').getHandler();
 
 const logger = require('./logger').bunyanLogger();
 
-function resolveInsertNewAnime(newAnimetoInsert) {
+async function resolveInsertNewAnime(newAnimetoInsert) {
     logger.info(`Inserting new show with id ${newAnimetoInsert['media']['id']}`);
-    mongoAnimeHandlerInstance.addNewAnime(
+    await mongoAnimeHandlerInstance.addNewAnime(
         {
             'ani_list': newAnimetoInsert['media']['id'],
             'my_anime_list': newAnimetoInsert['media']['idMal']
@@ -49,9 +49,9 @@ function resolveInsertNewAnime(newAnimetoInsert) {
     );
 }
 
-function resolveOverwriteExistingAnime(oldId, oldAnimeToOverwrite) {
+async function resolveOverwriteExistingAnime(oldId, oldAnimeToOverwrite) {
     logger.info(`Overwriting existing show with id ${oldAnimeToOverwrite['media']['id']}`);
-    mongoAnimeHandlerInstance.updateExistingAnime(
+    await mongoAnimeHandlerInstance.updateExistingAnime(
         oldId,
         {
             'ani_list': oldAnimeToOverwrite['media']['id'],
@@ -70,9 +70,9 @@ function resolveOverwriteExistingAnime(oldId, oldAnimeToOverwrite) {
 }
 
 //ids, titles, mangaType, myStatus, score, currentVol, currentChap, totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash
-function resolveInsertNewManga(newMangatoInsert) {
+async function resolveInsertNewManga(newMangatoInsert) {
     logger.info(`Inserting new book with id ${newMangatoInsert['media']['id']}`);
-    mongoMangaHandlerInstance.addNewManga(
+    await mongoMangaHandlerInstance.addNewManga(
         {
             'ani_list': newMangatoInsert['media']['id'],
             'my_anime_list': newMangatoInsert['media']['idMal']
@@ -92,9 +92,9 @@ function resolveInsertNewManga(newMangatoInsert) {
     );
 }
 
-function resolveOverwriteExistingManga(oldId, newMangatoInsert) {
+async function resolveOverwriteExistingManga(oldId, newMangatoInsert) {
     logger.info(`Inserting new book with id ${newMangatoInsert['media']['id']}`);
-    mongoMangaHandlerInstance.updateExistingManga(
+    await mongoMangaHandlerInstance.updateExistingManga(
         oldId,
         {
             'ani_list': newMangatoInsert['media']['id'],
@@ -120,18 +120,17 @@ async function importAnimeAniListItemsIntoMongo() {
     let roller = await aniListHandlerInstance.getPageOfAniListAnimeResults(page);
     let mediaItems = roller['data']['Page']['mediaList'];
     while (mediaItems.length > 0) {
-        for (let i in mediaItems) {
-            mongoAnimeHandlerInstance.findAnimeByAniListId(mediaItems[i]['media']['id'])
-                .then(record => {
-                    if (record.length > 0) {
-                        if (record[0].last_hash !== crypto.createHash('sha256').update(JSON.stringify(mediaItems[i])).digest('hex')) {
-                            resolveOverwriteExistingAnime(record[0]._id, mediaItems[i]);
-                        }
-                    } else {
-                        resolveInsertNewAnime(mediaItems[i]);
-                    }
-                });
-        }
+        mediaItems.forEach(async media => {
+            const record = await mongoAnimeHandlerInstance
+                .findAnimeByAniListId(media['media']['id']);
+            if (record.length > 0) {
+                if (record[0].last_hash !== crypto.createHash('sha256').update(JSON.stringify(media)).digest('hex')) {
+                    await resolveOverwriteExistingAnime(record[0]._id, media);
+                }
+            } else {
+                await resolveInsertNewAnime(media);
+            }
+        });
         ++page;
         roller = await aniListHandlerInstance.getPageOfAniListAnimeResults(page);
         mediaItems = roller['data']['Page']['mediaList'];
@@ -143,18 +142,17 @@ async function importMangaAniListItemsIntoMongo() {
     let roller = await aniListHandlerInstance.getPageOfAniListMangaResults(page);
     let mediaItems = roller['data']['Page']['mediaList'];
     while (mediaItems.length > 0) {
-        for (let i in mediaItems) {
-            mongoMangaHandlerInstance.findMangaByAniListId(mediaItems[i]['media']['id'])
-                .then(record => {
-                    if (record.length > 0) {
-                        if (record[0].last_hash !== crypto.createHash('sha256').update(JSON.stringify(mediaItems[i])).digest('hex')) {
-                            resolveOverwriteExistingManga(record[0]._id, mediaItems[i]);
-                        }
-                    } else {
-                        resolveInsertNewManga(mediaItems[i]);
-                    }
-                });
-        }
+        mediaItems.forEach(async media => {
+            const record = await mongoMangaHandlerInstance
+                .findMangaByAniListId(media['media']['id']);
+            if (record.length > 0) {
+                if (record[0].last_hash !== crypto.createHash('sha256').update(JSON.stringify(media)).digest('hex')) {
+                    await resolveOverwriteExistingManga(record[0]._id, media);
+                }
+            } else {
+                await resolveInsertNewManga(media);
+            }
+        });
         ++page;
         roller = await aniListHandlerInstance.getPageOfAniListMangaResults(page);
         mediaItems = roller['data']['Page']['mediaList'];

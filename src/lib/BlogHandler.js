@@ -56,11 +56,11 @@ class BlogHandler {
         this.BlogPostModel = this.mongoDbInstance.bootModel('BlogPost', this.BlogPost);
     }
 
-    findBlog (blogId) {
+    async findBlog (blogId) {
         return this.mongoDbInstance.findById(this.BlogPostModel, blogId);
     }
 
-    deleteBlog (blogId) {
+    async deleteBlog (blogId) {
         return this.mongoDbInstance.deleteById(this.BlogPostModel, blogId);
     }
 
@@ -72,42 +72,37 @@ class BlogHandler {
         return query;
     }
 
-    findBlogs (skip, limit, sort, visible=true) {
+    async findBlogs (skip, limit, sort, visible=true) {
         return this.mongoDbInstance.findFromQuery(this.BlogPostModel, this.buildQuery(visible), skip, limit, sort);
     }
 
-    findBlogsByQuery(query, skip, limit, sort) {
+    async findBlogsByQuery(query, skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.BlogPostModel, query, skip, limit, sort);
     }
 
-    getTotalBlogCount(visible=true) {
+    async getTotalBlogCount(visible=true) {
         return this.mongoDbInstance.getTotalCountFromQuery(this.BlogPostModel, this.buildQuery(visible));
     }
 
-    upsertBlog(blog) {
+    async upsertBlog(blog) {
         return this.mongoDbInstance.upsertItem(blog);
     }
 
-    editBlog (blogId, title, text, publiclyVisible, tags) {
-        return new Promise((resolve, reject) => {
-            this.findBlog(blogId).then(oldBlogPost => {
-                if (typeof oldBlogPost === 'undefined') {
-                    reject(new Error('Could not find given blog to update'));
-                } else {
-                    oldBlogPost = this.fillInBlog(oldBlogPost, title, text, publiclyVisible, tags);
-                    this.upsertBlog(oldBlogPost).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async editBlog (blogId, title, text, publiclyVisible, tags) {
+        let oldBlogPost = await this.findBlog(blogId);
+        if (typeof oldBlogPost === 'undefined') {
+            throw new Error('Could not find given blog to update');
+        } else {
+            oldBlogPost = this.fillInBlog(oldBlogPost, title, text, publiclyVisible, tags);
+            return await this.upsertBlog(oldBlogPost);
+        }
     }
 
-    insertBlog (title, text, publiclyVisible, tags) {
-        return new Promise((resolve, reject) => {
-            let newBlogPost = new this.BlogPostModel();
-            newBlogPost._id = oId();
-            newBlogPost = this.fillInBlog(newBlogPost, title, text, publiclyVisible, tags);
-            this.upsertBlog(newBlogPost).then(resolve, reject).catch(reject);
-        });
+    async insertBlog (title, text, publiclyVisible, tags) {
+        let newBlogPost = new this.BlogPostModel();
+        newBlogPost._id = oId();
+        newBlogPost = this.fillInBlog(newBlogPost, title, text, publiclyVisible, tags);
+        return await this.upsertBlog(newBlogPost);
     }
 
     fillInBlog(blog, title, text, publiclyVisible, tags) {

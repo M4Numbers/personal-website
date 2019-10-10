@@ -56,11 +56,11 @@ class ProjectHandler {
         this.DevProjectModel = this.mongoDbInstance.bootModel('DevProject', this.DevProject);
     }
 
-    findProject (projectId) {
+    async findProject (projectId) {
         return this.mongoDbInstance.findById(this.DevProjectModel, projectId);
     }
 
-    deleteProject (projectId) {
+    async deleteProject (projectId) {
         return this.mongoDbInstance.deleteById(this.DevProjectModel, projectId);
     }
 
@@ -72,38 +72,36 @@ class ProjectHandler {
         return query;
     }
 
-    findProjects (skip, limit, sort, visible=true) {
+    async findProjects (skip, limit, sort, visible=true) {
         return this.mongoDbInstance.findFromQuery(this.DevProjectModel, this.buildQuery(visible), skip, limit, sort);
     }
 
-    getTotalProjectCount (visible=true) {
+    async getTotalProjectCount (visible=true) {
         return this.mongoDbInstance.getTotalCountFromQuery(this.DevProjectModel, this.buildQuery(visible));
     }
 
-    editProject (projectId, title, text, publiclyVisible, tags) {
-        return new Promise((resolve, reject) => {
-            this.findProject(projectId).then(oldDevProject => {
-                if (typeof oldDevProject === 'undefined') {
-                    reject(new Error('Could not find given blog to update'));
-                } else {
-                    oldDevProject = this.fillInProject(oldDevProject, title, text, publiclyVisible, tags);
-                    this.mongoDbInstance.upsertItem(oldDevProject).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async editProject (projectId, title, text, publiclyVisible, tags) {
+        let oldDevProject = await this.findProject(projectId);
+        if (typeof oldDevProject === 'undefined') {
+            throw new Error('Could not find given blog to update');
+        } else {
+            oldDevProject = this.fillInProject(oldDevProject, title, text, publiclyVisible, tags);
+            return await this.mongoDbInstance.upsertItem(oldDevProject);
+        }
     }
 
-    insertProject (title, text, publiclyVisible, tags) {
-        return new Promise((resolve, reject) => {
-            let newDevProject = new this.DevProjectModel();
-            newDevProject._id = oId();
-            newDevProject = this.fillInProject(newDevProject, title, text, publiclyVisible, tags);
-            this.mongoDbInstance.upsertItem(newDevProject).then(resolve, reject).catch(reject);
-        });
+    async insertProject (title, text, publiclyVisible, tags) {
+        let newDevProject = new this.DevProjectModel();
+        newDevProject._id = oId();
+        newDevProject = this.fillInProject(newDevProject, title, text, publiclyVisible, tags);
+        return await this.mongoDbInstance.upsertItem(newDevProject);
     }
 
     fillInProject (project, title, text, publiclyVisible, tags) {
-        project.short_title = title.replace(/ /g, '-').replace(/\p/, '').toLocaleLowerCase();
+        project.short_title = title
+            .replace(/ /g, '-')
+            .replace(/\p/, '')
+            .toLocaleLowerCase();
         project.long_title = title;
         project.public = publiclyVisible;
         project.description = text;

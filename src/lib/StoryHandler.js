@@ -61,68 +61,57 @@ class StoryHandler {
         this.StoryModel = this.mongoDbInstance.bootModel('Story', this.Story);
     }
 
-    findStoryByRawId(rawId) {
+    async findStoryByRawId(rawId) {
         return this.mongoDbInstance.findById(this.StoryModel, rawId);
     }
 
-    findAllStories(skip, limit, sort) {
+    async findAllStories(skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.StoryModel, {}, skip, limit, sort);
     }
 
-    findStoriesByQuery(query, skip, limit, sort) {
+    async findStoriesByQuery(query, skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.StoryModel, query, skip, limit, sort);
     }
 
-    getTotalStoryCount() {
+    async getTotalStoryCount() {
         return this.mongoDbInstance.getTotalCountFromQuery(this.StoryModel, {});
     }
 
-    upsertStory (storyToUpsert) {
+    async upsertStory (storyToUpsert) {
         return this.mongoDbInstance.upsertItem(storyToUpsert);
     }
 
-    addChapterToStory (storyIdToUpdate, chapterNumber, chapterIdToAdd) {
-        return this.findStoryByRawId(storyIdToUpdate)
-            .then(story => {
-                story.chapters.push(chapterIdToAdd);
-                return Promise.resolve(story);
-            })
-            .then(updatedStory => this.upsertStory(updatedStory));
+    async addChapterToStory (storyIdToUpdate, chapterNumber, chapterIdToAdd) {
+        let story = await this.findStoryByRawId(storyIdToUpdate);
+        story.chapters.push(chapterIdToAdd);
+        return await this.upsertStory(story);
     }
 
-    removeChapterFromStory (storyIdToUpdate, chapterIdToRemove) {
-        return this.findStoryByRawId(storyIdToUpdate)
-            .then(story => {
-                story.chapters = story.chapters.filter(item => {return item != chapterIdToRemove;});
-                return Promise.resolve(story);
-            })
-            .then(updatedStory => this.upsertStory(updatedStory));
+    async removeChapterFromStory (storyIdToUpdate, chapterIdToRemove) {
+        let story = await this.findStoryByRawId(storyIdToUpdate);
+        story.chapters = story.chapters.filter(item => item !== chapterIdToRemove);
+        return await this.upsertStory(story);
     }
 
-    deleteStory (storyIdToRemove) {
+    async deleteStory (storyIdToRemove) {
         return this.mongoDbInstance.deleteById(this.StoryModel, storyIdToRemove);
     }
 
-    updateExistingStory(originalId, title, status, type, synopsis, image, tags, meta) {
-        return new Promise((resolve, reject) => {
-            this.findStoryByRawId(originalId).then(oldStory => {
-                if (typeof oldStory === 'undefined') {
-                    reject(new Error('Could not find given story to update'));
-                } else {
-                    oldStory = this.fillInStoryMetadata(oldStory, title, status, type, synopsis, image, tags, meta);
-                    this.upsertStory(oldStory).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async updateExistingStory(originalId, title, status, type, synopsis, image, tags, meta) {
+        let oldStory = await this.findStoryByRawId(originalId);
+        if (typeof oldStory === 'undefined') {
+            throw new Error('Could not find given story to update');
+        } else {
+            oldStory = this.fillInStoryMetadata(oldStory, title, status, type, synopsis, image, tags, meta);
+            return this.upsertStory(oldStory);
+        }
     }
 
-    addNewStory(title, status, type, synopsis, image, tags, meta) {
-        return new Promise((resolve, reject) => {
-            let newStory = new this.StoryModel();
-            newStory._id = oId();
-            newStory = this.fillInStoryMetadata(newStory, title, status, type, synopsis, image, tags, meta);
-            this.upsertStory(newStory).then(resolve, reject).catch(reject);
-        });
+    async addNewStory(title, status, type, synopsis, image, tags, meta) {
+        let newStory = new this.StoryModel();
+        newStory._id = oId();
+        newStory = this.fillInStoryMetadata(newStory, title, status, type, synopsis, image, tags, meta);
+        return await this.upsertStory(newStory);
     }
 
     fillInStoryMetadata(storyToUpdate, title, status, type, synopsis, image, tags, meta) {

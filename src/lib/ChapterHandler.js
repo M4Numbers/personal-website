@@ -58,7 +58,7 @@ class ChapterHandler {
         this.ChapterModel = this.mongoDbInstance.bootModel('Chapter', this.Chapter);
     }
 
-    findChapterByRawId (rawId) {
+    async findChapterByRawId (rawId) {
         return this.mongoDbInstance.findById(this.ChapterModel, rawId);
     }
 
@@ -68,48 +68,43 @@ class ChapterHandler {
         };
     }
 
-    findChaptersByStory (storyId, skip=0, limit=25, sort={'chapter_number': 1}) {
+    async findChaptersByStory (storyId, skip=0, limit=25, sort={'chapter_number': 1}) {
         return this.mongoDbInstance.findFromQuery(this.ChapterModel, this.buildQuery(storyId), skip, limit, sort);
     }
 
-    findChapterByStoryAndNumber (storyId, chapterNumber) {
+    async findChapterByStoryAndNumber (storyId, chapterNumber) {
         return this.mongoDbInstance.findFromQuery(this.ChapterModel, {
             'parent_story_id': {'$eq': storyId},
             'chapter_number': {'$eq': chapterNumber}
         }, 0, 1, {});
     }
 
-    upsertChapter (chapterToUpsert) {
+    async upsertChapter (chapterToUpsert) {
         return this.mongoDbInstance.upsertItem(chapterToUpsert);
     }
 
-    deleteChapter (chapterIdToRemove) {
+    async deleteChapter (chapterIdToRemove) {
         return this.mongoDbInstance.deleteById(this.ChapterModel, chapterIdToRemove);
     }
 
-    updateExistingChapter (originalId, chapterNumber, title, text, notes) {
-        return new Promise((resolve, reject) => {
-            logger.info(`Updating chapter with raw id of ${originalId}`);
-            this.findChapterByRawId(originalId).then(oldChapter => {
-                if (typeof oldChapter === 'undefined') {
-                    logger.warn('Could not find given chapter to update');
-                    reject(new Error('Could not find given chapter to update'));
-                } else {
-                    oldChapter = this.fillInChapterMetadata(oldChapter, chapterNumber, title, text, notes);
-                    this.upsertChapter(oldChapter).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async updateExistingChapter (originalId, chapterNumber, title, text, notes) {
+        logger.info(`Updating chapter with raw id of ${originalId}`);
+        let oldChapter = await this.findChapterByRawId(originalId);
+        if (typeof oldChapter === 'undefined') {
+            logger.warn('Could not find given chapter to update');
+            throw new Error('Could not find given chapter to update');
+        } else {
+            oldChapter = this.fillInChapterMetadata(oldChapter, chapterNumber, title, text, notes);
+            return await this.upsertChapter(oldChapter);
+        }
     }
 
-    addNewChapter (parentStoryId, chapterNumber, title, text, notes) {
-        return new Promise((resolve, reject) => {
-            let newChapter = new this.ChapterModel();
-            newChapter._id = oId();
-            newChapter.parent_story_id = parentStoryId;
-            newChapter = this.fillInChapterMetadata(newChapter, chapterNumber, title, text, notes);
-            this.upsertChapter(newChapter).then(resolve, reject).catch(reject);
-        });
+    async addNewChapter (parentStoryId, chapterNumber, title, text, notes) {
+        let newChapter = new this.ChapterModel();
+        newChapter._id = oId();
+        newChapter.parent_story_id = parentStoryId;
+        newChapter = this.fillInChapterMetadata(newChapter, chapterNumber, title, text, notes);
+        return await this.upsertChapter(newChapter);
     }
 
     fillInChapterMetadata (chapterToUpdate, chapterNumber, title, text, notes) {

@@ -92,7 +92,7 @@ class ArtHandler {
             oldArtItem = this.fillInArtMetadata(
                 oldArtItem, title, completedDate, image, tags, notes,
             );
-            await this.upsertArt(oldArtItem);
+            return await this.upsertArt(oldArtItem);
         }
     }
 
@@ -102,7 +102,7 @@ class ArtHandler {
         newArtPiece = this.fillInArtMetadata(
             newArtPiece, title, completedDate, image, tags, notes
         );
-        await this.upsertArt(newArtPiece);
+        return await this.upsertArt(newArtPiece);
     }
 
     fillInArtMetadata(artPieceToUpdate, title, completedDate, image, tags, notes) {

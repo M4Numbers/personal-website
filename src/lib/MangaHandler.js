@@ -78,11 +78,11 @@ class MangaHandler {
         this.MangaBookModel = this.mongoDbInstance.bootModel('MangaBook', this.MangaBook);
     }
 
-    findMangaByRawId(rawId) {
+    async findMangaByRawId(rawId) {
         return this.mongoDbInstance.findById(this.MangaBookModel, rawId);
     }
 
-    findMangaByAniListId(aniListId) {
+    async findMangaByAniListId(aniListId) {
         return this.mongoDbInstance.findFromQuery(this.MangaBookModel, {'manga_id.ani_list': aniListId}, 0, 1, {});
     }
 
@@ -111,33 +111,30 @@ class MangaHandler {
         return query;
     }
 
-    findMangaBooks(skip, limit, sort, category = '') {
+    async findMangaBooks(skip, limit, sort, category = '') {
         return this.mongoDbInstance.findFromQuery(this.MangaBookModel, this.buildQuery(category), skip, limit, sort);
     }
 
-    findMangaBooksByQuery(query, skip, limit, sort) {
+    async findMangaBooksByQuery(query, skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.MangaBookModel, query, skip, limit, sort);
     }
 
-    getTotalBookCount(category = '') {
+    async getTotalBookCount(category = '') {
         return this.mongoDbInstance.getTotalCountFromQuery(this.MangaBookModel, this.buildQuery(category));
     }
 
-    upsertManga (mangaToUpsert) {
+    async upsertManga (mangaToUpsert) {
         return this.mongoDbInstance.upsertItem(mangaToUpsert);
     }
 
-    editManga (mangaId, reviewText, tagList) {
-        return new Promise((resolve, reject) => {
-            this.findMangaByRawId(mangaId).then(oldMangaBook => {
-                if (typeof oldMangaBook === 'undefined') {
-                    reject(new Error('Could not find given show to update'));
-                } else {
-                    oldMangaBook = this.fillInManga(oldMangaBook, reviewText, tagList);
-                    this.upsertManga(oldMangaBook).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async editManga (mangaId, reviewText, tagList) {
+        let oldMangaBook = await this.findMangaByRawId(mangaId);
+        if (typeof oldMangaBook === 'undefined') {
+            throw new Error('Could not find given show to update');
+        } else {
+            oldMangaBook = this.fillInManga(oldMangaBook, reviewText, tagList);
+            return await this.upsertManga(oldMangaBook);
+        }
     }
 
     fillInManga (mangaToUpdate, reviewText, tagList) {
@@ -147,26 +144,36 @@ class MangaHandler {
         return mangaToUpdate;
     }
 
-    updateExistingManga(originalId, ids, titles, mangaType, myStatus, score, currentVol, currentChap, totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash) {
-        return new Promise((resolve, reject) => {
-            this.findMangaByRawId(originalId).then(oldMangaItem => {
-                if (typeof oldMangaItem === 'undefined') {
-                    reject(new Error('Could not find given manga to update'));
-                } else {
-                    oldMangaItem = this.fillInMangaMetadata(oldMangaItem, ids, titles, mangaType, myStatus, score, currentVol, currentChap, totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash);
-                    this.upsertManga(oldMangaItem).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async updateExistingManga(
+        originalId, ids, titles, mangaType, myStatus, score, currentVol,
+        currentChap, totalVols, totalChaps, airingStatus, synopsis,
+        coverImgs, hash,
+    ) {
+        let oldMangaItem = await this.findMangaByRawId(originalId);
+        if (typeof oldMangaItem === 'undefined') {
+            throw new Error('Could not find given manga to update');
+        } else {
+            oldMangaItem = this.fillInMangaMetadata(
+                oldMangaItem, ids, titles, mangaType, myStatus, score,
+                currentVol, currentChap, totalVols, totalChaps, airingStatus,
+                synopsis, coverImgs, hash,
+            );
+            return await this.upsertManga(oldMangaItem);
+        }
     }
 
-    addNewManga(ids, titles, mangaType, myStatus, score, currentVol, currentChap, totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash) {
-        return new Promise((resolve, reject) => {
-            let newManga = new this.MangaBookModel();
-            newManga._id = oId();
-            newManga = this.fillInMangaMetadata(newManga, ids, titles, mangaType, myStatus, score, currentVol, currentChap, totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash);
-            this.upsertManga(newManga).then(resolve, reject).catch(reject);
-        });
+    async addNewManga(
+        ids, titles, mangaType, myStatus, score, currentVol, currentChap,
+        totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash,
+    ) {
+        let newManga = new this.MangaBookModel();
+        newManga._id = oId();
+        newManga = this.fillInMangaMetadata(
+            newManga, ids, titles, mangaType, myStatus, score, currentVol,
+            currentChap, totalVols, totalChaps, airingStatus, synopsis,
+            coverImgs, hash,
+        );
+        return await this.upsertManga(newManga);
     }
 
     fillInMangaMetadata(mangaToUpdate, ids, titles, mangaType, myStatus, score, currentVol, currentChap, totalVols, totalChaps, airingStatus, synopsis, coverImgs, hash) {

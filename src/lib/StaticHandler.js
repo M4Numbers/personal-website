@@ -50,15 +50,13 @@ class StaticHandler {
         this.StaticDocumentModel = this.mongoDbInstance.bootModel('StaticDocument', this.StaticDocument);
     }
 
-    findStatic (id) {
+    async findStatic (id) {
         return this.mongoDbInstance.findById(this.StaticDocumentModel, id);
     }
 
-    updateStatic (id, content) {
-        return this.mongoDbInstance.findOrCreate(this.StaticDocumentModel, id)
-            .then(document => {
-                return this.mongoDbInstance.upsertItem(this.fillInStatic(document, id, content));
-            });
+    async updateStatic (id, content) {
+        const document = await this.mongoDbInstance.findOrCreate(this.StaticDocumentModel, id);
+        return await this.mongoDbInstance.upsertItem(this.fillInStatic(document, id, content));
     }
 
     fillInStatic (document, id, content) {

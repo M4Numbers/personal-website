@@ -58,11 +58,11 @@ class KinkHandler {
         this.KinkCollectionModel = this.mongoDbInstance.bootModel('KinkCollection', this.KinkCollection);
     }
 
-    findKinkByRawId(rawId) {
+    async findKinkByRawId(rawId) {
         return this.mongoDbInstance.findById(this.KinkCollectionModel, rawId);
     }
 
-    deleteKink(kinkId) {
+    async deleteKink(kinkId) {
         return this.mongoDbInstance.deleteById(this.KinkCollectionModel, kinkId);
     }
 
@@ -85,42 +85,37 @@ class KinkHandler {
         return query;
     }
 
-    findKinks(skip, limit, sort, category = '') {
+    async findKinks(skip, limit, sort, category = '') {
         return this.mongoDbInstance.findFromQuery(this.KinkCollectionModel, this.buildQuery(category), skip, limit, sort);
     }
 
-    findKinksByQuery(query, skip, limit, sort) {
+    async findKinksByQuery(query, skip, limit, sort) {
         return this.mongoDbInstance.findFromQuery(this.KinkCollectionModel, query, skip, limit, sort);
     }
 
-    getTotalKinkCount(category = '') {
+    async getTotalKinkCount(category = '') {
         return this.mongoDbInstance.getTotalCountFromQuery(this.KinkCollectionModel, this.buildQuery(category));
     }
 
-    upsertKink (kinkToUpsert) {
+    async upsertKink (kinkToUpsert) {
         return this.mongoDbInstance.upsertItem(kinkToUpsert);
     }
 
-    updateExistingKink(originalId, title, description, status, experience, coverImg, tags) {
-        return new Promise((resolve, reject) => {
-            this.findKinkByRawId(originalId).then(oldKink => {
-                if (typeof oldKink === 'undefined') {
-                    reject(new Error('Could not find given anime to update'));
-                } else {
-                    oldKink = this.fillInKink(oldKink, title, description, status, experience, coverImg, tags);
-                    this.upsertKink(oldKink).then(resolve, reject).catch(reject);
-                }
-            }, reject).catch(reject);
-        });
+    async updateExistingKink(originalId, title, description, status, experience, coverImg, tags) {
+        let oldKink = await this.findKinkByRawId(originalId);
+        if (typeof oldKink === 'undefined') {
+            throw new Error('Could not find given anime to update');
+        } else {
+            oldKink = this.fillInKink(oldKink, title, description, status, experience, coverImg, tags);
+            return await this.upsertKink(oldKink);
+        }
     }
 
-    addNewKink(title, description, status, experience, image, tags) {
-        return new Promise((resolve, reject) => {
-            let newKink = new this.KinkCollectionModel();
-            newKink._id = oId();
-            newKink = this.fillInKink(newKink, title, description, status, experience, image, tags);
-            this.upsertKink(newKink).then(resolve, reject).catch(reject);
-        });
+    async addNewKink(title, description, status, experience, image, tags) {
+        let newKink = new this.KinkCollectionModel();
+        newKink._id = oId();
+        newKink = this.fillInKink(newKink, title, description, status, experience, image, tags);
+        return await this.upsertKink(newKink);
     }
 
     fillInKink(kinkToUpdate, title, description, status, experience, image, tags) {

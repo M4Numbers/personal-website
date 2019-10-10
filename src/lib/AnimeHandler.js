@@ -130,7 +130,7 @@ class AnimeHandler {
             throw new Error('Could not find given show to update');
         } else {
             oldAnimeShow = this.fillInAnime(oldAnimeShow, reviewText, tagList);
-            await this.upsertAnime(oldAnimeShow);
+            return await this.upsertAnime(oldAnimeShow);
         }
     }
 
@@ -153,7 +153,7 @@ class AnimeHandler {
                 oldAnimeItem, ids, titles, myStatus, score, currentEps,
                 totalEps, airingStatus, synopsis, coverImgs, hash,
             );
-            await this.upsertAnime(oldAnimeItem);
+            return await this.upsertAnime(oldAnimeItem);
         }
     }
 
@@ -167,7 +167,7 @@ class AnimeHandler {
             newAnime, ids, titles, myStatus, score, currentEps,
             totalEps, airingStatus, synopsis, coverImgs, hash,
         );
-        await this.upsertAnime(newAnime).then(resolve, reject).catch(reject);
+        return await this.upsertAnime(newAnime);
     }
 
     fillInAnimeMetadata(animeToUpdate, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash) {
