@@ -22,16 +22,21 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const getAllAnime = async (req, res, next) => {
-    Promise.all(
-        [
-            animeHandlerInstance.findAnimeShows(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'title.romaji': 1}, false),
-            animeHandlerInstance.getTotalShowCount(false)
-        ]
-    ).then(([shows, totalCount]) => {
+    try {
+        const shows = await animeHandlerInstance.findAnimeShows(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+            10,
+            {'title.romaji': 1},
+            false,
+        );
+        const showCount = await animeHandlerInstance.getTotalShowCount(false);
+
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/admin/anime/admin_anime_view.njk', {
@@ -48,7 +53,7 @@ const getAllAnime = async (req, res, next) => {
 
             pagination: {
                 base_url: '/admin/anime?',
-                total: totalCount,
+                total: showCount,
                 page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
@@ -61,7 +66,9 @@ const getAllAnime = async (req, res, next) => {
             }
         }));
         next();
-    });
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = getAllAnime;

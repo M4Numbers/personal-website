@@ -22,15 +22,21 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const importHandler = require('../../../lib/ImportHandler');
 
 const refreshAnime = async function (req, res, next) {
-    req.log.info('Importing new anime into mongo...');
-    await importHandler.importAnimeIntoMongo();
-    res.contentType = 'application/json';
-    res.header('content-type', 'application/json');
-    res.send(200, {});
-    next();
+    try {
+        req.log.info('Importing new anime into mongo...');
+        await importHandler.importAnimeIntoMongo();
+        res.contentType = 'application/json';
+        res.header('content-type', 'application/json');
+        res.send(200, {});
+        next();
+    } catch (e) {
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = refreshAnime;

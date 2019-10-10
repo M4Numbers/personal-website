@@ -22,18 +22,21 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const postEditAnime = async (req, res, next) => {
-    animeHandlerInstance.editAnime(
-        req.params['animeId'], req.body['show-review'],
-        req.body['show-tags'].split(/, ?/)
-    ).then(() => {
+    try {
+        await animeHandlerInstance.editAnime(
+            req.params['animeId'], req.body['show-review'],
+            req.body['show-tags'].split(/, ?/),
+        );
         res.redirect(303, `/admin/anime/${req.params['animeId']}`, next);
-    }, rejection => {
-        req.log.warn({ anime_id: req.params['animeId'], error: rejection });
+    } catch (e) {
+        req.log.warn({ anime_id: req.params['animeId'], error: e });
         res.redirect(303, `/admin/anime/${req.params['animeId']}`, next);
-    });
+    }
 };
 
 module.exports = postEditAnime;
