@@ -43,7 +43,7 @@ const getAllBlogs = async (req, res, next) => {
             top_page: {
                 title: 'My Blog',
                 tagline: 'A list of scribbled things that have been made over the years.',
-                image_src: '/assets/images/handle_logo.png',
+                image_src: '/assets/images/J_handle.png',
                 image_alt: 'Main face of the site'
             },
 

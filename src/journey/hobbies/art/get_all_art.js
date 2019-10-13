@@ -45,7 +45,7 @@ const getAllArt = async (req, res, next) => {
             top_page: {
                 title: 'My Art Scrapbook',
                 tagline: 'A collection of the things that I have attempted to draw at some point or another',
-                image_src: '/assets/images/handle_logo.png',
+                image_src: '/assets/images/J_handle.png',
                 image_alt: 'Main face of the site'
             },
 

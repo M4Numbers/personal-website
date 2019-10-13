@@ -31,7 +31,7 @@ const generateHomepage = (req, res, next) => {
         top_page: {
             title: 'My Hobbies',
             tagline: 'I have several hobbies and interests... Some of them are somewhat worrying',
-            image_src: '/assets/images/handle_logo.png',
+            image_src: '/assets/images/J_handle.png',
             image_alt: 'Main face of the site'
         },
 

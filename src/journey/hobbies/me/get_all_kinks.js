@@ -44,7 +44,7 @@ const getAllKinks = async (req, res, next) => {
             top_page: {
                 title: 'Welcome to Me',
                 tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                image_src: '/assets/images/handle_logo.png',
+                image_src: '/assets/images/J_handle.png',
                 image_alt: 'My logo that I use to represent myself'
             },
 

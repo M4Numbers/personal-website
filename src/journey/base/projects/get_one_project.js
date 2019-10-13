@@ -37,7 +37,7 @@ const getOneProject = async (req, res, next) => {
                 top_page: {
                     title: project.long_title,
                     project_tags: project.tags,
-                    image_src: '/assets/images/handle_logo.png',
+                    image_src: '/assets/images/J_handle.png',
                     image_alt: 'Main face of the site',
                 },
 

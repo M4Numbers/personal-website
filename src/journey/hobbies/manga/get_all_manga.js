@@ -49,7 +49,7 @@ const getAllManga = async (req, res, next) => {
             top_page: {
                 title: 'My Manga Readlist',
                 tagline: 'A list of all the strange things that I have read at some point or another',
-                image_src: '/assets/images/handle_logo.png',
+                image_src: '/assets/images/J_handle.png',
                 image_alt: 'Main face of the site'
             },
 

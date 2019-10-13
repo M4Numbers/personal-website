@@ -46,7 +46,7 @@ const getAllStories = async (req, res, next) => {
             top_page: {
                 title: 'My Writings',
                 tagline: 'A collection of all the things that I\'ve scribbled down at one point or another',
-                image_src: '/assets/images/handle_logo.png',
+                image_src: '/assets/images/J_handle.png',
                 image_alt: 'Main face of the site'
             },
 
