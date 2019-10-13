@@ -29,17 +29,12 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const ArtHandler = require('../../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
-const viewAllArtPieces = async (req, res, next) => {
+const viewArtPiece = async (req, res, next) => {
     try {
-        const allArtPieces = await artHandlerInstance.findAllArtPieces(
-            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
-            10,
-            {'date_completed': -1}
-        );
-        const totalCount = artHandlerInstance.getTotalArtPieceCount();
+        const picture = await artHandlerInstance.findArtByRawId(req.params['artId']);
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/art/admin_art_view.njk', {
+        res.send(200, renderer.render('pages/admin/art/admin_art_view_single.njk', {
             top_page: {
                 title: 'Administrator Toolkit',
                 tagline: 'All the functions that the administrator of the site has available to them',
@@ -48,14 +43,7 @@ const viewAllArtPieces = async (req, res, next) => {
             },
 
             content: {
-                pictures: allArtPieces
-            },
-
-            pagination: {
-                base_url: '/admin/art?',
-                total: totalCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
+                picture: picture
             },
 
             head: {
@@ -67,9 +55,9 @@ const viewAllArtPieces = async (req, res, next) => {
         }));
         next();
     } catch (e) {
-        req.log.warn(`Unable to view all art pieces :: ${e.message}`);
+        req.log.warn(`Issue with viewing single art piece :: ${e.message}`);
         next(new errors.InternalServerError(e.message));
     }
 };
 
-module.exports = viewAllArtPieces;
+module.exports = viewArtPiece;
