@@ -28,19 +28,19 @@ const ArtHandler = require('../../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
 const postNewArtPiece = async (req, res, next) => {
-    try {
-        req.log.info(`Reading in new image from ${req.files['art-image'].path}`);
-        let imageAsBase64 = fs.readFileSync(req.files['art-image'].path, 'base64');
-        const savedArt = await artHandlerInstance.addNewArtItem(
-            req.body['art-title'], req.body['art-completed-date'],
-            imageAsBase64, req.body['art-tags'].split(/, ?/),
-            req.body['art-notes']
-        );
-        res.redirect(303, `/admin/art/${savedArt._id}`, next);
-    } catch (e) {
-        req.log.warn({ error: e });
-        res.redirect(303, '/admin/art/new', next);
-    }
+  try {
+    req.log.info(`Reading in new image from ${req.files['art-image'].path}`);
+    let imageAsBase64 = fs.readFileSync(req.files['art-image'].path, 'base64');
+    const savedArt = await artHandlerInstance.addNewArtItem(
+        req.body['art-title'], req.body['art-completed-date'],
+        imageAsBase64, req.body['art-tags'].split(/, ?/),
+        req.body['art-notes']
+    );
+    res.redirect(303, `/admin/art/${savedArt._id}`, next);
+  } catch (e) {
+    req.log.warn({error: e});
+    res.redirect(303, '/admin/art/new', next);
+  }
 };
 
 module.exports = postNewArtPiece;

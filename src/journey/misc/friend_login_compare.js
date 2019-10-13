@@ -28,21 +28,21 @@ const crypto = require('crypto');
 const tokenHandler = require('../../lib/login');
 
 const friendLoginCompare = async (req, res, next) => {
-    if (req.body['me_password'] && !(res.nunjucks['friendly'])) {
-        let hash = crypto.createHash('sha256').update(req.body['me_password']).digest('hex');
-        if (hash === config.get('protected.hash')) {
-            res.header(
-                'Set-Cookie',
-                `login-token=${await tokenHandler.generateSignature({ friendly: true })}; `
-                + `Max-Age=3600; `
-                + `Domain=${config.get('app.hostname')}; `
-                + `Secure; `
-                + `HttpOnly; `
-                + `SameSite=Strict`
-            );
-        }
+  if (req.body['me_password'] && !(res.nunjucks['friendly'])) {
+    let hash = crypto.createHash('sha256').update(req.body['me_password']).digest('hex');
+    if (hash === config.get('protected.hash')) {
+      res.header(
+          'Set-Cookie',
+          `login-token=${await tokenHandler.generateSignature({friendly: true})}; `
+          + `Max-Age=3600; `
+          + `Domain=${config.get('app.hostname')}; `
+          + `Secure; `
+          + `HttpOnly; `
+          + `SameSite=Strict`
+      );
     }
-    res.redirect(303, '/hobbies/me/login', next);
+  }
+  res.redirect(303, '/hobbies/me/login', next);
 };
 
 module.exports = friendLoginCompare;

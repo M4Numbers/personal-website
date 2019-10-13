@@ -34,12 +34,12 @@ const viewDeleteArtPiece = require('../../journey/admin/art/view_delete_art_piec
 const deleteArtPiece = require('../../journey/admin/art/delete_art_piece');
 
 module.exports = (server) => {
-    server.get('/admin/art', testLoggedIn, viewAllArtPieces);
-    server.get('/admin/art/new', testLoggedIn, viewCreateNewArtPiece);
-    server.post('/admin/art/new', testLoggedIn, postNewArtPiece);
-    server.get('/admin/art/:artId', testLoggedIn, viewArtPiece);
-    server.get('/admin/art/:artId/edit', testLoggedIn, viewEditArtPiece);
-    server.post('/admin/art/:artId/edit', testLoggedIn, submitEditedArtPiece);
-    server.get('/admin/art/:artId/delete', testLoggedIn, viewDeleteArtPiece);
-    server.post('/admin/art/:artId/delete', testLoggedIn, deleteArtPiece);
+  server.get('/admin/art', testLoggedIn, viewAllArtPieces);
+  server.get('/admin/art/new', testLoggedIn, viewCreateNewArtPiece);
+  server.post('/admin/art/new', testLoggedIn, postNewArtPiece);
+  server.get('/admin/art/:artId', testLoggedIn, viewArtPiece);
+  server.get('/admin/art/:artId/edit', testLoggedIn, viewEditArtPiece);
+  server.post('/admin/art/:artId/edit', testLoggedIn, submitEditedArtPiece);
+  server.get('/admin/art/:artId/delete', testLoggedIn, viewDeleteArtPiece);
+  server.post('/admin/art/:artId/delete', testLoggedIn, deleteArtPiece);
 };

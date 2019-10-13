@@ -28,47 +28,48 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const getAllAnime = async (req, res, next) => {
-    try {
-        const shows = await animeHandlerInstance.findAnimeShows(
-            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
-            10,
-            {'title.romaji': 1},
-            false,
-        );
-        const showCount = await animeHandlerInstance.getTotalShowCount(false);
+  try {
+    const shows = await animeHandlerInstance.findAnimeShows(
+        Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+        10,
+        {'title.romaji': 1},
+        false,
+    );
+    const showCount = await animeHandlerInstance.getTotalShowCount(false);
 
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/anime/admin_anime_view.njk', {
-            top_page: {
-                title: 'Administrator Toolkit',
-                tagline: 'All the functions that the administrator of the site has available to them',
-                fa_type: 'fas',
-                fa_choice: 'fa-toolbox'
-            },
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/anime/admin_anime_view.njk', {
+      top_page: {
+        title: 'Administrator Toolkit',
+        tagline: 'All the functions that the administrator of the site has available to them',
+        fa_type: 'fas',
+        fa_choice: 'fa-toolbox'
+      },
 
-            content: {
-                shows: shows
-            },
+      content: {
+        shows: shows
+      },
 
-            pagination: {
-                base_url: '/admin/anime?',
-                total: showCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
-            },
+      pagination: {
+        base_url: '/admin/anime?',
+        total: showCount,
+        page: Math.max((req.query['page'] || 1), 1),
+        page_size: 10
+      },
 
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'admin',
-                current_sub_page: 'anime-view'
-            }
-        }));
-        next();
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers',
+        description: 'Home to the wild things',
+        current_page: 'admin',
+        current_sub_page: 'anime-view'
+      }
+    }));
+    next();
+  } catch (e) {
+    req.log.warn(`Issues found when getting all anime shows :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = getAllAnime;

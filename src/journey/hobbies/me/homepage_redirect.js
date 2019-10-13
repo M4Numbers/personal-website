@@ -23,7 +23,7 @@
  */
 
 const homepageRedirect = async (req, res, next) => {
-    res.redirect(303, '/hobbies/me/overview', next);
+  res.redirect(303, '/hobbies/me/overview', next);
 };
 
 module.exports = homepageRedirect;

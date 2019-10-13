@@ -32,8 +32,8 @@ const getAllKinks = require('../../../journey/hobbies/me/get_all_kinks');
 const getSingleKink = require('../../../journey/hobbies/me/get_single_kink');
 
 module.exports = (server) => {
-    server.get('/hobbies/me/over-18', testFriendLoggedIn, generateOver18Page);
-    server.post('/hobbies/me/over-18', testFriendLoggedIn, evaluateOver18);
-    server.get('/hobbies/me/fetishes', testFriendLoggedIn, over18Check, getAllKinks);
-    server.get('/hobbies/me/fetishes/:kinkId', testFriendLoggedIn, over18Check, getSingleKink);
+  server.get('/hobbies/me/over-18', testFriendLoggedIn, generateOver18Page);
+  server.post('/hobbies/me/over-18', testFriendLoggedIn, evaluateOver18);
+  server.get('/hobbies/me/fetishes', testFriendLoggedIn, over18Check, getAllKinks);
+  server.get('/hobbies/me/fetishes/:kinkId', testFriendLoggedIn, over18Check, getSingleKink);
 };

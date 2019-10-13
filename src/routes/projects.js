@@ -26,6 +26,6 @@ const getAllProjects = require('../journey/base/projects/get_all_projects');
 const getOneProject = require('../journey/base/projects/get_one_project');
 
 module.exports = (server) => {
-    getAllProjects(server);
-    getOneProject(server);
+  getAllProjects(server);
+  getOneProject(server);
 };

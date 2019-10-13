@@ -23,11 +23,11 @@
  */
 
 const testFriendLoggedIn = async (req, res, next) => {
-    if (!res.nunjucks['friendly']) {
-        res.redirect(303, '/hobbies/me/login', next);
-    } else {
-        next();
-    }
+  if (!res.nunjucks['friendly']) {
+    res.redirect(303, '/hobbies/me/login', next);
+  } else {
+    next();
+  }
 };
 
 module.exports = testFriendLoggedIn;

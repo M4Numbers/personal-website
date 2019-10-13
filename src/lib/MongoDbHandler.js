@@ -29,82 +29,82 @@ const logger = require('./logger').bunyanLogger();
 
 class MongoDbHandler {
 
-    static getMongo() {
-        if (this.mongoDbInstance === undefined) {
-            this.mongoDbInstance = new MongoDbHandler();
-        }
-        return this.mongoDbInstance;
+  static getMongo() {
+    if (this.mongoDbInstance === undefined) {
+      this.mongoDbInstance = new MongoDbHandler();
     }
+    return this.mongoDbInstance;
+  }
 
-    constructor () {
-        this.connection = mongoose.createConnection(config.get('database.uri'), { useNewUrlParser: true });
-    }
+  constructor() {
+    this.connection = mongoose.createConnection(config.get('database.uri'), {useNewUrlParser: true});
+  }
 
-    bootModel (modelName, model) {
-        return this.connection.model(modelName, model);
-    }
+  bootModel(modelName, model) {
+    return this.connection.model(modelName, model);
+  }
 
-    async findById (model, id) {
-        try {
-            return await model.findById(id)
-        } catch (e) {
-            logger.warn(e.message);
-            throw e;
-        }
+  async findById(model, id) {
+    try {
+      return await model.findById(id);
+    } catch (e) {
+      logger.warn(e.message);
+      throw e;
     }
+  }
 
-    async findOrCreate (model, id) {
-        try {
-            return await model.findOneAndUpdate(
-                {'_id': id},
-                {},
-                {upsert: true, new: true}
-            );
-        } catch (err) {
-            logger.warn(err.message);
-            throw err;
-        }
+  async findOrCreate(model, id) {
+    try {
+      return await model.findOneAndUpdate(
+          {'_id': id},
+          {},
+          {upsert: true, new: true}
+      );
+    } catch (err) {
+      logger.warn(err.message);
+      throw err;
     }
+  }
 
-    async deleteById (model, id) {
-        try {
-            return await model.deleteOne({'_id': id})
-        } catch (e) {
-            logger.warn(e.message);
-            throw e;
-        }
+  async deleteById(model, id) {
+    try {
+      return await model.deleteOne({'_id': id});
+    } catch (e) {
+      logger.warn(e.message);
+      throw e;
     }
+  }
 
-    async findFromQuery (model, query, skip, limit, sort) {
-        try {
-            return await model.find(
-                query,
-                {},
-                {skip: skip, limit: limit, sort: sort}
-            );
-        } catch (e) {
-            logger.warn(e.message);
-            throw e;
-        }
+  async findFromQuery(model, query, skip, limit, sort) {
+    try {
+      return await model.find(
+          query,
+          {},
+          {skip: skip, limit: limit, sort: sort}
+      );
+    } catch (e) {
+      logger.warn(e.message);
+      throw e;
     }
+  }
 
-    async getTotalCountFromQuery(model, query) {
-        try {
-            return await model.countDocuments(query);
-        } catch (e) {
-            logger.warn(e.message);
-            throw e;
-        }
+  async getTotalCountFromQuery(model, query) {
+    try {
+      return await model.countDocuments(query);
+    } catch (e) {
+      logger.warn(e.message);
+      throw e;
     }
+  }
 
-    async upsertItem(itemToSave) {
-        try {
-            return await itemToSave.save();
-        } catch (e) {
-            logger.warn(e.message);
-            throw e;
-        }
+  async upsertItem(itemToSave) {
+    try {
+      return await itemToSave.save();
+    } catch (e) {
+      logger.warn(e.message);
+      throw e;
     }
+  }
 
 }
 

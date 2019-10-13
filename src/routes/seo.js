@@ -26,6 +26,6 @@ const robots = require('../journey/seo/robots');
 const sitemap = require('../journey/seo/sitemap');
 
 module.exports = (server) => {
-    server.get('/robots.txt', robots);
-    server.get('/sitemap.txt', sitemap);
+  server.get('/robots.txt', robots);
+  server.get('/sitemap.txt', sitemap);
 };

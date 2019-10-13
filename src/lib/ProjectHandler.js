@@ -32,83 +32,83 @@ const MongoDbHandler = require('./MongoDbHandler');
 
 class ProjectHandler {
 
-    static getHandler() {
-        if (this.projectHandlerInstance === undefined) {
-            this.projectHandlerInstance = new ProjectHandler();
-        }
-        return this.projectHandlerInstance;
+  static getHandler() {
+    if (this.projectHandlerInstance === undefined) {
+      this.projectHandlerInstance = new ProjectHandler();
     }
+    return this.projectHandlerInstance;
+  }
 
-    constructor () {
-        this.mongoDbInstance = MongoDbHandler.getMongo();
+  constructor() {
+    this.mongoDbInstance = MongoDbHandler.getMongo();
 
-        this.DevProject = new Schema({
-            '_id': ObjectId,
-            'short_title': String,
-            'long_title': String,
-            'public': Boolean,
-            'description': String,
-            'time_posted': {type: Date, default: Date.now()},
-            'time_updated': {type: Date, default: Date.now()},
-            'tags': Array,
-            'comments': Array
-        });
-        this.DevProjectModel = this.mongoDbInstance.bootModel('DevProject', this.DevProject);
+    this.DevProject = new Schema({
+      '_id': ObjectId,
+      'short_title': String,
+      'long_title': String,
+      'public': Boolean,
+      'description': String,
+      'time_posted': {type: Date, default: Date.now()},
+      'time_updated': {type: Date, default: Date.now()},
+      'tags': Array,
+      'comments': Array
+    });
+    this.DevProjectModel = this.mongoDbInstance.bootModel('DevProject', this.DevProject);
+  }
+
+  async findProject(projectId) {
+    return this.mongoDbInstance.findById(this.DevProjectModel, projectId);
+  }
+
+  async deleteProject(projectId) {
+    return this.mongoDbInstance.deleteById(this.DevProjectModel, projectId);
+  }
+
+  buildQuery(visible = false) {
+    let query = {};
+    if (visible === true) {
+      query['public'] = true;
     }
+    return query;
+  }
 
-    async findProject (projectId) {
-        return this.mongoDbInstance.findById(this.DevProjectModel, projectId);
-    }
+  async findProjects(skip, limit, sort, visible = true) {
+    return this.mongoDbInstance.findFromQuery(this.DevProjectModel, this.buildQuery(visible), skip, limit, sort);
+  }
 
-    async deleteProject (projectId) {
-        return this.mongoDbInstance.deleteById(this.DevProjectModel, projectId);
-    }
+  async getTotalProjectCount(visible = true) {
+    return this.mongoDbInstance.getTotalCountFromQuery(this.DevProjectModel, this.buildQuery(visible));
+  }
 
-    buildQuery (visible=false) {
-        let query = {};
-        if (visible === true) {
-            query['public'] = true;
-        }
-        return query;
+  async editProject(projectId, title, text, publiclyVisible, tags) {
+    let oldDevProject = await this.findProject(projectId);
+    if (typeof oldDevProject === 'undefined') {
+      throw new Error('Could not find given blog to update');
+    } else {
+      oldDevProject = this.fillInProject(oldDevProject, title, text, publiclyVisible, tags);
+      return await this.mongoDbInstance.upsertItem(oldDevProject);
     }
+  }
 
-    async findProjects (skip, limit, sort, visible=true) {
-        return this.mongoDbInstance.findFromQuery(this.DevProjectModel, this.buildQuery(visible), skip, limit, sort);
-    }
+  async insertProject(title, text, publiclyVisible, tags) {
+    let newDevProject = new this.DevProjectModel();
+    newDevProject._id = oId();
+    newDevProject = this.fillInProject(newDevProject, title, text, publiclyVisible, tags);
+    return await this.mongoDbInstance.upsertItem(newDevProject);
+  }
 
-    async getTotalProjectCount (visible=true) {
-        return this.mongoDbInstance.getTotalCountFromQuery(this.DevProjectModel, this.buildQuery(visible));
-    }
-
-    async editProject (projectId, title, text, publiclyVisible, tags) {
-        let oldDevProject = await this.findProject(projectId);
-        if (typeof oldDevProject === 'undefined') {
-            throw new Error('Could not find given blog to update');
-        } else {
-            oldDevProject = this.fillInProject(oldDevProject, title, text, publiclyVisible, tags);
-            return await this.mongoDbInstance.upsertItem(oldDevProject);
-        }
-    }
-
-    async insertProject (title, text, publiclyVisible, tags) {
-        let newDevProject = new this.DevProjectModel();
-        newDevProject._id = oId();
-        newDevProject = this.fillInProject(newDevProject, title, text, publiclyVisible, tags);
-        return await this.mongoDbInstance.upsertItem(newDevProject);
-    }
-
-    fillInProject (project, title, text, publiclyVisible, tags) {
-        project.short_title = title
-            .replace(/ /g, '-')
-            .replace(/\p/, '')
-            .toLocaleLowerCase();
-        project.long_title = title;
-        project.public = publiclyVisible;
-        project.description = text;
-        project.tags = tags;
-        project.time_updated = Date.now();
-        return project;
-    }
+  fillInProject(project, title, text, publiclyVisible, tags) {
+    project.short_title = title
+        .replace(/ /g, '-')
+        .replace(/\p/, '')
+        .toLocaleLowerCase();
+    project.long_title = title;
+    project.public = publiclyVisible;
+    project.description = text;
+    project.tags = tags;
+    project.time_updated = Date.now();
+    return project;
+  }
 }
 
 ProjectHandler.projectHandlerInstance = undefined;

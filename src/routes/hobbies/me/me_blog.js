@@ -28,6 +28,6 @@ const getAllBlogPosts = require('../../../journey/hobbies/me/get_all_extended_bl
 const getSingleBlogPost = require('../../../journey/hobbies/me/get_single_extended_blog');
 
 module.exports = (server) => {
-    server.get('/hobbies/me/extended-blog', testFriendLoggedIn, getAllBlogPosts);
-    server.get('/hobbies/me/extended-blog/:blogId', testFriendLoggedIn, getSingleBlogPost);
+  server.get('/hobbies/me/extended-blog', testFriendLoggedIn, getAllBlogPosts);
+  server.get('/hobbies/me/extended-blog/:blogId', testFriendLoggedIn, getSingleBlogPost);
 };

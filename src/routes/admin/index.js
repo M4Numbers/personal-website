@@ -35,16 +35,16 @@ const handleAdminMangaEndpoints = require('./admin_manga');
 const handleAdminStaticEndpoints = require('./admin_static');
 
 module.exports = (server) => {
-    handleLoginEndpoints(server);
-    handleAdminHomepage(server);
-    handleAdminBlogEndpoints(server);
-    handleAdminProjectEndpoints(server);
-    handleAdminArtEndpoints(server);
-    handleAdminStoryEndpoints(server);
-    handleAdminChapterEndpoints(server);
-    handleAdminKinkEndpoints(server);
-    handleAdminAnimeEndpoints(server);
-    handleAdminMangaEndpoints(server);
-    handleAdminStaticEndpoints(server);
-    return server;
+  handleLoginEndpoints(server);
+  handleAdminHomepage(server);
+  handleAdminBlogEndpoints(server);
+  handleAdminProjectEndpoints(server);
+  handleAdminArtEndpoints(server);
+  handleAdminStoryEndpoints(server);
+  handleAdminChapterEndpoints(server);
+  handleAdminKinkEndpoints(server);
+  handleAdminAnimeEndpoints(server);
+  handleAdminMangaEndpoints(server);
+  handleAdminStaticEndpoints(server);
+  return server;
 };

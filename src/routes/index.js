@@ -9,14 +9,14 @@ const loadAdminEndpoints = require('./admin');
 const loadStaticsEndpoints = require('./statics');
 
 module.exports = (server) => {
-    loadAssetEndpoints(server);
-    loadSEOEndpoints(server);
-    loadSearchEndpoint(server);
-    loadHomepageEndpoints(server);
-    loadBlogEndpoints(server);
-    loadProjectEndpoints(server);
-    loadHobbiesEndpoints(server);
-    loadStaticsEndpoints(server);
-    loadAdminEndpoints(server);
-    return server;
+  loadAssetEndpoints(server);
+  loadSEOEndpoints(server);
+  loadSearchEndpoint(server);
+  loadHomepageEndpoints(server);
+  loadBlogEndpoints(server);
+  loadProjectEndpoints(server);
+  loadHobbiesEndpoints(server);
+  loadStaticsEndpoints(server);
+  loadAdminEndpoints(server);
+  return server;
 };

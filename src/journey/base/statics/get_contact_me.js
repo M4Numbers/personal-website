@@ -30,35 +30,36 @@ const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler()
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
 const getContactMe = async (req, res, next) => {
-    try {
-        const staticContent = await staticHandlerInstance.findStatic(StaticDocumentTypes.CONTACT_ME);
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/contact.njk', {
-            top_page: {
-                title: 'Contact Me',
-                tagline: 'If, for whatever reason, you want to get in touch with me, use the links below to find my other' +
-                    ' hidey-holes.',
-                fa_type: 'fas',
-                fa_choice: 'fa-phone'
-            },
+  try {
+    const staticContent = await staticHandlerInstance.findStatic(StaticDocumentTypes.CONTACT_ME);
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/contact.njk', {
+      top_page: {
+        title: 'Contact Me',
+        tagline: 'If, for whatever reason, you want to get in touch with me, use the links below to find my other' +
+            ' hidey-holes.',
+        fa_type: 'fas',
+        fa_choice: 'fa-phone'
+      },
 
-            content: {
-                options: (staticContent || {}).content
-            },
+      content: {
+        options: (staticContent || {}).content
+      },
 
-            head: {
-                title: 'J4Numbers :: Contact Me',
-                description: 'Home to the wild things',
-                current_page: 'contact'
-            }
-        }));
-        next();
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers :: Contact Me',
+        description: 'Home to the wild things',
+        current_page: 'contact'
+      }
+    }));
+    next();
+  } catch (e) {
+    req.log.warn(`Issue found when trying to get contact me page :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = (server) => {
-    server.get('/contact', getContactMe);
+  server.get('/contact', getContactMe);
 };

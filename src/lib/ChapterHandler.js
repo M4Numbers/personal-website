@@ -34,87 +34,87 @@ const logger = require('./logger').bunyanLogger();
 
 class ChapterHandler {
 
-    static getHandler () {
-        if (this.chapterHandlerInstance === undefined) {
-            logger.debug('Starting up a new instance of the chapter database handler');
-            this.chapterHandlerInstance = new ChapterHandler();
-        }
-        return this.chapterHandlerInstance;
+  static getHandler() {
+    if (this.chapterHandlerInstance === undefined) {
+      logger.debug('Starting up a new instance of the chapter database handler');
+      this.chapterHandlerInstance = new ChapterHandler();
     }
+    return this.chapterHandlerInstance;
+  }
 
-    constructor () {
-        this.mongoDbInstance = MongoDbHandler.getMongo();
+  constructor() {
+    this.mongoDbInstance = MongoDbHandler.getMongo();
 
-        this.Chapter = new Schema({
-            '_id': ObjectId,
-            'parent_story_id': String,
-            'chapter_number': Number,
-            'chapter_title': String,
-            'chapter_text': String,
-            'time_posted': {type: Date, default: Date.now()},
-            'time_updated': {type: Date, default: Date.now()},
-            'author_notes': String
-        });
-        this.ChapterModel = this.mongoDbInstance.bootModel('Chapter', this.Chapter);
+    this.Chapter = new Schema({
+      '_id': ObjectId,
+      'parent_story_id': String,
+      'chapter_number': Number,
+      'chapter_title': String,
+      'chapter_text': String,
+      'time_posted': {type: Date, default: Date.now()},
+      'time_updated': {type: Date, default: Date.now()},
+      'author_notes': String
+    });
+    this.ChapterModel = this.mongoDbInstance.bootModel('Chapter', this.Chapter);
+  }
+
+  async findChapterByRawId(rawId) {
+    return this.mongoDbInstance.findById(this.ChapterModel, rawId);
+  }
+
+  buildQuery(storyId) {
+    return {
+      'parent_story_id': {'$eq': storyId}
+    };
+  }
+
+  async findChaptersByStory(storyId, skip = 0, limit = 25, sort = {'chapter_number': 1}) {
+    return this.mongoDbInstance.findFromQuery(this.ChapterModel, this.buildQuery(storyId), skip, limit, sort);
+  }
+
+  async findChapterByStoryAndNumber(storyId, chapterNumber) {
+    return this.mongoDbInstance.findFromQuery(this.ChapterModel, {
+      'parent_story_id': {'$eq': storyId},
+      'chapter_number': {'$eq': chapterNumber}
+    }, 0, 1, {});
+  }
+
+  async upsertChapter(chapterToUpsert) {
+    return this.mongoDbInstance.upsertItem(chapterToUpsert);
+  }
+
+  async deleteChapter(chapterIdToRemove) {
+    return this.mongoDbInstance.deleteById(this.ChapterModel, chapterIdToRemove);
+  }
+
+  async updateExistingChapter(originalId, chapterNumber, title, text, notes) {
+    logger.info(`Updating chapter with raw id of ${originalId}`);
+    let oldChapter = await this.findChapterByRawId(originalId);
+    if (typeof oldChapter === 'undefined') {
+      logger.warn('Could not find given chapter to update');
+      throw new Error('Could not find given chapter to update');
+    } else {
+      oldChapter = this.fillInChapterMetadata(oldChapter, chapterNumber, title, text, notes);
+      return await this.upsertChapter(oldChapter);
     }
+  }
 
-    async findChapterByRawId (rawId) {
-        return this.mongoDbInstance.findById(this.ChapterModel, rawId);
-    }
+  async addNewChapter(parentStoryId, chapterNumber, title, text, notes) {
+    let newChapter = new this.ChapterModel();
+    newChapter._id = oId();
+    newChapter.parent_story_id = parentStoryId;
+    newChapter = this.fillInChapterMetadata(newChapter, chapterNumber, title, text, notes);
+    return await this.upsertChapter(newChapter);
+  }
 
-    buildQuery (storyId) {
-        return {
-            'parent_story_id': {'$eq': storyId}
-        };
-    }
-
-    async findChaptersByStory (storyId, skip=0, limit=25, sort={'chapter_number': 1}) {
-        return this.mongoDbInstance.findFromQuery(this.ChapterModel, this.buildQuery(storyId), skip, limit, sort);
-    }
-
-    async findChapterByStoryAndNumber (storyId, chapterNumber) {
-        return this.mongoDbInstance.findFromQuery(this.ChapterModel, {
-            'parent_story_id': {'$eq': storyId},
-            'chapter_number': {'$eq': chapterNumber}
-        }, 0, 1, {});
-    }
-
-    async upsertChapter (chapterToUpsert) {
-        return this.mongoDbInstance.upsertItem(chapterToUpsert);
-    }
-
-    async deleteChapter (chapterIdToRemove) {
-        return this.mongoDbInstance.deleteById(this.ChapterModel, chapterIdToRemove);
-    }
-
-    async updateExistingChapter (originalId, chapterNumber, title, text, notes) {
-        logger.info(`Updating chapter with raw id of ${originalId}`);
-        let oldChapter = await this.findChapterByRawId(originalId);
-        if (typeof oldChapter === 'undefined') {
-            logger.warn('Could not find given chapter to update');
-            throw new Error('Could not find given chapter to update');
-        } else {
-            oldChapter = this.fillInChapterMetadata(oldChapter, chapterNumber, title, text, notes);
-            return await this.upsertChapter(oldChapter);
-        }
-    }
-
-    async addNewChapter (parentStoryId, chapterNumber, title, text, notes) {
-        let newChapter = new this.ChapterModel();
-        newChapter._id = oId();
-        newChapter.parent_story_id = parentStoryId;
-        newChapter = this.fillInChapterMetadata(newChapter, chapterNumber, title, text, notes);
-        return await this.upsertChapter(newChapter);
-    }
-
-    fillInChapterMetadata (chapterToUpdate, chapterNumber, title, text, notes) {
-        chapterToUpdate.chapter_number = chapterNumber;
-        chapterToUpdate.chapter_title = title;
-        chapterToUpdate.chapter_text = text;
-        chapterToUpdate.author_notes = notes;
-        chapterToUpdate.time_updated = Date.now();
-        return chapterToUpdate;
-    }
+  fillInChapterMetadata(chapterToUpdate, chapterNumber, title, text, notes) {
+    chapterToUpdate.chapter_number = chapterNumber;
+    chapterToUpdate.chapter_title = title;
+    chapterToUpdate.chapter_text = text;
+    chapterToUpdate.author_notes = notes;
+    chapterToUpdate.time_updated = Date.now();
+    return chapterToUpdate;
+  }
 
 }
 

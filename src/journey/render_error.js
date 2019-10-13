@@ -23,23 +23,23 @@
  */
 
 const renderError = async (error, req, res) => {
-    // set locals, only providing error in development
-    res.locals.message = error.message;
-    res.locals.error = req.app.get('env') === 'development' ? error : {};
+  // set locals, only providing error in development
+  res.locals.message = error.message;
+  res.locals.error = req.app.get('env') === 'development' ? error : {};
 
-    // render the error page
-    res.status(error.status || 500);
-    res.render('pages/error', {
-        head: {
-            title: `${error.status} :: ${error.message}`,
-            description: 'Home to the wild things'
-        },
-        error: {
-            message: error.message,
-            status: error.status,
-            stack: error.stack
-        }
-    });
+  // render the error page
+  res.status(error.status || 500);
+  res.render('pages/error', {
+    head: {
+      title: `${error.status} :: ${error.message}`,
+      description: 'Home to the wild things'
+    },
+    error: {
+      message: error.message,
+      status: error.status,
+      stack: error.stack
+    }
+  });
 };
 
 module.exports = renderError;

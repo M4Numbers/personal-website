@@ -23,11 +23,11 @@
  */
 
 const over18Check = (req, res, next) => {
-    if (res.cookies['over-18'] === 'yes') {
-        next();
-    } else {
-        res.redirect(303, '/hobbies/me/over-18', next);
-    }
+  if (res.cookies['over-18'] === 'yes') {
+    next();
+  } else {
+    res.redirect(303, '/hobbies/me/over-18', next);
+  }
 };
 
 module.exports = over18Check;

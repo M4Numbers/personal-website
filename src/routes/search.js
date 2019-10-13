@@ -24,6 +24,6 @@
 
 const doSearch = require('../journey/base/search/do_search');
 
-module.exports = (server) =>{
-    doSearch(server);
+module.exports = (server) => {
+  doSearch(server);
 };

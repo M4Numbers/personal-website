@@ -26,6 +26,6 @@ const viewAdminLogin = require('../../journey/misc/admin_login_view');
 const postAdminLogin = require('../../journey/misc/admin_login_compare');
 
 module.exports = (server) => {
-    server.get('/admin/login', viewAdminLogin);
-    server.post('/admin/login', postAdminLogin);
+  server.get('/admin/login', viewAdminLogin);
+  server.post('/admin/login', postAdminLogin);
 };

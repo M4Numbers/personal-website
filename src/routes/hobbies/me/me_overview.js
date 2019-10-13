@@ -28,6 +28,6 @@ const homepageRadar = require('../../../journey/hobbies/me/homepage_redirect');
 const viewOverviewPage = require('../../../journey/hobbies/me/generate_overview');
 
 module.exports = (server) => {
-    server.get('/hobbies/me/', testFriendLoggedIn, homepageRadar);
-    server.get('/hobbies/me/overview', testFriendLoggedIn, viewOverviewPage);
+  server.get('/hobbies/me/', testFriendLoggedIn, homepageRadar);
+  server.get('/hobbies/me/overview', testFriendLoggedIn, viewOverviewPage);
 };

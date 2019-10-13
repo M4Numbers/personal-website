@@ -27,30 +27,30 @@ const config = require('config');
 const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const friendLoginView = async (req, res, next) => {
-    if (res.nunjucks['friendly']) {
-        res.redirect(303, '/hobbies/me', next);
-    } else {
-        res.send(200, renderer.render('pages/me/me_login.njk', {
-            top_page: {
-                title: 'Test Your Knowledge',
-                tagline: 'Log into the site as someone who knows me',
-                fa_type: 'fas',
-                fa_choice: 'fa-key'
-            },
+  if (res.nunjucks['friendly']) {
+    res.redirect(303, '/hobbies/me', next);
+  } else {
+    res.send(200, renderer.render('pages/me/me_login.njk', {
+      top_page: {
+        title: 'Test Your Knowledge',
+        tagline: 'Log into the site as someone who knows me',
+        fa_type: 'fas',
+        fa_choice: 'fa-key'
+      },
 
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'me_login'
-            },
+      head: {
+        title: 'J4Numbers',
+        description: 'Home to the wild things',
+        current_page: 'me_login'
+      },
 
-            content: {
-                question: config.get('protected.question'),
-                hint: config.get('protected.hint')
-            }
-        }));
-        next();
-    }
+      content: {
+        question: config.get('protected.question'),
+        hint: config.get('protected.hint')
+      }
+    }));
+    next();
+  }
 };
 
 module.exports = friendLoginView;

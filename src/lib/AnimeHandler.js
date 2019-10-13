@@ -34,155 +34,155 @@ const logger = require('./logger').bunyanLogger();
 
 class AnimeHandler {
 
-    static getHandler() {
-        if (this.animeHandlerInstance === undefined) {
-            logger.debug('Starting up a new instance of the anime database handler');
-            this.animeHandlerInstance = new AnimeHandler();
-        }
-        return this.animeHandlerInstance;
+  static getHandler() {
+    if (this.animeHandlerInstance === undefined) {
+      logger.debug('Starting up a new instance of the anime database handler');
+      this.animeHandlerInstance = new AnimeHandler();
     }
+    return this.animeHandlerInstance;
+  }
 
-    constructor() {
-        this.mongoDbInstance = MongoDbHandler.getMongo();
+  constructor() {
+    this.mongoDbInstance = MongoDbHandler.getMongo();
 
-        this.AnimeShow = new Schema({
-            '_id': ObjectId,
-            'last_hash': String,
-            'anime_id': {
-                'ani_list': Number,
-                'my_anime_list': Number,
-                'ani_db': Number
-            },
-            'anime_status': String,
-            'title': {
-                'romaji': String,
-                'english': String,
-                'native': String
-            },
-            'score': Number,
-            'status': String,
-            'total_eps': Number,
-            'current_ep': Number,
-            'synopsis': String,
-            'cover_img': {
-                'large': String,
-                'medium': String
-            },
-            'tags': Array,
-            'time_updated': {type: Date, default: Date.now()},
-            'review': String
-        });
-        this.AnimeShowModel = this.mongoDbInstance.bootModel('AnimeShow', this.AnimeShow);
+    this.AnimeShow = new Schema({
+      '_id': ObjectId,
+      'last_hash': String,
+      'anime_id': {
+        'ani_list': Number,
+        'my_anime_list': Number,
+        'ani_db': Number
+      },
+      'anime_status': String,
+      'title': {
+        'romaji': String,
+        'english': String,
+        'native': String
+      },
+      'score': Number,
+      'status': String,
+      'total_eps': Number,
+      'current_ep': Number,
+      'synopsis': String,
+      'cover_img': {
+        'large': String,
+        'medium': String
+      },
+      'tags': Array,
+      'time_updated': {type: Date, default: Date.now()},
+      'review': String
+    });
+    this.AnimeShowModel = this.mongoDbInstance.bootModel('AnimeShow', this.AnimeShow);
+  }
+
+  async findAnimeByAniListId(aniListId) {
+    return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, {'anime_id.ani_list': aniListId}, 0, 1, {});
+  }
+
+  async findAnimeByRawId(rawId) {
+    return this.mongoDbInstance.findById(this.AnimeShowModel, rawId);
+  }
+
+  buildQuery(status = '') {
+    let query = {};
+    if (status !== 'all') {
+      if (status === 'seen') {
+        query['current_ep'] = {$gte: 1};
+      }
+      if (status === 'completed') {
+        query['status'] = 'COMPLETED';
+      }
+      if (status === 'watching') {
+        query['status'] = 'CURRENT';
+      }
+      if (status === 'held') {
+        query['status'] = 'PAUSED';
+      }
+      if (status === 'dropped') {
+        query['status'] = 'DROPPED';
+      }
+      if (status === 'planned') {
+        query['status'] = 'PLANNING';
+      }
     }
+    return query;
+  }
 
-    async findAnimeByAniListId(aniListId) {
-        return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, {'anime_id.ani_list': aniListId}, 0, 1, {});
-    }
+  async findAnimeShows(skip, limit, sort, category = '') {
+    return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, this.buildQuery(category), skip, limit, sort);
+  }
 
-    async findAnimeByRawId(rawId) {
-        return this.mongoDbInstance.findById(this.AnimeShowModel, rawId);
-    }
+  async findAnimeShowsByQuery(query, skip, limit, sort) {
+    return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, query, skip, limit, sort);
+  }
 
-    buildQuery(status = '') {
-        let query = {};
-        if (status !== 'all') {
-            if (status === 'seen') {
-                query['current_ep'] = {$gte: 1};
-            }
-            if (status === 'completed') {
-                query['status'] = 'COMPLETED';
-            }
-            if (status === 'watching') {
-                query['status'] = 'CURRENT';
-            }
-            if (status === 'held') {
-                query['status'] = 'PAUSED';
-            }
-            if (status === 'dropped') {
-                query['status'] = 'DROPPED';
-            }
-            if (status === 'planned') {
-                query['status'] = 'PLANNING';
-            }
-        }
-        return query;
-    }
+  async getTotalShowCount(category = '') {
+    return this.mongoDbInstance.getTotalCountFromQuery(this.AnimeShowModel, this.buildQuery(category));
+  }
 
-    async findAnimeShows(skip, limit, sort, category = '') {
-        return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, this.buildQuery(category), skip, limit, sort);
-    }
+  async upsertAnime(animeToUpsert) {
+    return this.mongoDbInstance.upsertItem(animeToUpsert);
+  }
 
-    async findAnimeShowsByQuery(query, skip, limit, sort) {
-        return this.mongoDbInstance.findFromQuery(this.AnimeShowModel, query, skip, limit, sort);
+  async editAnime(animeId, reviewText, tagList) {
+    let oldAnimeShow = await this.findAnimeByRawId(animeId);
+    if (typeof oldAnimeShow === 'undefined') {
+      throw new Error('Could not find given show to update');
+    } else {
+      oldAnimeShow = this.fillInAnime(oldAnimeShow, reviewText, tagList);
+      return await this.upsertAnime(oldAnimeShow);
     }
+  }
 
-    async getTotalShowCount(category = '') {
-        return this.mongoDbInstance.getTotalCountFromQuery(this.AnimeShowModel, this.buildQuery(category));
-    }
+  fillInAnime(animeToUpdate, reviewText, tagList) {
+    animeToUpdate.review = reviewText;
+    animeToUpdate.tags = tagList;
+    animeToUpdate.time_updated = Date.now();
+    return animeToUpdate;
+  }
 
-    async upsertAnime (animeToUpsert) {
-        return this.mongoDbInstance.upsertItem(animeToUpsert);
+  async updateExistingAnime(
+      originalId, ids, titles, myStatus, score, currentEps, totalEps,
+      airingStatus, synopsis, coverImgs, hash,
+  ) {
+    let oldAnimeItem = await this.findAnimeByRawId(originalId);
+    if (typeof oldAnimeItem === 'undefined') {
+      throw new Error('Could not find given anime to update');
+    } else {
+      oldAnimeItem = this.fillInAnimeMetadata(
+          oldAnimeItem, ids, titles, myStatus, score, currentEps,
+          totalEps, airingStatus, synopsis, coverImgs, hash,
+      );
+      return await this.upsertAnime(oldAnimeItem);
     }
+  }
 
-    async editAnime(animeId, reviewText, tagList) {
-        let oldAnimeShow = await this.findAnimeByRawId(animeId);
-        if (typeof oldAnimeShow === 'undefined') {
-            throw new Error('Could not find given show to update');
-        } else {
-            oldAnimeShow = this.fillInAnime(oldAnimeShow, reviewText, tagList);
-            return await this.upsertAnime(oldAnimeShow);
-        }
-    }
+  async addNewAnime(
+      ids, titles, myStatus, score, currentEps, totalEps, airingStatus,
+      synopsis, coverImgs, hash,
+  ) {
+    let newAnime = new this.AnimeShowModel();
+    newAnime._id = oId();
+    newAnime = this.fillInAnimeMetadata(
+        newAnime, ids, titles, myStatus, score, currentEps,
+        totalEps, airingStatus, synopsis, coverImgs, hash,
+    );
+    return await this.upsertAnime(newAnime);
+  }
 
-    fillInAnime (animeToUpdate, reviewText, tagList) {
-        animeToUpdate.review = reviewText;
-        animeToUpdate.tags = tagList;
-        animeToUpdate.time_updated = Date.now();
-        return animeToUpdate;
-    }
-
-    async updateExistingAnime(
-        originalId, ids, titles, myStatus, score, currentEps, totalEps,
-        airingStatus, synopsis, coverImgs, hash,
-    ) {
-        let oldAnimeItem = await this.findAnimeByRawId(originalId);
-        if (typeof oldAnimeItem === 'undefined') {
-            throw new Error('Could not find given anime to update');
-        } else {
-            oldAnimeItem = this.fillInAnimeMetadata(
-                oldAnimeItem, ids, titles, myStatus, score, currentEps,
-                totalEps, airingStatus, synopsis, coverImgs, hash,
-            );
-            return await this.upsertAnime(oldAnimeItem);
-        }
-    }
-
-    async addNewAnime(
-        ids, titles, myStatus, score, currentEps, totalEps, airingStatus,
-        synopsis, coverImgs, hash,
-    ) {
-        let newAnime = new this.AnimeShowModel();
-        newAnime._id = oId();
-        newAnime = this.fillInAnimeMetadata(
-            newAnime, ids, titles, myStatus, score, currentEps,
-            totalEps, airingStatus, synopsis, coverImgs, hash,
-        );
-        return await this.upsertAnime(newAnime);
-    }
-
-    fillInAnimeMetadata(animeToUpdate, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash) {
-        animeToUpdate.anime_id = ids;
-        animeToUpdate.title = titles;
-        animeToUpdate.status = myStatus;
-        animeToUpdate.score = score;
-        animeToUpdate.current_ep = currentEps;
-        animeToUpdate.total_eps = totalEps;
-        animeToUpdate.anime_status = airingStatus;
-        animeToUpdate.synopsis = synopsis;
-        animeToUpdate.cover_img = coverImgs;
-        animeToUpdate.last_hash = hash;
-        return animeToUpdate;
-    }
+  fillInAnimeMetadata(animeToUpdate, ids, titles, myStatus, score, currentEps, totalEps, airingStatus, synopsis, coverImgs, hash) {
+    animeToUpdate.anime_id = ids;
+    animeToUpdate.title = titles;
+    animeToUpdate.status = myStatus;
+    animeToUpdate.score = score;
+    animeToUpdate.current_ep = currentEps;
+    animeToUpdate.total_eps = totalEps;
+    animeToUpdate.anime_status = airingStatus;
+    animeToUpdate.synopsis = synopsis;
+    animeToUpdate.cover_img = coverImgs;
+    animeToUpdate.last_hash = hash;
+    return animeToUpdate;
+  }
 
 }
 

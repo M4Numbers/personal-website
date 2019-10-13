@@ -28,38 +28,39 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const projectHandlerInstance = require('../../../lib/ProjectHandler').getHandler();
 
 const getOneProject = async (req, res, next) => {
-    try {
-        const project = await projectHandlerInstance.findProject(req.params['projectId']);
-        if (project !== null) {
-            res.contentType = 'text/html';
-            res.header('content-type', 'text/html');
-            res.send(200, renderer.render('pages/project_single.njk', {
-                top_page: {
-                    title: project.long_title,
-                    project_tags: project.tags,
-                    image_src: '/assets/images/J_handle.png',
-                    image_alt: 'Main face of the site',
-                },
+  try {
+    const project = await projectHandlerInstance.findProject(req.params['projectId']);
+    if (project !== null) {
+      res.contentType = 'text/html';
+      res.header('content-type', 'text/html');
+      res.send(200, renderer.render('pages/project_single.njk', {
+        top_page: {
+          title: project.long_title,
+          project_tags: project.tags,
+          image_src: '/assets/images/J_handle.png',
+          image_alt: 'Main face of the site',
+        },
 
-                content: {
-                    project_text: project.description
-                },
+        content: {
+          project_text: project.description
+        },
 
-                head: {
-                    title: `J4Numbers :: ${project.long_title}`,
-                    description: 'Home to the wild things',
-                    current_page: 'projects'
-                }
-            }));
-            next();
-        } else {
-            next(new errors.NotFoundError());
+        head: {
+          title: `J4Numbers :: ${project.long_title}`,
+          description: 'Home to the wild things',
+          current_page: 'projects'
         }
-    } catch (rejection) {
-        next(new errors.InternalServerError(rejection));
+      }));
+      next();
+    } else {
+      next(new errors.NotFoundError());
     }
+  } catch (rejection) {
+    req.log.warn(`Issue found when trying to get single project :: ${e.message}`);
+    next(new errors.InternalServerError(rejection.message));
+  }
 };
 
 module.exports = (server) => {
-    server.get('/projects/:projectId', getOneProject);
+  server.get('/projects/:projectId', getOneProject);
 };

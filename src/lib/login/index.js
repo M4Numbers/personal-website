@@ -31,7 +31,7 @@ const keyFile = fs.readFileSync(config.get('jwt.private_key'));
 
 const decodeToken = async (token) => {
   try {
-    return jwt.verify(token, certificateFile)
+    return jwt.verify(token, certificateFile);
   } catch (e) {
     return {};
   }
@@ -56,14 +56,14 @@ const isLoggedIn = async (token) => {
 };
 
 const isFriendly = async (token) => {
-    if (token === '') {
-        return false;
-    }
-    const decoded = await decodeToken(token);
-    if (!Object.prototype.hasOwnProperty.call(decoded, 'friendly')) {
-        return false;
-    }
-    return decoded.friendly;
+  if (token === '') {
+    return false;
+  }
+  const decoded = await decodeToken(token);
+  if (!Object.prototype.hasOwnProperty.call(decoded, 'friendly')) {
+    return false;
+  }
+  return decoded.friendly;
 };
 
 module.exports = {

@@ -26,11 +26,11 @@ const fs = require('fs');
 const path = require('path');
 
 const displaySitemap = async (req, res, next) => {
-    const robots = fs.readFileSync(path.join(__dirname, '../../seo/sitemap.txt'));
-    res.contentType = 'text/plain';
-    res.header('Content-Type', 'text/plain');
-    res.send(200, robots);
-    next();
+  const robots = fs.readFileSync(path.join(__dirname, '../../seo/sitemap.txt'));
+  res.contentType = 'text/plain';
+  res.header('Content-Type', 'text/plain');
+  res.send(200, robots);
+  next();
 };
 
 module.exports = displaySitemap;

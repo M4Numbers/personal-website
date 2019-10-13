@@ -32,80 +32,80 @@ const logger = require('./logger').bunyanLogger();
 
 class AniListHandler {
 
-    static getHandler() {
-        if (this.aniListHandlerInstance === undefined) {
-            this.aniListHandlerInstance = new AniListHandler();
-        }
-        return this.aniListHandlerInstance;
+  static getHandler() {
+    if (this.aniListHandlerInstance === undefined) {
+      this.aniListHandlerInstance = new AniListHandler();
     }
+    return this.aniListHandlerInstance;
+  }
 
-    constructor() {
-        this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'animeAniList.gql'), {encoding: 'utf-8'});
-        this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
+  constructor() {
+    this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'animeAniList.gql'), {encoding: 'utf-8'});
+    this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
+  }
+
+  async getMangaQueryTemplate() {
+    if (this.aniListMangaQuery === undefined) {
+      this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
     }
+    return this.aniListMangaQuery;
+  }
 
-    async getMangaQueryTemplate() {
-        if (this.aniListMangaQuery === undefined) {
-            this.aniListMangaQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'mangaAniList.gql'), {encoding: 'utf-8'});
-        }
-        return this.aniListMangaQuery;
+  async getAnimeQueryTemplate() {
+    if (this.aniListAnimeQuery === undefined) {
+      this.aniListAnimeQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'animeAniList.gql'), {encoding: 'utf-8'});
     }
+    return this.aniListAnimeQuery;
+  }
 
-    async getAnimeQueryTemplate() {
-        if (this.aniListAnimeQuery === undefined) {
-            this.aniListAnimeQuery = fs.readFileSync(path.join(__dirname, '../', 'gql', 'animeAniList.gql'), {encoding: 'utf-8'});
-        }
-        return this.aniListAnimeQuery;
+  async performRequest(body) {
+    return request({
+      url: 'https://graphql.anilist.co',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: body,
+      json: true
+    });
+  }
+
+  async getPageOfAniListAnimeResults(page = 0) {
+    try {
+      const query = await this.getAnimeQueryTemplate();
+      let variables = {
+        page: page,
+        mediaType: MediaTypes.ANIME
+      };
+
+      await this.performRequest({
+        query: query,
+        variables: variables
+      });
+    } catch (e) {
+      logger.warn(`Unhandled exception when requesting aniList data :: ${e.message}`);
+      throw e;
     }
+  }
 
-    async performRequest(body) {
-        return request({
-            url: 'https://graphql.anilist.co',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: body,
-            json: true
-        });
+  async getPageOfAniListMangaResults(page = 0) {
+    try {
+      const query = await this.getMangaQueryTemplate();
+      let variables = {
+        page: page,
+        mediaType: MediaTypes.MANGA
+      };
+
+      await this.performRequest({
+        query: query,
+        variables: variables
+      });
+    } catch (e) {
+      logger.warn(`Unhandled exception when requesting aniList data :: ${e.message}`);
+      throw e;
     }
-
-    async getPageOfAniListAnimeResults(page=0) {
-        try {
-            const query = await this.getAnimeQueryTemplate();
-            let variables = {
-                page: page,
-                mediaType: MediaTypes.ANIME
-            };
-
-            await this.performRequest({
-                query: query,
-                variables: variables
-            });
-        } catch (e) {
-            logger.warn(`Unhandled exception when requesting aniList data :: ${e.message}`);
-            throw e;
-        }
-    }
-
-    async getPageOfAniListMangaResults(page=0) {
-        try {
-            const query = await this.getMangaQueryTemplate();
-            let variables = {
-                page: page,
-                mediaType: MediaTypes.MANGA
-            };
-
-            await this.performRequest({
-                query: query,
-                variables: variables
-            });
-        } catch (e) {
-            logger.warn(`Unhandled exception when requesting aniList data :: ${e.message}`);
-            throw e;
-        }
-    }
+  }
 
 }
 

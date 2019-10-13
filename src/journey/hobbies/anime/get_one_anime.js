@@ -28,33 +28,34 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const getOneAnime = async (req, res, next) => {
-    try {
-        const anime = await animeHandlerInstance.findAnimeByRawId(req.params['animeId'])
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/anime/anime_one.njk', {
-            top_page: {
-                title: anime.title.romaji,
-                tagline: 'A list of all the strange things that I have seen at some point or another',
-                image_src: anime.cover_img.large,
-                image_alt: anime.title.romaji
-            },
+  try {
+    const anime = await animeHandlerInstance.findAnimeByRawId(req.params['animeId']);
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/anime/anime_one.njk', {
+      top_page: {
+        title: anime.title.romaji,
+        tagline: 'A list of all the strange things that I have seen at some point or another',
+        image_src: anime.cover_img.large,
+        image_alt: anime.title.romaji
+      },
 
-            content: {
-                show: anime,
-                comments: anime.review
-            },
+      content: {
+        show: anime,
+        comments: anime.review
+      },
 
-            head: {
-                title: 'J4Numbers :: Hobbies :: Anime :: ',
-                description: 'Home to the wild things',
-                current_page: 'hobbies',
-                current_sub_page: 'anime',
-            }
-        }));
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers :: Hobbies :: Anime :: ',
+        description: 'Home to the wild things',
+        current_page: 'hobbies',
+        current_sub_page: 'anime',
+      }
+    }));
+  } catch (e) {
+    req.log.warn(`Issue found when trying to get single anime :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = getOneAnime;

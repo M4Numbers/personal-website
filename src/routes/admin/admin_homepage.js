@@ -27,5 +27,5 @@ const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
 const redirectToBlog = (req, res, next) => res.redirect(303, '/admin/blog', next);
 
 module.exports = (server) => {
-    server.get('/admin/', testLoggedIn, redirectToBlog);
+  server.get('/admin/', testLoggedIn, redirectToBlog);
 };

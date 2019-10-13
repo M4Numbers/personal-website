@@ -23,6 +23,6 @@
  */
 
 module.exports = {
-    'ANIME': 'ANIME',
-    'MANGA': 'MANGA'
+  'ANIME': 'ANIME',
+  'MANGA': 'MANGA'
 };

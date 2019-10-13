@@ -32,38 +32,38 @@ const logger = require('./logger').bunyanLogger();
 
 class StaticHandler {
 
-    static getHandler() {
-        if (this.staticHandlerInstance === undefined) {
-            logger.debug('Starting up a new instance of the static database handler');
-            this.staticHandlerInstance = new StaticHandler();
-        }
-        return this.staticHandlerInstance;
+  static getHandler() {
+    if (this.staticHandlerInstance === undefined) {
+      logger.debug('Starting up a new instance of the static database handler');
+      this.staticHandlerInstance = new StaticHandler();
     }
+    return this.staticHandlerInstance;
+  }
 
-    constructor () {
-        this.mongoDbInstance = MongoDbHandler.getMongo();
+  constructor() {
+    this.mongoDbInstance = MongoDbHandler.getMongo();
 
-        this.StaticDocument = new Schema({
-            '_id': String,
-            'content': Object
-        });
-        this.StaticDocumentModel = this.mongoDbInstance.bootModel('StaticDocument', this.StaticDocument);
-    }
+    this.StaticDocument = new Schema({
+      '_id': String,
+      'content': Object
+    });
+    this.StaticDocumentModel = this.mongoDbInstance.bootModel('StaticDocument', this.StaticDocument);
+  }
 
-    async findStatic (id) {
-        return this.mongoDbInstance.findById(this.StaticDocumentModel, id);
-    }
+  async findStatic(id) {
+    return this.mongoDbInstance.findById(this.StaticDocumentModel, id);
+  }
 
-    async updateStatic (id, content) {
-        const document = await this.mongoDbInstance.findOrCreate(this.StaticDocumentModel, id);
-        return await this.mongoDbInstance.upsertItem(this.fillInStatic(document, id, content));
-    }
+  async updateStatic(id, content) {
+    const document = await this.mongoDbInstance.findOrCreate(this.StaticDocumentModel, id);
+    return await this.mongoDbInstance.upsertItem(this.fillInStatic(document, id, content));
+  }
 
-    fillInStatic (document, id, content) {
-        document._id = id;
-        document.content = content;
-        return document;
-    }
+  fillInStatic(document, id, content) {
+    document._id = id;
+    document.content = content;
+    return document;
+  }
 
 }
 

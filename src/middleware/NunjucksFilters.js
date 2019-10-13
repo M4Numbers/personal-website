@@ -30,9 +30,9 @@ const markdown = require('markdown-it')();
  * @param {Environment} njk The nunjucks environment handler
  */
 function loadFilters(njk) {
-    njk.addFilter('markdown', function (input) {
-        return markdown.render(input || '');
-    });
+  njk.addFilter('markdown', function (input) {
+    return markdown.render(input || '');
+  });
 }
 
 module.exports = loadFilters;

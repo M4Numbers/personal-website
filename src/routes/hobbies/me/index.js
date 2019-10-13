@@ -28,8 +28,8 @@ const handleExtendedBlogEndpoints = require('./me_blog');
 const handleKinkEndpoints = require('./me_kinks');
 
 module.exports = (server) => {
-    handleFriendLoginEndpoints(server);
-    handleOverviewEndpoints(server);
-    handleExtendedBlogEndpoints(server);
-    handleKinkEndpoints(server);
+  handleFriendLoginEndpoints(server);
+  handleOverviewEndpoints(server);
+  handleExtendedBlogEndpoints(server);
+  handleKinkEndpoints(server);
 };

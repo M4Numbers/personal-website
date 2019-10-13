@@ -26,7 +26,7 @@ const getAllBlogs = require('../journey/base/blog/get_all_blogs');
 const getOneBlog = require('../journey/base/blog/get_one_blog');
 
 module.exports = (server) => {
-    server.get('/blog', getAllBlogs);
-    server.get('/blog/:blogId', getOneBlog);
-    return server;
+  server.get('/blog', getAllBlogs);
+  server.get('/blog/:blogId', getOneBlog);
+  return server;
 };

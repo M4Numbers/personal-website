@@ -28,34 +28,35 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const mangaHandlerInstance = require('../../../lib/MangaHandler').getHandler();
 
 const getOneManga = async (req, res, next) => {
-    try {
-        const manga = await mangaHandlerInstance.findMangaByRawId(req.params['mangaId'])
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/manga/manga_one.njk', {
-            top_page: {
-                title: manga.title.romaji,
-                tagline: 'A list of all the strange things that I have read at some point or another',
-                image_src: manga.cover_img.large,
-                image_alt: manga.title.romaji
-            },
+  try {
+    const manga = await mangaHandlerInstance.findMangaByRawId(req.params['mangaId']);
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/manga/manga_one.njk', {
+      top_page: {
+        title: manga.title.romaji,
+        tagline: 'A list of all the strange things that I have read at some point or another',
+        image_src: manga.cover_img.large,
+        image_alt: manga.title.romaji
+      },
 
-            content: {
-                book: manga,
-                comments: manga.review
-            },
+      content: {
+        book: manga,
+        comments: manga.review
+      },
 
-            head: {
-                title: 'J4Numbers :: Hobbies :: Manga :: ',
-                description: 'Home to the wild things',
-                current_page: 'hobbies',
-                current_sub_page: 'manga',
-            }
-        }));
-        next();
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers :: Hobbies :: Manga :: ',
+        description: 'Home to the wild things',
+        current_page: 'hobbies',
+        current_sub_page: 'manga',
+      }
+    }));
+    next();
+  } catch (e) {
+    req.log.warn(`Issue found when trying to get single manga :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = getOneManga;

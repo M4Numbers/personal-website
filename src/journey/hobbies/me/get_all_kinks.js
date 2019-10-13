@@ -29,50 +29,51 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const kinkHandlerInstance = require('../../../lib/KinkHandler').getHandler();
 
 const getAllKinks = async (req, res, next) => {
-    try {
-        const kinks = await kinkHandlerInstance.findKinks(
-            Math.max(0, ((req.query['page'] || 1) - 1)) * 20,
-            20,
-            {'kink_name': 1},
-            req.query['category'],
-        );
-        const kinkCount = await kinkHandlerInstance.getTotalKinkCount(false);
+  try {
+    const kinks = await kinkHandlerInstance.findKinks(
+        Math.max(0, ((req.query['page'] || 1) - 1)) * 20,
+        20,
+        {'kink_name': 1},
+        req.query['category'],
+    );
+    const kinkCount = await kinkHandlerInstance.getTotalKinkCount(false);
 
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/me/me_kinks_all.njk', {
-            top_page: {
-                title: 'Welcome to Me',
-                tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
-                image_src: '/assets/images/J_handle.png',
-                image_alt: 'My logo that I use to represent myself'
-            },
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/me/me_kinks_all.njk', {
+      top_page: {
+        title: 'Welcome to Me',
+        tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
+        image_src: '/assets/images/J_handle.png',
+        image_alt: 'My logo that I use to represent myself'
+      },
 
-            content: {
-                title: 'A collection of kinks belonging to me',
-                kinks: kinks
-            },
+      content: {
+        title: 'A collection of kinks belonging to me',
+        kinks: kinks
+      },
 
-            pagination: {
-                base_url: '/hobbies/me/fetishes?',
-                total: kinkCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 20
-            },
+      pagination: {
+        base_url: '/hobbies/me/fetishes?',
+        total: kinkCount,
+        page: Math.max((req.query['page'] || 1), 1),
+        page_size: 20
+      },
 
-            head: {
-                title: 'J4Numbers :: Welcome to Me',
-                description: 'Home to the wild things',
-                current_page: 'hobbies',
-                current_sub_page: 'me',
-                current_sub_sub_page: 'fetishes',
-                current_category: req.query['category']
-            }
-        }));
-        next();
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers :: Welcome to Me',
+        description: 'Home to the wild things',
+        current_page: 'hobbies',
+        current_sub_page: 'me',
+        current_sub_sub_page: 'fetishes',
+        current_category: req.query['category']
+      }
+    }));
+    next();
+  } catch (e) {
+    req.log.warn(`Issue found when trying to get all kinks :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = getAllKinks;

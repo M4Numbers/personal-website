@@ -25,16 +25,16 @@
 /* eslint-disable no-unused-vars */
 
 const toTheTop = () => {
-    $('html, body').animate({scrollTop: 0}, 'slow');
+  $('html, body').animate({scrollTop: 0}, 'slow');
 };
 
 const goto = (id) => {
-    $('html, body').animate(
-        {
-            scrollTop: $(id).offset().top
-        }, 'slow');
+  $('html, body').animate(
+      {
+        scrollTop: $(id).offset().top
+      }, 'slow');
 };
 
 $('.navbar-lower').affix({
-    offset: {top: 50}
+  offset: {top: 50}
 });

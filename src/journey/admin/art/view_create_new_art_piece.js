@@ -25,24 +25,24 @@
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const viewCreateNewArtPiece = async (req, res, next) => {
-    res.contentType = 'text/html';
-    res.header('content-type', 'text/html');
-    res.send(200, renderer.render('pages/admin/art/admin_art_create.njk', {
-        top_page: {
-            title: 'Administrator Toolkit',
-            tagline: 'All the functions that the administrator of the site has available to them',
-            fa_type: 'fas',
-            fa_choice: 'fa-toolbox'
-        },
+  res.contentType = 'text/html';
+  res.header('content-type', 'text/html');
+  res.send(200, renderer.render('pages/admin/art/admin_art_create.njk', {
+    top_page: {
+      title: 'Administrator Toolkit',
+      tagline: 'All the functions that the administrator of the site has available to them',
+      fa_type: 'fas',
+      fa_choice: 'fa-toolbox'
+    },
 
-        head: {
-            title: 'J4Numbers',
-            description: 'Home to the wild things',
-            current_page: 'admin',
-            current_sub_page: 'art-edit'
-        }
-    }));
-    next();
+    head: {
+      title: 'J4Numbers',
+      description: 'Home to the wild things',
+      current_page: 'admin',
+      current_sub_page: 'art-edit'
+    }
+  }));
+  next();
 };
 
 module.exports = viewCreateNewArtPiece;

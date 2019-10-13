@@ -29,40 +29,40 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
+const sitemapSorter = (a, b) => (a['page_name'] > b['page_name']) ? 1 : ((a['page_name'] < ['page_name']) ? -1 : 0);
+
 const getSitemap = async (req, res, next) => {
-    try {
-        const sitemapItems = await staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP);
-        let sortedSiteMap = ((sitemapItems || {}).content || []).sort((a, b) => {
-            return (a['page_name'] > b['page_name']) ? 1 : ((a['page_name'] < b['page_name']) ? -1 : 0);
-        });
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/sitemap.njk', {
-            top_page: {
-                title: 'Sitemap',
-                tagline: 'If you want to get somewhere, why not use the links below to navigate!',
-                fa_type: 'fas',
-                fa_choice: 'fa-map'
-            },
+  try {
+    const sitemapItems = await staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP);
+    let sortedSiteMap = ((sitemapItems || {}).content || []).sort(sitemapSorter);
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/sitemap.njk', {
+      top_page: {
+        title: 'Sitemap',
+        tagline: 'If you want to get somewhere, why not use the links below to navigate!',
+        fa_type: 'fas',
+        fa_choice: 'fa-map'
+      },
 
-            content: {
-                title: 'Sitemap',
-                site_links: sortedSiteMap || [],
-            },
+      content: {
+        title: 'Sitemap',
+        site_links: sortedSiteMap || [],
+      },
 
-            head: {
-                title: 'J4Numbers :: Sitemap',
-                description: 'Home to the wild things',
-                current_page: 'sitemap'
-            }
-        }));
-        next();
-    } catch (caught) {
-        req.log.warn(`Catch during find static :: ${caught}`);
-        next(new errors.InternalServerError(caught.message));
-    }
+      head: {
+        title: 'J4Numbers :: Sitemap',
+        description: 'Home to the wild things',
+        current_page: 'sitemap'
+      }
+    }));
+    next();
+  } catch (caught) {
+    req.log.warn(`Catch during find static :: ${caught}`);
+    next(new errors.InternalServerError(caught.message));
+  }
 };
 
 module.exports = (server) => {
-    server.get('/map', getSitemap);
+  server.get('/map', getSitemap);
 };

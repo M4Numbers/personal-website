@@ -26,6 +26,6 @@ const viewFriendLogin = require('../../../journey/misc/friend_login_view');
 const submitFriendLogin = require('../../../journey/misc/friend_login_compare');
 
 module.exports = (server) => {
-    server.get('/hobbies/me/login', viewFriendLogin);
-    server.post('/hobbies/me/login', submitFriendLogin);
+  server.get('/hobbies/me/login', viewFriendLogin);
+  server.post('/hobbies/me/login', submitFriendLogin);
 };

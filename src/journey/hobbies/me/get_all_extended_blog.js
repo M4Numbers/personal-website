@@ -29,48 +29,49 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 
 const getAllExtendedBlogs = (req, res, next) => {
-    try {
-        const blogs = blogHandlerInstance.findBlogs(
-            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
-            10,
-            {'time_posted': -1},
-            false,
-        );
-        const blogCount = blogHandlerInstance.getTotalBlogCount();
+  try {
+    const blogs = blogHandlerInstance.findBlogs(
+        Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+        10,
+        {'time_posted': -1},
+        false,
+    );
+    const blogCount = blogHandlerInstance.getTotalBlogCount();
 
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/me/me_blog_all.njk', {
-            top_page: {
-                title: 'My Private Blog',
-                tagline: 'A list of scribbled things that have been made over the years.',
-                image_src: '/assets/images/J_handle.png',
-                image_alt: 'Main face of the site'
-            },
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/me/me_blog_all.njk', {
+      top_page: {
+        title: 'My Private Blog',
+        tagline: 'A list of scribbled things that have been made over the years.',
+        image_src: '/assets/images/J_handle.png',
+        image_alt: 'Main face of the site'
+      },
 
-            content: {
-                blogs: blogs
-            },
+      content: {
+        blogs: blogs
+      },
 
-            pagination: {
-                base_url: '/hobbies/me/extended-blog?',
-                total: blogCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
-            },
+      pagination: {
+        base_url: '/hobbies/me/extended-blog?',
+        total: blogCount,
+        page: Math.max((req.query['page'] || 1), 1),
+        page_size: 10
+      },
 
-            head: {
-                title: 'J4Numbers :: Extended Blog',
-                description: 'Home to the wild things',
-                current_page: 'hobbies',
-                current_sub_page: 'me',
-                current_sub_sub_page: 'extended-blog'
-            }
-        }));
-        next();
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers :: Extended Blog',
+        description: 'Home to the wild things',
+        current_page: 'hobbies',
+        current_sub_page: 'me',
+        current_sub_sub_page: 'extended-blog'
+      }
+    }));
+    next();
+  } catch (e) {
+    req.log.warn(`Issue found when trying to get all blog posts :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = getAllExtendedBlogs;

@@ -23,11 +23,11 @@
  */
 
 const testAdministratorLoggedIn = async (req, res, next) => {
-    if (!res.nunjucks['logged_in']) {
-        res.redirect(303, '/admin/login', next);
-    } else {
-        next();
-    }
+  if (!res.nunjucks['logged_in']) {
+    res.redirect(303, '/admin/login', next);
+  } else {
+    next();
+  }
 };
 
 module.exports = testAdministratorLoggedIn;

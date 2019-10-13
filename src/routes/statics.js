@@ -28,8 +28,8 @@ const viewContactMe = require('../journey/base/statics/get_contact_me');
 const viewSiteStats = require('../journey/base/statics/get_stats');
 
 module.exports = (server) => {
-    viewSitemap(server);
-    viewAboutMe(server);
-    viewContactMe(server);
-    viewSiteStats(server);
+  viewSitemap(server);
+  viewAboutMe(server);
+  viewContactMe(server);
+  viewSiteStats(server);
 };

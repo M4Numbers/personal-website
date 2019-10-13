@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-const mongoMemoryServer = require("mongodb-memory-server");
+const mongoMemoryServer = require('mongodb-memory-server');
 
 const mongod = new mongoMemoryServer.MongoMemoryServer();
 
 mongod.getConnectionString()
     .then(connectionUri => {
-        console.log(`Started up database server on ${connectionUri}`);
-        process.env["DATABASE_URI"] = connectionUri;
-        require("../src/app");
+      console.log(`Started up database server on ${connectionUri}`);
+      process.env['DATABASE_URI'] = connectionUri;
+      require('../src/app');
     });

@@ -30,187 +30,187 @@ const ProjectHandler = require('../../lib/ProjectHandler');
 const projectHandlerInstance = ProjectHandler.getHandler();
 
 const viewAllProjects = function (req, res, next) {
-    Promise.all(
-        [
-            projectHandlerInstance.findProjects(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}, false),
-            projectHandlerInstance.getTotalProjectCount(false)
-        ]
-    ).then(([projects, totalCount]) => {
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/projects/admin_project_view.njk', {
-            top_page: {
-                title: 'Administrator Toolkit',
-                tagline: 'All the functions that the administrator of the site has available to them',
-                fa_type: 'fas',
-                fa_choice: 'fa-toolbox'
-            },
+  Promise.all(
+      [
+        projectHandlerInstance.findProjects(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'time_posted': -1}, false),
+        projectHandlerInstance.getTotalProjectCount(false)
+      ]
+  ).then(([projects, totalCount]) => {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/projects/admin_project_view.njk', {
+      top_page: {
+        title: 'Administrator Toolkit',
+        tagline: 'All the functions that the administrator of the site has available to them',
+        fa_type: 'fas',
+        fa_choice: 'fa-toolbox'
+      },
 
-            content: {
-                projects: projects
-            },
+      content: {
+        projects: projects
+      },
 
-            pagination: {
-                base_url: '/admin/projects?',
-                total: totalCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
-            },
+      pagination: {
+        base_url: '/admin/projects?',
+        total: totalCount,
+        page: Math.max((req.query['page'] || 1), 1),
+        page_size: 10
+      },
 
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'admin',
-                current_sub_page: 'project-view'
-            }
-        }));
-        next();
-    });
+      head: {
+        title: 'J4Numbers',
+        description: 'Home to the wild things',
+        current_page: 'admin',
+        current_sub_page: 'project-view'
+      }
+    }));
+    next();
+  });
 };
 
 const createNewProject = function (req, res, next) {
-    res.contentType = 'text/html';
-    res.header('content-type', 'text/html');
-    res.send(200, renderer.render('pages/admin/projects/admin_project_create.njk', {
-        top_page: {
-            title: 'Administrator Toolkit',
-            tagline: 'All the functions that the administrator of the site has available to them',
-            fa_type: 'fas',
-            fa_choice: 'fa-toolbox'
-        },
+  res.contentType = 'text/html';
+  res.header('content-type', 'text/html');
+  res.send(200, renderer.render('pages/admin/projects/admin_project_create.njk', {
+    top_page: {
+      title: 'Administrator Toolkit',
+      tagline: 'All the functions that the administrator of the site has available to them',
+      fa_type: 'fas',
+      fa_choice: 'fa-toolbox'
+    },
 
-        head: {
-            title: 'J4Numbers',
-            description: 'Home to the wild things',
-            current_page: 'admin',
-            current_sub_page: 'project-edit'
-        }
-    }));
-    next()
+    head: {
+      title: 'J4Numbers',
+      description: 'Home to the wild things',
+      current_page: 'admin',
+      current_sub_page: 'project-edit'
+    }
+  }));
+  next();
 };
 
 const postNewProject = function (req, res, next) {
-    projectHandlerInstance.insertProject(
-        req.body['project-title'], req.body['project-text'],
-        req.body['project-visible'] === 'Y', req.body['project-tags'].split(/, */)
-    ).then((savedProject) => {
-        res.redirect(303, `/admin/projects/${savedProject._id}`, next);
-    }, rejection => {
-        req.log.warn({error: rejection});
-        res.redirect(303, '/admin/projects/new', next);
-    });
+  projectHandlerInstance.insertProject(
+      req.body['project-title'], req.body['project-text'],
+      req.body['project-visible'] === 'Y', req.body['project-tags'].split(/, */)
+  ).then((savedProject) => {
+    res.redirect(303, `/admin/projects/${savedProject._id}`, next);
+  }, rejection => {
+    req.log.warn({error: rejection});
+    res.redirect(303, '/admin/projects/new', next);
+  });
 };
 
 const getOneProject = function (req, res, next) {
-    projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/projects/admin_project_view_single.njk', {
-            top_page: {
-                title: 'Administrator Toolkit',
-                tagline: 'All the functions that the administrator of the site has available to them',
-                fa_type: 'fas',
-                fa_choice: 'fa-toolbox'
-            },
+  projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/projects/admin_project_view_single.njk', {
+      top_page: {
+        title: 'Administrator Toolkit',
+        tagline: 'All the functions that the administrator of the site has available to them',
+        fa_type: 'fas',
+        fa_choice: 'fa-toolbox'
+      },
 
-            content: {
-                project: project
-            },
+      content: {
+        project: project
+      },
 
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'admin',
-                current_sub_page: 'project-view'
-            }
-        }));
-        next();
-    });
+      head: {
+        title: 'J4Numbers',
+        description: 'Home to the wild things',
+        current_page: 'admin',
+        current_sub_page: 'project-view'
+      }
+    }));
+    next();
+  });
 };
 
 const editOneProject = function (req, res, next) {
-    projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/projects/admin_project_edit_single.njk', {
-            top_page: {
-                title: 'Administrator Toolkit',
-                tagline: 'All the functions that the administrator of the site has available to them',
-                fa_type: 'fas',
-                fa_choice: 'fa-toolbox'
-            },
+  projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/projects/admin_project_edit_single.njk', {
+      top_page: {
+        title: 'Administrator Toolkit',
+        tagline: 'All the functions that the administrator of the site has available to them',
+        fa_type: 'fas',
+        fa_choice: 'fa-toolbox'
+      },
 
-            content: {
-                project: project
-            },
+      content: {
+        project: project
+      },
 
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'admin',
-                current_sub_page: 'project-edit'
-            }
-        }));
-        next();
-    });
+      head: {
+        title: 'J4Numbers',
+        description: 'Home to the wild things',
+        current_page: 'admin',
+        current_sub_page: 'project-edit'
+      }
+    }));
+    next();
+  });
 };
 
 const postProjectEdits = function (req, res, next) {
-    projectHandlerInstance.editProject(
-        req.params['projectId'], req.body['project-title'],
-        req.body['project-text'], req.body['project-visible'] === 'Y',
-        req.body['project-tags'].split(/, */)
-    ).then(() => {
-        res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
-    }, rejection => {
-        req.log.warn({blog_id: req.params['projectId'], error: rejection});
-        res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
-    });
+  projectHandlerInstance.editProject(
+      req.params['projectId'], req.body['project-title'],
+      req.body['project-text'], req.body['project-visible'] === 'Y',
+      req.body['project-tags'].split(/, */)
+  ).then(() => {
+    res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
+  }, rejection => {
+    req.log.warn({blog_id: req.params['projectId'], error: rejection});
+    res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
+  });
 };
 
 const viewDeleteProject = function (req, res, next) {
-    projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/projects/admin_project_delete_single.njk', {
-            top_page: {
-                title: 'Administrator Toolkit',
-                tagline: 'All the functions that the administrator of the site has available to them',
-                fa_type: 'fas',
-                fa_choice: 'fa-toolbox'
-            },
+  projectHandlerInstance.findProject(req.params['projectId']).then((project) => {
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/admin/projects/admin_project_delete_single.njk', {
+      top_page: {
+        title: 'Administrator Toolkit',
+        tagline: 'All the functions that the administrator of the site has available to them',
+        fa_type: 'fas',
+        fa_choice: 'fa-toolbox'
+      },
 
-            content: {
-                project: project
-            },
+      content: {
+        project: project
+      },
 
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'admin',
-                current_sub_page: 'project-delete'
-            }
-        }));
-        next();
-    });
+      head: {
+        title: 'J4Numbers',
+        description: 'Home to the wild things',
+        current_page: 'admin',
+        current_sub_page: 'project-delete'
+      }
+    }));
+    next();
+  });
 };
 
-const deleteSingleProject =  function (req, res, next) {
-    projectHandlerInstance.deleteProject(req.params['projectId']).then(() => {
-        res.redirect(303, '/admin/projects', next);
-    }, rejection => {
-        req.log.warn({project_id: req.params['projectId'], error: rejection});
-        res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
-    });
+const deleteSingleProject = function (req, res, next) {
+  projectHandlerInstance.deleteProject(req.params['projectId']).then(() => {
+    res.redirect(303, '/admin/projects', next);
+  }, rejection => {
+    req.log.warn({project_id: req.params['projectId'], error: rejection});
+    res.redirect(303, `/admin/projects/${req.params['projectId']}`, next);
+  });
 };
 
 module.exports = (server) => {
-    server.get('/admin/projects', testLoggedIn, viewAllProjects);
-    server.get('/admin/projects/new', testLoggedIn, createNewProject);
-    server.post('/admin/projects/new', testLoggedIn, postNewProject);
-    server.get('/admin/projects/:projectId', testLoggedIn, getOneProject);
-    server.get('/admin/projects/:projectId/edit', testLoggedIn, editOneProject);
-    server.post('/admin/projects/:projectId/edit', testLoggedIn, postProjectEdits);
-    server.get('/admin/projects/:projectId/delete', testLoggedIn, viewDeleteProject);
-    server.post('/admin/projects/:projectId/delete', testLoggedIn, deleteSingleProject);
+  server.get('/admin/projects', testLoggedIn, viewAllProjects);
+  server.get('/admin/projects/new', testLoggedIn, createNewProject);
+  server.post('/admin/projects/new', testLoggedIn, postNewProject);
+  server.get('/admin/projects/:projectId', testLoggedIn, getOneProject);
+  server.get('/admin/projects/:projectId/edit', testLoggedIn, editOneProject);
+  server.post('/admin/projects/:projectId/edit', testLoggedIn, postProjectEdits);
+  server.get('/admin/projects/:projectId/delete', testLoggedIn, viewDeleteProject);
+  server.post('/admin/projects/:projectId/delete', testLoggedIn, deleteSingleProject);
 };

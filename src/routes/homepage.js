@@ -25,5 +25,5 @@
 const homepageJourney = require('../journey/base/homepage');
 
 module.exports = (server) => {
-    server.get('/', homepageJourney);
+  server.get('/', homepageJourney);
 };

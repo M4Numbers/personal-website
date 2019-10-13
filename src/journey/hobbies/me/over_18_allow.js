@@ -25,20 +25,20 @@
 const config = require('config');
 
 const over18Check = (req, res, next) => {
-    if (req.body['over_18'] === 'yes') {
-        res.header(
-            'Set-Cookie',
-            `over-18=yes; `
-            + `Max-Age=3600; `
-            + `Domain=${config.get('app.hostname')}; `
-            + `Secure; `
-            + `HttpOnly; `
-            + `SameSite=Strict`
-        );
-        res.redirect(303, '/hobbies/me/fetishes', next);
-    } else {
-        res.redirect(303, '/hobbies/me/over-18', next);
-    }
+  if (req.body['over_18'] === 'yes') {
+    res.header(
+        'Set-Cookie',
+        `over-18=yes; `
+        + `Max-Age=3600; `
+        + `Domain=${config.get('app.hostname')}; `
+        + `Secure; `
+        + `HttpOnly; `
+        + `SameSite=Strict`
+    );
+    res.redirect(303, '/hobbies/me/fetishes', next);
+  } else {
+    res.redirect(303, '/hobbies/me/over-18', next);
+  }
 };
 
 module.exports = over18Check;

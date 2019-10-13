@@ -26,13 +26,13 @@ const ArtHandler = require('../../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
 const deleteArtPiece = async (req, res, next) => {
-    try {
-        await artHandlerInstance.deleteArt(req.params['artId']);
-        res.redirect(303, '/admin/art/', next);
-    } catch (e) {
-        req.log.warn({ art_id: req.params['artId'], error: e });
-        res.redirect(303, `/admin/art/${req.params['artId']}`, next);
-    }
+  try {
+    await artHandlerInstance.deleteArt(req.params['artId']);
+    res.redirect(303, '/admin/art/', next);
+  } catch (e) {
+    req.log.warn({art_id: req.params['artId'], error: e});
+    res.redirect(303, `/admin/art/${req.params['artId']}`, next);
+  }
 };
 
 module.exports = deleteArtPiece;

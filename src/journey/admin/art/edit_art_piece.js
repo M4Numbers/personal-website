@@ -26,17 +26,17 @@ const ArtHandler = require('../../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
 const submitEditedArtPiece = async (req, res, next) => {
-    try {
-        await artHandlerInstance.updateExistingArtPiece(
-            req.params['artId'], req.body['art-title'],
-            req.body['art-completed-date'], req.files['art-image'],
-            req.body['art-tags'].split(/, ?/), req.body['art-notes']
-        );
-        res.redirect(303, `/admin/art/${req.params['artId']}`, next);
-    } catch (e) {
-        req.log.warn({art_id: req.params['artId'], error: e});
-        res.redirect(303, `/admin/art/${req.params['artId']}`, next);
-    }
+  try {
+    await artHandlerInstance.updateExistingArtPiece(
+        req.params['artId'], req.body['art-title'],
+        req.body['art-completed-date'], req.files['art-image'],
+        req.body['art-tags'].split(/, ?/), req.body['art-notes']
+    );
+    res.redirect(303, `/admin/art/${req.params['artId']}`, next);
+  } catch (e) {
+    req.log.warn({art_id: req.params['artId'], error: e});
+    res.redirect(303, `/admin/art/${req.params['artId']}`, next);
+  }
 };
 
 module.exports = submitEditedArtPiece;

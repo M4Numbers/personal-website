@@ -29,47 +29,48 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const projectHandlerInstance = require('../../../lib/ProjectHandler').getHandler();
 
 const getAllProjects = async (req, res, next) => {
-    try {
-        const allProjects = await projectHandlerInstance.findProjects(
-            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
-            10,
-            {'time_posted': -1}
-        );
-        const allProjectCounts = await projectHandlerInstance.getTotalProjectCount();
+  try {
+    const allProjects = await projectHandlerInstance.findProjects(
+        Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+        10,
+        {'time_posted': -1}
+    );
+    const allProjectCounts = await projectHandlerInstance.getTotalProjectCount();
 
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/project_all.njk', {
-            top_page: {
-                title: 'My Projects',
-                tagline: 'A list of things that I have made in my spare time at some point or another.',
-                image_src: '/assets/images/J_handle.png',
-                image_alt: 'Main face of the site'
-            },
+    res.contentType = 'text/html';
+    res.header('content-type', 'text/html');
+    res.send(200, renderer.render('pages/project_all.njk', {
+      top_page: {
+        title: 'My Projects',
+        tagline: 'A list of things that I have made in my spare time at some point or another.',
+        image_src: '/assets/images/J_handle.png',
+        image_alt: 'Main face of the site'
+      },
 
-            content: {
-                projects: allProjects
-            },
+      content: {
+        projects: allProjects
+      },
 
-            pagination: {
-                base_url: '/projects?',
-                total: allProjectCounts,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
-            },
+      pagination: {
+        base_url: '/projects?',
+        total: allProjectCounts,
+        page: Math.max((req.query['page'] || 1), 1),
+        page_size: 10
+      },
 
-            head: {
-                title: 'J4Numbers :: Projects',
-                description: 'Home to the wild things',
-                current_page: 'projects'
-            }
-        }));
-        next();
-    } catch (e) {
-        next(new errors.InternalServerError(e.message));
-    }
+      head: {
+        title: 'J4Numbers :: Projects',
+        description: 'Home to the wild things',
+        current_page: 'projects'
+      }
+    }));
+    next();
+  } catch (e) {
+    req.log.warn(`Issue found when trying to get all projects :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
 
 module.exports = (server) => {
-    server.get('/projects', getAllProjects);
+  server.get('/projects', getAllProjects);
 };

@@ -31,9 +31,9 @@ const adminEditOneAnime = require('../../journey/admin/anime/post_edit_anime');
 const adminRefreshAnimeList = require('../../journey/admin/anime/refresh_anime');
 
 module.exports = (server) => {
-    server.get('/admin/anime', testLoggedIn, adminViewAllAnime);
-    server.get('/admin/anime/:animeId', testLoggedIn, adminViewOneAnime);
-    server.get('/admin/anime/:animeId/edit', testLoggedIn, adminViewEditOneAnime);
-    server.post('/admin/anime/:animeId/edit', testLoggedIn, adminEditOneAnime);
-    server.post('/admin/anime/refresh', testLoggedIn, adminRefreshAnimeList);
+  server.get('/admin/anime', testLoggedIn, adminViewAllAnime);
+  server.get('/admin/anime/:animeId', testLoggedIn, adminViewOneAnime);
+  server.get('/admin/anime/:animeId/edit', testLoggedIn, adminViewEditOneAnime);
+  server.post('/admin/anime/:animeId/edit', testLoggedIn, adminEditOneAnime);
+  server.post('/admin/anime/refresh', testLoggedIn, adminRefreshAnimeList);
 };

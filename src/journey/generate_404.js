@@ -25,7 +25,7 @@
 const SiteError = require('../lib/SiteError');
 
 const generate404 = async (req, res, next) => {
-    next(new SiteError(404, 'Not Found'));
+  next(new SiteError(404, 'Not Found'));
 };
 
 module.exports = generate404;
