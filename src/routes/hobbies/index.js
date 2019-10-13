@@ -28,11 +28,11 @@ const animeHomeEndpoint = require('./hobbies_anime');
 const mangaHomeEndpoint = require('./hobbies_manga');
 
 module.exports = (server) => {
-    hobbiesHomeEndpoint(server);
-    meHomeEndpoints(server);
-    artHomeEndpoint(server);
-    writingHomeEndpoint(server);
-    animeHomeEndpoint(server);
-    mangaHomeEndpoint(server);
-    return server;
+  hobbiesHomeEndpoint(server);
+  meHomeEndpoints(server);
+  artHomeEndpoint(server);
+  writingHomeEndpoint(server);
+  animeHomeEndpoint(server);
+  mangaHomeEndpoint(server);
+  return server;
 };

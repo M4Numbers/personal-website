@@ -25,7 +25,7 @@ const getOneStory = require('../../journey/hobbies/story/get_one_story');
 const getOneChapter = require('../../journey/hobbies/story/get_one_chapter');
 
 module.exports = (server) => {
-    server.get('/hobbies/writing', getAllStories);
-    server.get('/hobbies/writing/:storyId', getOneStory);
-    server.get('/hobbies/writing/:storyId/chapter/:chapterNumber', getOneChapter);
+  server.get('/hobbies/writing', getAllStories);
+  server.get('/hobbies/writing/:storyId', getOneStory);
+  server.get('/hobbies/writing/:storyId/chapter/:chapterNumber', getOneChapter);
 };

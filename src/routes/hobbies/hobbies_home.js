@@ -23,5 +23,5 @@
 const viewHobbiesPage = require('../../journey/hobbies/generate_homepage');
 
 module.exports = (server) => {
-    server.get('/hobbies/', viewHobbiesPage)
+  server.get('/hobbies/', viewHobbiesPage);
 };

@@ -24,6 +24,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiAsPromised = require('chai-as-promised');
 const sinonChai = require('sinon-chai');
+const clearRequire = require('clear-require');
 
 process.env.NODE_ENV = 'test';
 
@@ -36,5 +37,5 @@ global.request = chai.request;
 global.expect = chai.expect;
 
 global.clearRequire = (module) => {
-    require('clear-require')(module);
+  clearRequire(module);
 };

@@ -24,6 +24,6 @@ const getAllArtPieces = require('../../journey/hobbies/art/get_all_art');
 const getOneArtPiece = require('../../journey/hobbies/art/get_one_art');
 
 module.exports = (server) => {
-    server.get('/hobbies/art', getAllArtPieces);
-    server.get('/hobbies/art/:artId', getOneArtPiece);
+  server.get('/hobbies/art', getAllArtPieces);
+  server.get('/hobbies/art/:artId', getOneArtPiece);
 };

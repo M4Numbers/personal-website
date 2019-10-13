@@ -20,24 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-describe("The central application", () => {
-  describe("default routes", () => {
+const configuration = require('../../../config/test');
+
+describe('The central application', function () {
+  describe('default routes', function () {
     before(function () {
-      process.env.ALLOW_CONFIG_MUTATIONS = "true";
-      process.env.NODE_CONFIG = JSON.stringify(require("../../../config/test"));
+      process.env.ALLOW_CONFIG_MUTATIONS = 'true';
+      process.env.NODE_CONFIG = JSON.stringify(configuration);
     });
 
     after(function () {
-      require("clear-require")("config");
+      clearRequire('config');
     });
 
-    it("should load the home page", () => {
-      return request(require("../../../src/app"))
-          .get("/")
-          .then(response => {
-            expect(response).to.have.status(200);
-            expect(response).to.have.header("content-type", /text\/html/);
-          });
-    });
+    it('should load the home page', () => request(require('../../../src/app'))
+      .get('/')
+      .then((response) => {
+        expect(response).to.have.status(200);
+        expect(response).to.have.header('content-type', /text\/html/u);
+      }));
   });
 });

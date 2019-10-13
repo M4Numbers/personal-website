@@ -24,6 +24,6 @@ const viewAllAnime = require('../../journey/hobbies/anime/get_all_anime');
 const viewOneAnime = require('../../journey/hobbies/anime/get_one_anime');
 
 module.exports = (server) => {
-    server.get('/hobbies/anime', viewAllAnime);
-    server.get('/hobbies/anime/:animeId', viewOneAnime);
+  server.get('/hobbies/anime', viewAllAnime);
+  server.get('/hobbies/anime/:animeId', viewOneAnime);
 };

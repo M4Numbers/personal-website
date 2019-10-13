@@ -24,6 +24,6 @@ const getAllManga = require('../../journey/hobbies/manga/get_all_manga');
 const getSingleManga = require('../../journey/hobbies/manga/get_one_manga');
 
 module.exports = (server) => {
-    server.get('/hobbies/manga', getAllManga);
-    server.get('/hobbies/manga/:mangaId', getSingleManga);
+  server.get('/hobbies/manga', getAllManga);
+  server.get('/hobbies/manga/:mangaId', getSingleManga);
 };
