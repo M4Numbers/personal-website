@@ -13,17 +13,6 @@ module.exports = {
     public_cert: '/path/to/cert/file',
     private_key: '/path/to/key/file',
   },
-  cache: {
-    type: 'file',
-    file: {
-      base_path: './sessions/',
-    },
-    redis: {
-      cluster: false,
-      host: 'localhost',
-      port: 6379,
-    },
-  },
   nunjucks: {
     options: {
       autoescape: true,

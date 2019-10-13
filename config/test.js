@@ -22,24 +22,45 @@
  * SOFTWARE.
  */
 
-describe("The central application", () => {
-  describe("default routes", () => {
-    before(function () {
-      process.env.ALLOW_CONFIG_MUTATIONS = "true";
-      process.env.NODE_CONFIG = JSON.stringify(require("../../../config/test"));
-    });
-
-    after(function () {
-      require("clear-require")("config");
-    });
-
-    it("should load the home page", () => {
-      return request(require("../../../src/app"))
-          .get("/")
-          .then(response => {
-            expect(response).to.have.status(200);
-            expect(response).to.have.header("content-type", /text\/html/);
-          });
-    });
-  });
-});
+module.exports = {
+  app: {
+    http2: {
+      enabled: false,
+      key: '/path/to/key/file',
+      cert: '/path/to/cert/file',
+    },
+    name: 'j4numbers',
+    hostname: 'localhost',
+    port: '8080',
+  },
+  jwt: {
+    public_cert: 'test/spec/helpers/certs/localhost-cert.pem',
+    private_key: 'test/spec/helpers/certs/localhost-privkey.pem',
+  },
+  nunjucks: {
+    options: {
+      autoescape: true,
+    },
+  },
+  functionality: {},
+  cookies: {
+    domain: 'localhost',
+    secure_domain: 'localhost',
+    path: '/',
+    passphrase: 'TO_BE_FILLED_IN_ON_PRODUCTION',
+  },
+  database: {
+    uri: 'mongodb://user@password:mongodb-server:27017/database',
+  },
+  logger: {
+    level: 'info',
+  },
+  admin: {
+    hash: 'TO_BE_FILLED_IN_ON_PRODUCTION',
+  },
+  protected: {
+    question: 'TO_BE_FILLED_IN_ON_PRODUCTION',
+    hint: 'TO_BE_FILLED_IN_ON_PRODUCTION',
+    hash: 'TO_BE_FILLED_IN_ON_PRODUCTION',
+  },
+};

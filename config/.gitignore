@@ -1,3 +1,5 @@
 *.*
+!.gitignore
 !default.js
+!test.js
 !custom-environment-variables.json
