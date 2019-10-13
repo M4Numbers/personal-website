@@ -28,11 +28,6 @@ const over18Check = require('../../../journey/hobbies/me/over_18_check');
 const generateOver18Page = require('../../../journey/hobbies/me/generate_over_18_page');
 const evaluateOver18 = require('../../../journey/hobbies/me/over_18_allow');
 
-// router.post('/', require('../../../journey/hobbies/me/over_18_check'));
-// router.use(require('../../../journey/hobbies/me/generate_over_18_page'));
-// router.get('/', require('../../../journey/hobbies/me/get_all_kinks'));
-// router.get('/:kinkId', require('../../../journey/hobbies/me/get_single_kink'));
-
 const getAllKinks = require('../../../journey/hobbies/me/get_all_kinks');
 const getSingleKink = require('../../../journey/hobbies/me/get_single_kink');
 

@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+const errors = require('restify-errors');
+
 const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
 const renderer = require('../../lib/renderer').nunjucksRenderer();
 
@@ -29,13 +31,16 @@ const MangaHandler = require('../../lib/MangaHandler');
 const mangaHandlerInstance = MangaHandler.getHandler();
 const importHandler = require('../../lib/ImportHandler');
 
-const viewAllManga = function (req, res, next) {
-    Promise.all(
-        [
-            mangaHandlerInstance.findMangaBooks(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'title.romaji': 1}, false),
-            mangaHandlerInstance.getTotalBookCount(false)
-        ]
-    ).then(([books, totalCount]) => {
+const viewAllManga = async function (req, res, next) {
+    try {
+        const books = await mangaHandlerInstance.findMangaBooks(
+            Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
+            10,
+            {'title.romaji': 1},
+            false
+        );
+        const bookCount = await mangaHandlerInstance.getTotalBookCount(false);
+
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/admin/manga/admin_manga_view.njk', {
@@ -52,7 +57,7 @@ const viewAllManga = function (req, res, next) {
 
             pagination: {
                 base_url: '/admin/manga?',
-                total: totalCount,
+                total: bookCount,
                 page: Math.max((req.query['page'] || 1), 1),
                 page_size: 10
             },
@@ -65,11 +70,15 @@ const viewAllManga = function (req, res, next) {
             }
         }));
         next();
-    });
+    } catch (e) {
+        req.log.warn(`Issue when getting a list of all mangas :: ${e.message}`);
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
-const viewSingleManga = function (req, res, next) {
-    mangaHandlerInstance.findMangaByRawId(req.params['mangaId']).then((book) => {
+const viewSingleManga = async function (req, res, next) {
+    try {
+        const book = await mangaHandlerInstance.findMangaByRawId(req.params['mangaId']);
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/admin/manga/admin_manga_view_single.njk', {
@@ -92,11 +101,15 @@ const viewSingleManga = function (req, res, next) {
             }
         }));
         next();
-    });
+    } catch (e) {
+        req.log.warn(`Issue while trying to fetch manga :: ${e.message}`);
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
-const viewEditSingleManga = function (req, res, next) {
-    mangaHandlerInstance.findMangaByRawId(req.params['mangaId']).then((book) => {
+const viewEditSingleManga = async function (req, res, next) {
+    try {
+        const book = await mangaHandlerInstance.findMangaByRawId(req.params['mangaId'])
         res.contentType = 'text/html';
         res.header('content-type', 'text/html');
         res.send(200, renderer.render('pages/admin/manga/admin_manga_edit_single.njk', {
@@ -119,28 +132,37 @@ const viewEditSingleManga = function (req, res, next) {
             }
         }));
         next();
-    });
+    } catch (e) {
+        req.log.warn(`Error while trying to view the edit view of a manga :: ${e.message}`);
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
-const editSingleManga = function (req, res, next) {
-    mangaHandlerInstance.editManga(
-        req.params['mangaId'], req.body['book-review'],
-        req.body['book-tags'].split(/, ?/)
-    ).then(() => {
+const editSingleManga = async function (req, res, next) {
+    try {
+        await mangaHandlerInstance.editManga(
+            req.params['mangaId'], req.body['book-review'],
+            req.body['book-tags'].split(/, ?/)
+        );
         res.redirect(303, `/admin/manga/${req.params['mangaId']}`, next);
-    }, rejection => {
+    } catch (rejection) {
         req.log.warn({ manga_id: req.params['mangaId'], error: rejection });
         res.redirect(303, `/admin/manga/${req.params['mangaId']}`, next);
-    });
+    }
 };
 
 const refreshMangaDatabase = async function (req, res, next) {
-    req.log.info('Importing new manga into mongo...');
-    await importHandler.importMangaIntoMongo();
-    res.contentType = 'application/json';
-    res.header('content-type', 'application/json');
-    res.send(200, {});
-    next();
+    try {
+        req.log.info('Importing new manga into mongo...');
+        await importHandler.importMangaIntoMongo();
+        res.contentType = 'application/json';
+        res.header('content-type', 'application/json');
+        res.send(200, {});
+        next();
+    } catch (e) {
+        req.log.warn(`Error found when refreshing manga list :: ${e.message}`);
+        next(new errors.InternalServerError(e.message));
+    }
 };
 
 module.exports = (server) => {

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-// router.use('/me', require('./me/'));
-
 const hobbiesHomeEndpoint = require('./hobbies_home');
 const meHomeEndpoints = require('./me');
 const artHomeEndpoint = require('./hobbies_art');
