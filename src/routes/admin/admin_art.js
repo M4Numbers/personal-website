@@ -31,44 +31,7 @@ const fs = require('fs');
 const ArtHandler = require('../../lib/ArtHandler');
 const artHandlerInstance = ArtHandler.getHandler();
 
-const viewAllArtPieces = function (req, res, next) {
-    Promise.all(
-        [
-            artHandlerInstance.findAllArtPieces(Math.max(0, ((req.query['page'] || 1) - 1)) * 10, 10, {'date_completed': -1}),
-            artHandlerInstance.getTotalArtPieceCount()
-        ]
-    ).then(([pictures, totalCount]) => {
-        res.contentType = 'text/html';
-        res.header('content-type', 'text/html');
-        res.send(200, renderer.render('pages/admin/art/admin_art_view.njk', {
-            top_page: {
-                title: 'Administrator Toolkit',
-                tagline: 'All the functions that the administrator of the site has available to them',
-                fa_type: 'fas',
-                fa_choice: 'fa-toolbox'
-            },
-
-            content: {
-                pictures: pictures
-            },
-
-            pagination: {
-                base_url: '/admin/art?',
-                total: totalCount,
-                page: Math.max((req.query['page'] || 1), 1),
-                page_size: 10
-            },
-
-            head: {
-                title: 'J4Numbers',
-                description: 'Home to the wild things',
-                current_page: 'admin',
-                current_sub_page: 'art-view'
-            }
-        }));
-        next();
-    });
-};
+const viewAllArtPieces = require('../../journey/admin/art/get_all_art_pieces');
 
 const viewCreateNewArtPiece = function (req, res, next) {
     res.contentType = 'text/html';
