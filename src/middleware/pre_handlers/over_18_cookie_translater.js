@@ -22,9 +22,9 @@
 
 const cookiesConverter = (req, res, next) => {
   res.cookies = typeof res.cookies === 'undefined' ? {} : res.cookies;
-  const regex = /over-18=([^ ;]*)/i;
+  const regex = /over-18=(?<over18>[^ ;]*)/iu;
   const tokenHeader = regex.exec(req.header('cookie'));
-  res.cookies['over-18'] = tokenHeader === null ? '' : tokenHeader[1];
+  res.cookies[ 'over-18' ] = tokenHeader === null ? '' : tokenHeader.groups.over18;
   next();
 };
 

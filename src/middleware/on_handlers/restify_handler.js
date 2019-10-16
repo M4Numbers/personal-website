@@ -27,7 +27,7 @@ const restifyHandler = (req, res, err, callback) => {
   res.header('content-type', 'text/html');
   err.toHTML = () => renderer.render('pages/error.njk', { error: err });
   err.toJSON = () => ({
-    message: err.message,
+    message:    err.message,
     statusCode: res.statusCode,
   });
   return callback();

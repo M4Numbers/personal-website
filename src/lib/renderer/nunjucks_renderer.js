@@ -33,7 +33,10 @@ const renderMarkdown = (input) => markdown.render(input || '');
 
 const createRenderer = () => {
   const nunjucksEnv = new nunjucks.Environment([
-    new nunjucks.FileSystemLoader(path.join(process.cwd(), '/src/views'), config.get('nunjucks.options')),
+    new nunjucks.FileSystemLoader(
+      path.join(process.cwd(), '/src/views'),
+      config.get('nunjucks.options'),
+    ),
   ]);
   nunjucksEnv.addGlobal('functionality', config.get('functionality'));
   nunjucksEnv.addGlobal('metadata', metadata);

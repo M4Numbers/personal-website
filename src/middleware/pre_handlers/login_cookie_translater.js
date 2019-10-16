@@ -22,9 +22,9 @@
 
 const cookiesConverter = (req, res, next) => {
   res.cookies = typeof res.cookies === 'undefined' ? {} : res.cookies;
-  const regex = /login-token=([^ ;]*)/i;
+  const regex = /login-token=(?<token>[^ ;]*)/iu;
   const tokenHeader = regex.exec(req.header('cookie'));
-  res.cookies['login-token'] = tokenHeader === null ? '' : tokenHeader[1];
+  res.cookies[ 'login-token' ] = tokenHeader === null ? '' : tokenHeader.groups.token;
   next();
 };
 
