@@ -20,18 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-const testLoggedIn = require('../../journey/misc/test_admin_logged_in');
+const errors = require('restify-errors');
 
-const viewAllManga = require('../../journey/admin/manga/view_all_manga');
-const viewSingleManga = require('../../journey/admin/manga/view_single_manga');
-const viewEditSingleManga = require('../../journey/admin/manga/view_edit_single_manga');
-const editSingleManga = require('../../journey/admin/manga/edit_single_manga');
-const refreshMangaDatabase = require('../../journey/admin/manga/refresh_manga_database');
+const importHandler = require('../../lib/ImportHandler');
 
-module.exports = (server) => {
-  server.get('/admin/manga', testLoggedIn, viewAllManga);
-  server.get('/admin/manga/:mangaId', testLoggedIn, viewSingleManga);
-  server.get('/admin/manga/:mangaId/edit', testLoggedIn, viewEditSingleManga);
-  server.post('/admin/manga/:mangaId/edit', testLoggedIn, editSingleManga);
-  server.post('/admin/manga/refresh', testLoggedIn, refreshMangaDatabase);
+const refreshMangaDatabase = async (req, res, next) => {
+  try {
+    req.log.info('Importing new manga into mongo...');
+    await importHandler.importMangaIntoMongo();
+    res.contentType = 'application/json';
+    res.header('content-type', 'application/json');
+    res.send(200, {});
+    next();
+  } catch (e) {
+    req.log.warn(`Error found when refreshing manga list :: ${e.message}`);
+    next(new errors.InternalServerError(e.message));
+  }
 };
+
+module.exports = refreshMangaDatabase;
