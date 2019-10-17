@@ -29,14 +29,14 @@ const renderError = async (error, req, res) => {
   res.status(error.status || 500);
   res.render('pages/error', {
     head: {
-      title: `${error.status} :: ${error.message}`,
-      description: 'Home to the wild things'
+      title:       `${error.status} :: ${error.message}`,
+      description: 'Home to the wild things',
     },
     error: {
       message: error.message,
-      status: error.status,
-      stack: error.stack
-    }
+      status:  error.status,
+      stack:   error.stack,
+    },
   });
 };
 

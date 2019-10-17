@@ -27,27 +27,28 @@ const artHandlerInstance = require('../../../lib/ArtHandler').getHandler();
 
 const getOneArt = async (req, res, next) => {
   try {
-    const picture = await artHandlerInstance.findArtByRawId(req.params['artId']);
+    const picture = await artHandlerInstance.findArtByRawId(req.params.artId);
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/art/art_one.njk', {
       top_page: {
-        title: picture.title,
-        tagline: 'A collection of the things that I have attempted to draw at some point or another',
+        title:     picture.title,
+        tagline:   'A collection of the things that I have attempted to'
+          + ' draw at some point or another',
         image_src: `data:image/png;base64,${picture.image.thumb}`,
-        image_alt: picture.title
+        image_alt: picture.title,
       },
 
       content: {
-        picture: picture
+        picture,
       },
 
       head: {
-        title: 'J4Numbers :: Hobbies :: Art :: ',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
+        title:            'J4Numbers :: Hobbies :: Art :: ',
+        description:      'Home to the wild things',
+        current_page:     'hobbies',
         current_sub_page: 'art',
-      }
+      },
     }));
     next();
   } catch (e) {

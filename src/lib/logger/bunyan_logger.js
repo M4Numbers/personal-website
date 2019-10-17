@@ -26,7 +26,7 @@ const config = require('config');
 let logger;
 
 const createLogger = () => bunyan.createLogger({
-  name: config.get('app.name'),
+  name:  config.get('app.name'),
   level: config.get('logger.level'),
 });
 

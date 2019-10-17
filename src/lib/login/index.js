@@ -35,12 +35,11 @@ const decodeToken = async (token) => {
   }
 };
 
-const generateSignature = async (payload) =>
-    jwt.sign(payload, keyFile, {
-      algorithm: 'RS256',
-      expiresIn: '60m',
-      issuer: 'J4Numbers',
-    });
+const generateSignature = async (payload) => jwt.sign(payload, keyFile, {
+  algorithm: 'RS256',
+  expiresIn: '60m',
+  issuer:    'J4Numbers',
+});
 
 const isLoggedIn = async (token) => {
   if (token === '') {

@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 const over18Check = (req, res, next) => {
-  if (res.cookies['over-18'] === 'yes') {
+  if (res.cookies[ 'over-18' ] === 'yes') {
     next();
   } else {
     res.redirect(303, '/hobbies/me/over-18', next);

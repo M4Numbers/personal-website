@@ -26,17 +26,17 @@ const crypto = require('crypto');
 const tokenHandler = require('../../lib/login');
 
 const adminLoginCompare = async (req, res, next) => {
-  if (req.body['admin_password'] && !(res.nunjucks['logged_in'])) {
-    let hash = crypto.createHash('sha256').update(req.body['admin_password']).digest('hex');
+  if (req.body.admin_password && !(res.nunjucks.logged_in)) {
+    const hash = crypto.createHash('sha256').update(req.body.admin_password).digest('hex');
     if (hash === config.get('admin.hash')) {
       res.header(
-          'Set-Cookie',
-          `login-token=${await tokenHandler.generateSignature({admin: true})}; `
-          + `Max-Age=3600; `
+        'Set-Cookie',
+        `login-token=${await tokenHandler.generateSignature({ admin: true })}; `
+          + 'Max-Age=3600; '
           + `Domain=${config.get('app.hostname')}; `
-          + `Secure; `
-          + `HttpOnly; `
-          + `SameSite=Strict`
+          + 'Secure; '
+          + 'HttpOnly; '
+          + 'SameSite=Strict'
       );
     }
   }

@@ -23,7 +23,7 @@
 const renderer = require('../../lib/renderer').nunjucksRenderer();
 
 const adminLoginView = async (req, res, next) => {
-  if (res.nunjucks['logged_in']) {
+  if (res.nunjucks.logged_in) {
     res.redirect(303, '/admin', next);
   } else {
     res.contentType = 'text/html';
@@ -32,17 +32,17 @@ const adminLoginView = async (req, res, next) => {
       ...res.nunjucks,
 
       top_page: {
-        title: 'Log in',
-        tagline: 'Log into the site as an administrator',
-        fa_type: 'fas',
-        fa_choice: 'fa-key'
+        title:     'Log in',
+        tagline:   'Log into the site as an administrator',
+        fa_type:   'fas',
+        fa_choice: 'fa-key',
       },
 
       head: {
-        title: 'J4Numbers',
-        description: 'Home to the wild things',
-        current_page: 'login'
-      }
+        title:        'J4Numbers',
+        description:  'Home to the wild things',
+        current_page: 'login',
+      },
     }));
     next();
   }

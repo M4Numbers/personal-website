@@ -27,28 +27,29 @@ const kinkHandlerInstance = require('../../../lib/KinkHandler').getHandler();
 
 const getSingleKink = async (req, res, next) => {
   try {
-    const foundKink = await kinkHandlerInstance.findKinkByRawId(req.params['kinkId']);
+    const foundKink = await kinkHandlerInstance.findKinkByRawId(req.params.kinkId);
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/me/me_kinks_single.njk', {
       top_page: {
-        title: foundKink['kink_name'],
-        tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
+        title:     foundKink.kink_name,
+        tagline:   'If you were looking for a more personal overview about yours truly, '
+          + 'you\'ve come to the right place!',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'My logo that I use to represent myself'
+        image_alt: 'My logo that I use to represent myself',
       },
 
       content: {
-        kink: foundKink
+        kink: foundKink,
       },
 
       head: {
-        title: 'J4Numbers :: Welcome to Me',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
-        current_sub_page: 'me',
-        current_sub_sub_page: 'fetishes'
-      }
+        title:                'J4Numbers :: Welcome to Me',
+        description:          'Home to the wild things',
+        current_page:         'hobbies',
+        current_sub_page:     'me',
+        current_sub_sub_page: 'fetishes',
+      },
     }));
     next();
   } catch (e) {

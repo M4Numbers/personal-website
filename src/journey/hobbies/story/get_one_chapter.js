@@ -29,32 +29,32 @@ const chapterHandlerInstance = require('../../../lib/ChapterHandler').getHandler
 
 const getOneChapter = async (req, res, next) => {
   try {
-    const story = await storyHandlerInstance.findStoryByRawId(req.params['storyId']);
+    const story = await storyHandlerInstance.findStoryByRawId(req.params.storyId);
     const chapter = await chapterHandlerInstance.findChapterByStoryAndNumber(
-        req.params['storyId'],
-        req.params['chapterNumber'],
+      req.params.storyId,
+      req.params.chapterNumber,
     );
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/stories/chapters_one.njk', {
       top_page: {
-        title: story.title,
-        tagline: chapter.chapter_title,
+        title:     story.title,
+        tagline:   chapter.chapter_title,
         image_src: `data:image/png;base64,${story.cover_img}`,
-        image_alt: story.title
+        image_alt: story.title,
       },
 
       content: {
-        story: story,
-        chapter: chapter.pop()
+        story,
+        chapter: chapter.pop(),
       },
 
       head: {
-        title: 'J4Numbers :: Hobbies :: Writing :: ',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
+        title:            'J4Numbers :: Hobbies :: Writing :: ',
+        description:      'Home to the wild things',
+        current_page:     'hobbies',
         current_sub_page: 'writing',
-      }
+      },
     }));
     next();
   } catch (e) {

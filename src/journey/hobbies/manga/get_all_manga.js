@@ -28,12 +28,12 @@ const mangaHandlerInstance = require('../../../lib/MangaHandler').getHandler();
 const getAllManga = async (req, res, next) => {
   try {
     const allBooks = await mangaHandlerInstance.findMangaBooks(
-        Math.max(0, ((req.query['page'] || 1) - 1)) * 12,
-        12,
-        {'title.romaji': 1},
-        req.query.category,
+      Math.max(0, ((req.query.page || 1) - 1)) * 12,
+      12,
+      { 'title.romaji': 1 },
+      req.query.category,
     );
-    const totalCount = await mangaHandlerInstance.getTotalBookCount(req.query['category'] || '');
+    const totalCount = await mangaHandlerInstance.getTotalBookCount(req.query.category || '');
     let baseUrl = '';
     if (req.query.category) {
       baseUrl += `category=${req.query.category}&`;
@@ -45,30 +45,30 @@ const getAllManga = async (req, res, next) => {
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/manga/manga_all.njk', {
       top_page: {
-        title: 'My Manga Readlist',
-        tagline: 'A list of all the strange things that I have read at some point or another',
+        title:     'My Manga Readlist',
+        tagline:   'A list of all the strange things that I have read at some point or another',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'Main face of the site'
+        image_alt: 'Main face of the site',
       },
 
       content: {
-        books: allBooks
+        books: allBooks,
       },
 
       pagination: {
-        base_url: `/hobbies/manga?${baseUrl}`,
-        total: totalCount,
-        page: Math.max((req.query['page'] || 1), 1),
-        page_size: 12
+        base_url:  `/hobbies/manga?${baseUrl}`,
+        total:     totalCount,
+        page:      Math.max((req.query.page || 1), 1),
+        page_size: 12,
       },
 
       head: {
-        title: 'J4Numbers :: Hobbies :: Manga',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
+        title:            'J4Numbers :: Hobbies :: Manga',
+        description:      'Home to the wild things',
+        current_page:     'hobbies',
         current_sub_page: 'manga',
-        current_category: req.query['category'] || 'all'
-      }
+        current_category: req.query.category || 'all',
+      },
     }));
     next();
   } catch (e) {

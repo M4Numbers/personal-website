@@ -33,24 +33,25 @@ const generateOver18Page = async function (req, res, next) {
     const kinkWarning = await staticHandlerInstance.findStatic(StaticDocumentTypes.KINK_WARNING);
     res.send(200, renderer.render('pages/me/me_kinks_warn.njk', {
       top_page: {
-        title: 'Welcome to Me',
-        tagline: 'If you were looking for a more personal overview about yours truly, you\'ve come to the right place!',
+        title:     'Welcome to Me',
+        tagline:   'If you were looking for a more personal overview about yours truly, '
+          + 'you\'ve come to the right place!',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'My logo that I use to represent myself'
+        image_alt: 'My logo that I use to represent myself',
       },
 
       content: {
-        title: 'A warning, dear reader',
-        content: markdown.render((kinkWarning || {}).content || '')
+        title:   'A warning, dear reader',
+        content: markdown.render((kinkWarning || {}).content || ''),
       },
 
       head: {
-        title: 'J4Numbers :: Welcome to Me',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
-        current_sub_page: 'me',
-        current_sub_sub_page: 'fetishes'
-      }
+        title:                'J4Numbers :: Welcome to Me',
+        description:          'Home to the wild things',
+        current_page:         'hobbies',
+        current_sub_page:     'me',
+        current_sub_sub_page: 'fetishes',
+      },
     }));
     next();
   } catch (e) {

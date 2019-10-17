@@ -29,10 +29,10 @@ const blogHandlerInstance = require('../../../lib/BlogHandler').getHandler();
 const getAllExtendedBlogs = (req, res, next) => {
   try {
     const blogs = blogHandlerInstance.findBlogs(
-        Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
-        10,
-        {'time_posted': -1},
-        false,
+      Math.max(0, ((req.query.page || 1) - 1)) * 10,
+      10,
+      { 'time_posted': -1 },
+      false,
     );
     const blogCount = blogHandlerInstance.getTotalBlogCount();
 
@@ -40,30 +40,30 @@ const getAllExtendedBlogs = (req, res, next) => {
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/me/me_blog_all.njk', {
       top_page: {
-        title: 'My Private Blog',
-        tagline: 'A list of scribbled things that have been made over the years.',
+        title:     'My Private Blog',
+        tagline:   'A list of scribbled things that have been made over the years.',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'Main face of the site'
+        image_alt: 'Main face of the site',
       },
 
       content: {
-        blogs: blogs
+        blogs,
       },
 
       pagination: {
-        base_url: '/hobbies/me/extended-blog?',
-        total: blogCount,
-        page: Math.max((req.query['page'] || 1), 1),
-        page_size: 10
+        base_url:  '/hobbies/me/extended-blog?',
+        total:     blogCount,
+        page:      Math.max((req.query.page || 1), 1),
+        page_size: 10,
       },
 
       head: {
-        title: 'J4Numbers :: Extended Blog',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
-        current_sub_page: 'me',
-        current_sub_sub_page: 'extended-blog'
-      }
+        title:                'J4Numbers :: Extended Blog',
+        description:          'Home to the wild things',
+        current_page:         'hobbies',
+        current_sub_page:     'me',
+        current_sub_sub_page: 'extended-blog',
+      },
     }));
     next();
   } catch (e) {

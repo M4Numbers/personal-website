@@ -7,5 +7,5 @@ module.exports = {
     'node': true,
     'browser': true,
     'jquery': true,
-  }
+  },
 };

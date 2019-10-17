@@ -28,12 +28,12 @@ const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 const getAllAnime = async (req, res, next) => {
   try {
     const allShows = await animeHandlerInstance.findAnimeShows(
-        Math.max(0, ((req.query['page'] || 1) - 1)) * 12,
-        12,
-        {'title.romaji': 1},
-        req.query['category']
+      Math.max(0, ((req.query.page || 1) - 1)) * 12,
+      12,
+      { 'title.romaji': 1 },
+      req.query.category
     );
-    const allShowCount = await animeHandlerInstance.getTotalShowCount(req.query['category'] || '');
+    const allShowCount = await animeHandlerInstance.getTotalShowCount(req.query.category || '');
 
     let baseUrl = '';
     if (req.query.category) {
@@ -46,30 +46,30 @@ const getAllAnime = async (req, res, next) => {
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/anime/anime_all.njk', {
       top_page: {
-        title: 'My Anime Watchlist',
-        tagline: 'A list of all the strange things that I have seen at some point or another',
+        title:     'My Anime Watchlist',
+        tagline:   'A list of all the strange things that I have seen at some point or another',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'Main face of the site'
+        image_alt: 'Main face of the site',
       },
 
       content: {
-        shows: allShows
+        shows: allShows,
       },
 
       pagination: {
-        base_url: `/hobbies/anime?${baseUrl}`,
-        total: allShowCount,
-        page: Math.max((req.query['page'] || 1), 1),
-        page_size: 12
+        base_url:  `/hobbies/anime?${baseUrl}`,
+        total:     allShowCount,
+        page:      Math.max((req.query.page || 1), 1),
+        page_size: 12,
       },
 
       head: {
-        title: 'J4Numbers :: Hobbies :: Anime',
-        description: 'Home to the wild things',
-        current_page: 'hobbies',
+        title:            'J4Numbers :: Hobbies :: Anime',
+        description:      'Home to the wild things',
+        current_page:     'hobbies',
         current_sub_page: 'anime',
-        current_category: req.query['category'] || 'all'
-      }
+        current_category: req.query.category || 'all',
+      },
     }));
     next();
   } catch (e) {

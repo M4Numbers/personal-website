@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 const testFriendLoggedIn = async (req, res, next) => {
-  if (!res.nunjucks['friendly']) {
+  if (!res.nunjucks.friendly) {
     res.redirect(303, '/hobbies/me/login', next);
   } else {
     next();
