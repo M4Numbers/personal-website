@@ -27,27 +27,27 @@ const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 
 const getOneAnime = async (req, res, next) => {
   try {
-    const show = await animeHandlerInstance.findAnimeByRawId(req.params['animeId']);
+    const show = await animeHandlerInstance.findAnimeByRawId(req.params.animeId);
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/admin/anime/admin_anime_view_single.njk', {
       top_page: {
-        title: 'Administrator Toolkit',
-        tagline: 'All the functions that the administrator of the site has available to them',
-        fa_type: 'fas',
-        fa_choice: 'fa-toolbox'
+        title:     'Administrator Toolkit',
+        tagline:   'All the functions that the administrator of the site has available to them',
+        fa_type:   'fas',
+        fa_choice: 'fa-toolbox',
       },
 
       content: {
-        show: show
+        show,
       },
 
       head: {
-        title: 'J4Numbers',
-        description: 'Home to the wild things',
-        current_page: 'admin',
-        current_sub_page: 'anime-view'
-      }
+        title:            'J4Numbers',
+        description:      'Home to the wild things',
+        current_page:     'admin',
+        current_sub_page: 'anime-view',
+      },
     }));
     next();
   } catch (e) {

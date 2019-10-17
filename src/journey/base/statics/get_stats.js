@@ -30,22 +30,22 @@ const getStatistics = async (req, res, next) => {
   res.header('content-type', 'text/html');
   res.send(200, renderer.render('pages/stats.njk', {
     top_page: {
-      title: 'Statistics',
-      tagline: 'Some statistics that relate directly to the site',
-      fa_type: 'fas',
-      fa_choice: 'fa-clipboard-check'
+      title:     'Statistics',
+      tagline:   'Some statistics that relate directly to the site',
+      fa_type:   'fas',
+      fa_choice: 'fa-clipboard-check',
     },
 
     content: {
-      time: moment(),
-      version: envs['NPM_PACKAGE_VERSION']
+      time:    moment(),
+      version: envs.NPM_PACKAGE_VERSION,
     },
 
     head: {
-      title: 'J4Numbers :: Statistics',
-      description: 'Home to the wild things',
-      current_page: 'stats'
-    }
+      title:        'J4Numbers :: Statistics',
+      description:  'Home to the wild things',
+      current_page: 'stats',
+    },
   }));
   next();
 };

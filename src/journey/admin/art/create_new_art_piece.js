@@ -27,16 +27,16 @@ const artHandlerInstance = ArtHandler.getHandler();
 
 const postNewArtPiece = async (req, res, next) => {
   try {
-    req.log.info(`Reading in new image from ${req.files['art-image'].path}`);
-    let imageAsBase64 = fs.readFileSync(req.files['art-image'].path, 'base64');
+    req.log.info(`Reading in new image from ${req.files[ 'art-image' ].path}`);
+    const imageAsBase64 = fs.readFileSync(req.files[ 'art-image' ].path, 'base64');
     const savedArt = await artHandlerInstance.addNewArtItem(
-        req.body['art-title'], req.body['art-completed-date'],
-        imageAsBase64, req.body['art-tags'].split(/, ?/),
-        req.body['art-notes']
+      req.body[ 'art-title' ], req.body[ 'art-completed-date' ],
+      imageAsBase64, req.body[ 'art-tags' ].split(/, ?/u),
+      req.body[ 'art-notes' ],
     );
     res.redirect(303, `/admin/art/${savedArt._id}`, next);
   } catch (e) {
-    req.log.warn({error: e});
+    req.log.warn(`Issue found when trying to create new art piece :: ${e.message}`);
     res.redirect(303, '/admin/art/new', next);
   }
 };

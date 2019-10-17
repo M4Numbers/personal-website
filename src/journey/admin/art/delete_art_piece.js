@@ -25,11 +25,11 @@ const artHandlerInstance = ArtHandler.getHandler();
 
 const deleteArtPiece = async (req, res, next) => {
   try {
-    await artHandlerInstance.deleteArt(req.params['artId']);
+    await artHandlerInstance.deleteArt(req.params.artId);
     res.redirect(303, '/admin/art/', next);
   } catch (e) {
-    req.log.warn({art_id: req.params['artId'], error: e});
-    res.redirect(303, `/admin/art/${req.params['artId']}`, next);
+    req.log.warn(`Issue found when trying to delete art piece :: ${e.message}`);
+    res.redirect(303, `/admin/art/${req.params.artId}`, next);
   }
 };
 

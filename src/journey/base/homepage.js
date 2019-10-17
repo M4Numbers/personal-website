@@ -28,17 +28,17 @@ const homepage = async (req, res, next) => {
   res.send(200, renderer.render('pages/index.njk', {
     ...res.nunjucks,
     top_page: {
-      title: 'Hello World',
-      tagline: 'This is a site that contains information about the person on your left.',
+      title:     'Hello World',
+      tagline:   'This is a site that contains information about the person on your left.',
       image_src: '/assets/images/J_handle.png',
-      image_alt: 'Main face of the site'
+      image_alt: 'Main face of the site',
     },
 
     head: {
-      title: 'J4Numbers',
-      description: 'Home to the wild things',
-      current_page: 'index'
-    }
+      title:        'J4Numbers',
+      description:  'Home to the wild things',
+      current_page: 'index',
+    },
   }));
   next();
 };

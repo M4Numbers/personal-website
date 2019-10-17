@@ -27,7 +27,7 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const getOneBlog = async (req, res, next) => {
   try {
-    const blogPost = await blogHandlerInstance.findBlog(req.params['blogId']);
+    const blogPost = await blogHandlerInstance.findBlog(req.params.blogId);
 
     if (blogPost !== null) {
       res.contentType = 'text/html';
@@ -36,21 +36,21 @@ const getOneBlog = async (req, res, next) => {
         ...res.nunjucks,
 
         top_page: {
-          title: blogPost.long_title,
+          title:     blogPost.long_title,
           blog_tags: blogPost.tags,
           image_src: '/assets/images/J_handle.png',
           image_alt: 'Main face of the site',
         },
 
         content: {
-          blog_text: blogPost.full_text
+          blog_text: blogPost.full_text,
         },
 
         head: {
-          title: `J4Numbers :: ${blogPost.long_title}`,
-          description: 'Home to the wild things',
-          current_page: 'blog'
-        }
+          title:        `J4Numbers :: ${blogPost.long_title}`,
+          description:  'Home to the wild things',
+          current_page: 'blog',
+        },
       }));
       next();
     } else {

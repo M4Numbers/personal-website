@@ -34,22 +34,23 @@ const getAboutMe = async (req, res, next) => {
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/about.njk', {
       top_page: {
-        title: 'About Me',
-        tagline: 'If you were looking for a general overview about yours truly, you\'ve come to the right place!',
+        title:     'About Me',
+        tagline:   'If you were looking for a general overview about yours truly, '
+          + 'you\'ve come to the right place!',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'My logo that I use to represent myself'
+        image_alt: 'My logo that I use to represent myself',
       },
 
       content: {
         title: 'About Me',
-        text: (staticContent || {}).content,
+        text:  (staticContent || {}).content,
       },
 
       head: {
-        title: 'J4Numbers :: About Me',
-        description: 'Home to the wild things',
-        current_page: 'about'
-      }
+        title:        'J4Numbers :: About Me',
+        description:  'Home to the wild things',
+        current_page: 'about',
+      },
     }));
     next();
   } catch (rejection) {

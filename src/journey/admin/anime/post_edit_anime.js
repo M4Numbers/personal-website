@@ -25,13 +25,13 @@ const animeHandlerInstance = require('../../../lib/AnimeHandler').getHandler();
 const postEditAnime = async (req, res, next) => {
   try {
     await animeHandlerInstance.editAnime(
-        req.params['animeId'], req.body['show-review'],
-        req.body['show-tags'].split(/, ?/),
+      req.params.animeId, req.body[ 'show-review' ],
+      req.body[ 'show-tags' ].split(/, ?/u),
     );
-    res.redirect(303, `/admin/anime/${req.params['animeId']}`, next);
+    res.redirect(303, `/admin/anime/${req.params.animeId}`, next);
   } catch (e) {
-    req.log.warn({anime_id: req.params['animeId'], error: e});
-    res.redirect(303, `/admin/anime/${req.params['animeId']}`, next);
+    req.log.warn(`Issue found when trying to post new anime edits :: ${e.message}`);
+    res.redirect(303, `/admin/anime/${req.params.animeId}`, next);
   }
 };
 

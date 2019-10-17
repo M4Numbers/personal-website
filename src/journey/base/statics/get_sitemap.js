@@ -27,32 +27,36 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
-const sitemapSorter = (a, b) => (a['page_name'] > b['page_name']) ? 1 : ((a['page_name'] < ['page_name']) ? -1 : 0);
+const sitemapSorter = (a, b) => (
+  // eslint-disable-next-line no-nested-ternary
+  (a.page_name > b.page_name)
+    ? 1
+    : ((a.page_name < [ 'page_name' ]) ? -1 : 0));
 
 const getSitemap = async (req, res, next) => {
   try {
     const sitemapItems = await staticHandlerInstance.findStatic(StaticDocumentTypes.SITEMAP);
-    let sortedSiteMap = ((sitemapItems || {}).content || []).sort(sitemapSorter);
+    const sortedSiteMap = ((sitemapItems || {}).content || []).sort(sitemapSorter);
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/sitemap.njk', {
       top_page: {
-        title: 'Sitemap',
-        tagline: 'If you want to get somewhere, why not use the links below to navigate!',
-        fa_type: 'fas',
-        fa_choice: 'fa-map'
+        title:     'Sitemap',
+        tagline:   'If you want to get somewhere, why not use the links below to navigate!',
+        fa_type:   'fas',
+        fa_choice: 'fa-map',
       },
 
       content: {
-        title: 'Sitemap',
+        title:      'Sitemap',
         site_links: sortedSiteMap || [],
       },
 
       head: {
-        title: 'J4Numbers :: Sitemap',
-        description: 'Home to the wild things',
-        current_page: 'sitemap'
-      }
+        title:        'J4Numbers :: Sitemap',
+        description:  'Home to the wild things',
+        current_page: 'sitemap',
+      },
     }));
     next();
   } catch (caught) {

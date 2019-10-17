@@ -34,22 +34,22 @@ const getContactMe = async (req, res, next) => {
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/contact.njk', {
       top_page: {
-        title: 'Contact Me',
-        tagline: 'If, for whatever reason, you want to get in touch with me, use the links below to find my other' +
-            ' hidey-holes.',
-        fa_type: 'fas',
-        fa_choice: 'fa-phone'
+        title:   'Contact Me',
+        tagline: 'If, for whatever reason, you want to get in touch with me, '
+          + 'use the links below to find my other hidey-holes.',
+        fa_type:   'fas',
+        fa_choice: 'fa-phone',
       },
 
       content: {
-        options: (staticContent || {}).content
+        options: (staticContent || {}).content,
       },
 
       head: {
-        title: 'J4Numbers :: Contact Me',
-        description: 'Home to the wild things',
-        current_page: 'contact'
-      }
+        title:        'J4Numbers :: Contact Me',
+        description:  'Home to the wild things',
+        current_page: 'contact',
+      },
     }));
     next();
   } catch (e) {

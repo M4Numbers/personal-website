@@ -36,17 +36,17 @@ let http2Config;
 if (config.get('app.http2.enabled')) {
   log.info('HTTP/2 configuration accepted...');
   http2Config = {
-    key: fs.readFileSync(config.get('app.http2.key')),
+    key:  fs.readFileSync(config.get('app.http2.key')),
     cert: fs.readFileSync(config.get('app.http2.cert')),
   };
 }
 
 const server = restify.createServer({
-  name: config.get('app.name'),
-  url: config.get('app.hostname'),
+  name:                config.get('app.name'),
+  url:                 config.get('app.hostname'),
   ignoreTrailingSlash: true,
   log,
-  formatters: {
+  formatters:          {
     'text/html': (req, res, body) => {
       if (body instanceof Error) {
         return body.toHTML();

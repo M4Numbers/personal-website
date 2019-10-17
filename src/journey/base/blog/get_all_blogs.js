@@ -28,9 +28,9 @@ const renderer = require('../../../lib/renderer').nunjucksRenderer();
 const getAllBlogs = async (req, res, next) => {
   try {
     const blogPosts = await blogHandlerInstance.findBlogs(
-        Math.max(0, ((req.query['page'] || 1) - 1)) * 10,
-        10,
-        {'time_posted': -1}
+      Math.max(0, ((req.query.page || 1) - 1)) * 10,
+      10,
+      { 'time_posted': -1 }
     );
     const totalBlogCount = await blogHandlerInstance.getTotalBlogCount();
 
@@ -39,32 +39,32 @@ const getAllBlogs = async (req, res, next) => {
     res.send(200, renderer.render('pages/blog_all.njk', {
       ...res.nunjucks,
       top_page: {
-        title: 'My Blog',
-        tagline: 'A list of scribbled things that have been made over the years.',
+        title:     'My Blog',
+        tagline:   'A list of scribbled things that have been made over the years.',
         image_src: '/assets/images/J_handle.png',
-        image_alt: 'Main face of the site'
+        image_alt: 'Main face of the site',
       },
 
       content: {
-        blogs: blogPosts
+        blogs: blogPosts,
       },
 
       pagination: {
-        base_url: '/blog?',
-        total: totalBlogCount,
-        page: Math.max((req.query['page'] || 1), 1),
-        page_size: 10
+        base_url:  '/blog?',
+        total:     totalBlogCount,
+        page:      Math.max((req.query.page || 1), 1),
+        page_size: 10,
       },
 
       head: {
-        title: 'J4Numbers :: Blog',
-        description: 'Home to the wild things',
-        current_page: 'blog'
-      }
+        title:        'J4Numbers :: Blog',
+        description:  'Home to the wild things',
+        current_page: 'blog',
+      },
     }));
     next();
   } catch (e) {
-    req.log.warn(`Issue found when trying to get all blog posts :: ${e.message}`)
+    req.log.warn(`Issue found when trying to get all blog posts :: ${e.message}`);
     next(new errors.InternalServerError(e.message));
   }
 };

@@ -29,27 +29,27 @@ const artHandlerInstance = ArtHandler.getHandler();
 
 const viewDeleteArtPiece = async (req, res, next) => {
   try {
-    const picture = artHandlerInstance.findArtByRawId(req.params['artId']);
+    const picture = artHandlerInstance.findArtByRawId(req.params.artId);
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/admin/art/admin_art_delete_single.njk', {
       top_page: {
-        title: 'Administrator Toolkit',
-        tagline: 'All the functions that the administrator of the site has available to them',
-        fa_type: 'fas',
-        fa_choice: 'fa-toolbox'
+        title:     'Administrator Toolkit',
+        tagline:   'All the functions that the administrator of the site has available to them',
+        fa_type:   'fas',
+        fa_choice: 'fa-toolbox',
       },
 
       content: {
-        picture: picture
+        picture,
       },
 
       head: {
-        title: 'J4Numbers',
-        description: 'Home to the wild things',
-        current_page: 'admin',
-        current_sub_page: 'art-delete'
-      }
+        title:            'J4Numbers',
+        description:      'Home to the wild things',
+        current_page:     'admin',
+        current_sub_page: 'art-delete',
+      },
     }));
     next();
   } catch (e) {
