@@ -2,7 +2,7 @@
   "name": "personal-website",
   "description": "This is the personal website of Jayne Doe (otherwise known as J4Numbers)",
   "author": "Jayne Doe <j4numbers@gmail.com>",
-  "version": "2.0.0-beta1",
+  "version": "2.0.0-beta2",
   "main": "src/app.js",
   "private": true,
   "license": "MIT",
