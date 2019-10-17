@@ -22,7 +22,7 @@
 
 const errors = require('restify-errors');
 
-const importHandler = require('../../lib/ImportHandler');
+const importHandler = require('../../../lib/ImportHandler');
 
 const refreshMangaDatabase = async (req, res, next) => {
   try {

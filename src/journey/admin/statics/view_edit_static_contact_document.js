@@ -44,7 +44,7 @@ const viewEditSingleListContactStaticDocument = async (req, res, next) => {
 
         content: {
           static_id:     res.locals.staticId,
-          static_detail: staticData.content,
+          static_detail: (staticData !== null) ? staticData.content : {},
         },
 
         head: {

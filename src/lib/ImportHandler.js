@@ -119,6 +119,7 @@ async function importAnimeAniListItemsIntoMongo () {
   let roller = await aniListHandlerInstance.getPageOfAniListAnimeResults(page);
   let mediaItems = roller.data.Page.mediaList;
   while (mediaItems.length > 0) {
+    logger.info(`Scraped ${mediaItems.length} shows from AniList`);
     mediaItems.forEach(async (media) => {
       const record = await mongoAnimeHandlerInstance
         .findAnimeByAniListId(media.media.id);
@@ -142,6 +143,7 @@ async function importMangaAniListItemsIntoMongo () {
   let roller = await aniListHandlerInstance.getPageOfAniListMangaResults(page);
   let mediaItems = roller.data.Page.mediaList;
   while (mediaItems.length > 0) {
+    logger.info(`Scraped ${mediaItems.length} books from AniList`);
     mediaItems.forEach(async (media) => {
       const record = await mongoMangaHandlerInstance
         .findMangaByAniListId(media.media.id);

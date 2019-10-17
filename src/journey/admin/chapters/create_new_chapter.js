@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-const StoryHandler = require('../../lib/StoryHandler');
+const StoryHandler = require('../../../lib/StoryHandler');
 const storyHandlerInstance = StoryHandler.getHandler();
 
-const ChapterHandler = require('../../lib/ChapterHandler');
+const ChapterHandler = require('../../../lib/ChapterHandler');
 const chapterHandlerInstance = ChapterHandler.getHandler();
 
 // All endpoints below are prefixed with `/admin/stories/:storyId/chapter`

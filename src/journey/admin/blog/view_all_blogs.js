@@ -22,8 +22,9 @@
 
 const errors = require('restify-errors');
 
-const BlogHandler = require('../../lib/BlogHandler');
+const BlogHandler = require('../../../lib/BlogHandler');
 const blogHandlerInstance = BlogHandler.getHandler();
+
 const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const viewBlogHome = async (req, res, next) => {

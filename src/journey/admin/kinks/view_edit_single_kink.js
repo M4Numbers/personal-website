@@ -22,7 +22,7 @@
 
 const errors = require('restify-errors');
 
-const renderer = require('../../lib/renderer').nunjucksRenderer();
+const renderer = require('../../../lib/renderer').nunjucksRenderer();
 
 const KinkHandler = require('../../../lib/KinkHandler');
 const kinkHandlerInstance = KinkHandler.getHandler();

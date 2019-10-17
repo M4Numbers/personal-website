@@ -88,7 +88,7 @@ class AniListHandler {
         mediaType: MediaTypes.ANIME,
       };
 
-      await this.performRequest({
+      return await this.performRequest({
         query,
         variables,
       });
@@ -106,7 +106,7 @@ class AniListHandler {
         mediaType: MediaTypes.MANGA,
       };
 
-      await this.performRequest({
+      return await this.performRequest({
         query,
         variables,
       });
