@@ -31,8 +31,7 @@ const MongoDbHandler = require('./MongoDbHandler');
 const logger = require('./logger').bunyanLogger();
 
 class KinkHandler {
-
-  static getHandler() {
+  static getHandler () {
     if (this.kinkHandlerInstance === undefined) {
       logger.debug('Starting up a new instance of the kink database handler');
       this.kinkHandlerInstance = new KinkHandler();
@@ -40,83 +39,89 @@ class KinkHandler {
     return this.kinkHandlerInstance;
   }
 
-  constructor() {
+  constructor () {
     this.mongoDbInstance = MongoDbHandler.getMongo();
 
     this.KinkCollection = new Schema({
-      '_id': ObjectId,
-      'kink_name': String,
-      'kink_description': String,
-      'practising_status': String,
+      '_id':                 ObjectId,
+      'kink_name':           String,
+      'kink_description':    String,
+      'practising_status':   String,
       'personal_experience': String,
-      'cover_img': String,
-      'tags': Array,
-      'time_updated': {type: Date, default: Date.now()}
+      'cover_img':           String,
+      'tags':                Array,
+      'time_updated':        {
+        type:    Date,
+        default: Date.now(),
+      },
     });
-    this.KinkCollectionModel = this.mongoDbInstance.bootModel('KinkCollection', this.KinkCollection);
+    this.KinkCollectionModel = this.mongoDbInstance
+      .bootModel('KinkCollection', this.KinkCollection);
   }
 
-  async findKinkByRawId(rawId) {
+  async findKinkByRawId (rawId) {
     return this.mongoDbInstance.findById(this.KinkCollectionModel, rawId);
   }
 
-  async deleteKink(kinkId) {
+  async deleteKink (kinkId) {
     return this.mongoDbInstance.deleteById(this.KinkCollectionModel, kinkId);
   }
 
-  buildQuery(status = '') {
+  buildQuery (status = '') {
     let query = {};
     if (status !== 'all') {
       if (status === 'practised') {
-        query = {$or: [{practising_status: 'PRACTISING'}, {practising_status: 'RETIRED'}]};
+        query = { $or: [ { practising_status: 'PRACTISING' }, { practising_status: 'RETIRED' } ] };
       }
       if (status === 'practising') {
-        query['practising_status'] = 'PRACTISING';
+        query.practising_status = 'PRACTISING';
       }
       if (status === 'retired') {
-        query['practising_status'] = 'RETIRED';
+        query.practising_status = 'RETIRED';
       }
       if (status === 'fantasising') {
-        query['practising_status'] = 'FANTASISING';
+        query.practising_status = 'FANTASISING';
       }
     }
     return query;
   }
 
-  async findKinks(skip, limit, sort, category = '') {
-    return this.mongoDbInstance.findFromQuery(this.KinkCollectionModel, this.buildQuery(category), skip, limit, sort);
+  async findKinks (skip, limit, sort, category = '') {
+    return this.mongoDbInstance
+      .findFromQuery(this.KinkCollectionModel, this.buildQuery(category), skip, limit, sort);
   }
 
-  async findKinksByQuery(query, skip, limit, sort) {
+  async findKinksByQuery (query, skip, limit, sort) {
     return this.mongoDbInstance.findFromQuery(this.KinkCollectionModel, query, skip, limit, sort);
   }
 
-  async getTotalKinkCount(category = '') {
-    return this.mongoDbInstance.getTotalCountFromQuery(this.KinkCollectionModel, this.buildQuery(category));
+  async getTotalKinkCount (category = '') {
+    return this.mongoDbInstance
+      .getTotalCountFromQuery(this.KinkCollectionModel, this.buildQuery(category));
   }
 
-  async upsertKink(kinkToUpsert) {
+  async upsertKink (kinkToUpsert) {
     return this.mongoDbInstance.upsertItem(kinkToUpsert);
   }
 
-  async updateExistingKink(originalId, title, description, status, experience, coverImg, tags) {
+  async updateExistingKink (originalId, title, description, status, experience, coverImg, tags) {
     let oldKink = await this.findKinkByRawId(originalId);
     if (typeof oldKink === 'undefined') {
       throw new Error('Could not find given anime to update');
     } else {
       oldKink = this.fillInKink(oldKink, title, description, status, experience, coverImg, tags);
-      return await this.upsertKink(oldKink);
+      return this.upsertKink(oldKink);
     }
   }
 
-  async addNewKink(title, description, status, experience, image, tags) {
+  async addNewKink (title, description, status, experience, image, tags) {
     let newKink = new this.KinkCollectionModel();
     newKink._id = oId();
     newKink = this.fillInKink(newKink, title, description, status, experience, image, tags);
-    return await this.upsertKink(newKink);
+    return this.upsertKink(newKink);
   }
 
-  fillInKink(kinkToUpdate, title, description, status, experience, image, tags) {
+  fillInKink (kinkToUpdate, title, description, status, experience, image, tags) {
     kinkToUpdate.kink_name = title;
     kinkToUpdate.kink_description = description;
     kinkToUpdate.practising_status = status;
@@ -125,7 +130,6 @@ class KinkHandler {
     kinkToUpdate.tags = tags;
     return kinkToUpdate;
   }
-
 }
 
 KinkHandler.kinkHandlerInstance = undefined;

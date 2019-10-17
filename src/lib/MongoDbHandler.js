@@ -26,23 +26,23 @@ const mongoose = require('mongoose');
 const logger = require('./logger').bunyanLogger();
 
 class MongoDbHandler {
-
-  static getMongo() {
+  static getMongo () {
     if (this.mongoDbInstance === undefined) {
       this.mongoDbInstance = new MongoDbHandler();
     }
     return this.mongoDbInstance;
   }
 
-  constructor() {
-    this.connection = mongoose.createConnection(config.get('database.uri'), {useNewUrlParser: true});
+  constructor () {
+    this.connection = mongoose
+      .createConnection(config.get('database.uri'), { useNewUrlParser: true });
   }
 
-  bootModel(modelName, model) {
+  bootModel (modelName, model) {
     return this.connection.model(modelName, model);
   }
 
-  async findById(model, id) {
+  async findById (model, id) {
     try {
       return await model.findById(id);
     } catch (e) {
@@ -51,12 +51,13 @@ class MongoDbHandler {
     }
   }
 
-  async findOrCreate(model, id) {
+  async findOrCreate (model, id) {
     try {
       return await model.findOneAndUpdate(
-          {'_id': id},
-          {},
-          {upsert: true, new: true}
+        { '_id': id },
+        {},
+        { upsert: true,
+          new:    true }
       );
     } catch (err) {
       logger.warn(err.message);
@@ -64,21 +65,23 @@ class MongoDbHandler {
     }
   }
 
-  async deleteById(model, id) {
+  async deleteById (model, id) {
     try {
-      return await model.deleteOne({'_id': id});
+      return await model.deleteOne({ '_id': id });
     } catch (e) {
       logger.warn(e.message);
       throw e;
     }
   }
 
-  async findFromQuery(model, query, skip, limit, sort) {
+  async findFromQuery (model, query, skip, limit, sort) {
     try {
       return await model.find(
-          query,
-          {},
-          {skip: skip, limit: limit, sort: sort}
+        query,
+        {},
+        { skip,
+          limit,
+          sort }
       );
     } catch (e) {
       logger.warn(e.message);
@@ -86,7 +89,7 @@ class MongoDbHandler {
     }
   }
 
-  async getTotalCountFromQuery(model, query) {
+  async getTotalCountFromQuery (model, query) {
     try {
       return await model.countDocuments(query);
     } catch (e) {
@@ -95,7 +98,7 @@ class MongoDbHandler {
     }
   }
 
-  async upsertItem(itemToSave) {
+  async upsertItem (itemToSave) {
     try {
       return await itemToSave.save();
     } catch (e) {
@@ -103,7 +106,6 @@ class MongoDbHandler {
       throw e;
     }
   }
-
 }
 
 MongoDbHandler.mongoDbInstance = undefined;

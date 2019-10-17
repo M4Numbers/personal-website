@@ -31,8 +31,7 @@ const MongoDbHandler = require('./MongoDbHandler');
 const logger = require('./logger').bunyanLogger();
 
 class StoryHandler {
-
-  static getHandler() {
+  static getHandler () {
     if (this.storyHandlerInstance === undefined) {
       logger.debug('Starting up a new instance of the story database handler');
       this.storyHandlerInstance = new StoryHandler();
@@ -40,79 +39,86 @@ class StoryHandler {
     return this.storyHandlerInstance;
   }
 
-  constructor() {
+  constructor () {
     this.mongoDbInstance = MongoDbHandler.getMongo();
 
     this.Story = new Schema({
-      '_id': ObjectId,
+      '_id':          ObjectId,
       'story_status': String,
-      'story_type': String,
-      'title': String,
-      'synopsis': String,
-      'cover_img': String,
-      'chapters': Array,
-      'time_posted': {type: Date, default: Date.now()},
-      'time_updated': {type: Date, default: Date.now()},
-      'tags': Array,
-      'meta_review': String
+      'story_type':   String,
+      'title':        String,
+      'synopsis':     String,
+      'cover_img':    String,
+      'chapters':     Array,
+      'time_posted':  {
+        type:    Date,
+        default: Date.now(),
+      },
+      'time_updated': {
+        type:    Date,
+        default: Date.now(),
+      },
+      'tags':         Array,
+      'meta_review':  String,
     });
     this.StoryModel = this.mongoDbInstance.bootModel('Story', this.Story);
   }
 
-  async findStoryByRawId(rawId) {
+  async findStoryByRawId (rawId) {
     return this.mongoDbInstance.findById(this.StoryModel, rawId);
   }
 
-  async findAllStories(skip, limit, sort) {
+  async findAllStories (skip, limit, sort) {
     return this.mongoDbInstance.findFromQuery(this.StoryModel, {}, skip, limit, sort);
   }
 
-  async findStoriesByQuery(query, skip, limit, sort) {
+  async findStoriesByQuery (query, skip, limit, sort) {
     return this.mongoDbInstance.findFromQuery(this.StoryModel, query, skip, limit, sort);
   }
 
-  async getTotalStoryCount() {
+  async getTotalStoryCount () {
     return this.mongoDbInstance.getTotalCountFromQuery(this.StoryModel, {});
   }
 
-  async upsertStory(storyToUpsert) {
+  async upsertStory (storyToUpsert) {
     return this.mongoDbInstance.upsertItem(storyToUpsert);
   }
 
-  async addChapterToStory(storyIdToUpdate, chapterNumber, chapterIdToAdd) {
-    let story = await this.findStoryByRawId(storyIdToUpdate);
+  async addChapterToStory (storyIdToUpdate, chapterNumber, chapterIdToAdd) {
+    const story = await this.findStoryByRawId(storyIdToUpdate);
     story.chapters.push(chapterIdToAdd);
-    return await this.upsertStory(story);
+    return this.upsertStory(story);
   }
 
-  async removeChapterFromStory(storyIdToUpdate, chapterIdToRemove) {
-    let story = await this.findStoryByRawId(storyIdToUpdate);
-    story.chapters = story.chapters.filter(item => item !== chapterIdToRemove);
-    return await this.upsertStory(story);
+  async removeChapterFromStory (storyIdToUpdate, chapterIdToRemove) {
+    const story = await this.findStoryByRawId(storyIdToUpdate);
+    story.chapters = story.chapters.filter((item) => item !== chapterIdToRemove);
+    return this.upsertStory(story);
   }
 
-  async deleteStory(storyIdToRemove) {
+  async deleteStory (storyIdToRemove) {
     return this.mongoDbInstance.deleteById(this.StoryModel, storyIdToRemove);
   }
 
-  async updateExistingStory(originalId, title, status, type, synopsis, image, tags, meta) {
+  async updateExistingStory (originalId, title, status, type, synopsis, image, tags, meta) {
     let oldStory = await this.findStoryByRawId(originalId);
     if (typeof oldStory === 'undefined') {
       throw new Error('Could not find given story to update');
     } else {
-      oldStory = this.fillInStoryMetadata(oldStory, title, status, type, synopsis, image, tags, meta);
+      oldStory = this
+        .fillInStoryMetadata(oldStory, title, status, type, synopsis, image, tags, meta);
       return this.upsertStory(oldStory);
     }
   }
 
-  async addNewStory(title, status, type, synopsis, image, tags, meta) {
+  async addNewStory (title, status, type, synopsis, image, tags, meta) {
     let newStory = new this.StoryModel();
     newStory._id = oId();
     newStory = this.fillInStoryMetadata(newStory, title, status, type, synopsis, image, tags, meta);
-    return await this.upsertStory(newStory);
+    return this.upsertStory(newStory);
   }
 
-  fillInStoryMetadata(storyToUpdate, title, status, type, synopsis, image, tags, meta) {
+  fillInStoryMetadata (storyToUpdate, title, status, type, synopsis, image, tags, meta) {
     storyToUpdate.title = title;
     storyToUpdate.story_status = status;
     storyToUpdate.story_type = type;
@@ -123,7 +129,6 @@ class StoryHandler {
     storyToUpdate.time_updated = Date.now();
     return storyToUpdate;
   }
-
 }
 
 StoryHandler.storyHandlerInstance = undefined;

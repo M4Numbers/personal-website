@@ -29,82 +29,89 @@ const oId = mongoose.Types.ObjectId;
 const MongoDbHandler = require('./MongoDbHandler');
 
 class BlogHandler {
-
-  static getHandler() {
+  static getHandler () {
     if (this.blogHandlerInstance === undefined) {
       this.blogHandlerInstance = new BlogHandler();
     }
     return this.blogHandlerInstance;
   }
 
-  constructor() {
+  constructor () {
     this.mongoDbInstance = MongoDbHandler.getMongo();
 
     this.BlogPost = new Schema({
-      '_id': ObjectId,
-      'short_title': String,
-      'long_title': String,
-      'public': Boolean,
-      'full_text': String,
-      'time_posted': {type: Date, default: Date.now()},
-      'time_updated': {type: Date, default: Date.now()},
-      'tags': Array,
-      'comments': Array
+      '_id':          ObjectId,
+      'short_title':  String,
+      'long_title':   String,
+      'public':       Boolean,
+      'full_text':    String,
+      'time_posted':  {
+        type:    Date,
+        default: Date.now(),
+      },
+      'time_updated': {
+        type:    Date,
+        default: Date.now(),
+      },
+      'tags':         Array,
+      'comments':     Array,
     });
     this.BlogPostModel = this.mongoDbInstance.bootModel('BlogPost', this.BlogPost);
   }
 
-  async findBlog(blogId) {
+  async findBlog (blogId) {
     return this.mongoDbInstance.findById(this.BlogPostModel, blogId);
   }
 
-  async deleteBlog(blogId) {
+  async deleteBlog (blogId) {
     return this.mongoDbInstance.deleteById(this.BlogPostModel, blogId);
   }
 
-  buildQuery(visible = false) {
-    let query = {};
+  buildQuery (visible = false) {
+    const query = {};
     if (visible === true) {
-      query['public'] = true;
+      query.public = true;
     }
     return query;
   }
 
-  async findBlogs(skip, limit, sort, visible = true) {
-    return this.mongoDbInstance.findFromQuery(this.BlogPostModel, this.buildQuery(visible), skip, limit, sort);
+  async findBlogs (skip, limit, sort, visible = true) {
+    return this.mongoDbInstance
+      .findFromQuery(this.BlogPostModel, this.buildQuery(visible), skip, limit, sort);
   }
 
-  async findBlogsByQuery(query, skip, limit, sort) {
+  async findBlogsByQuery (query, skip, limit, sort) {
     return this.mongoDbInstance.findFromQuery(this.BlogPostModel, query, skip, limit, sort);
   }
 
-  async getTotalBlogCount(visible = true) {
-    return this.mongoDbInstance.getTotalCountFromQuery(this.BlogPostModel, this.buildQuery(visible));
+  async getTotalBlogCount (visible = true) {
+    return this.mongoDbInstance
+      .getTotalCountFromQuery(this.BlogPostModel, this.buildQuery(visible));
   }
 
-  async upsertBlog(blog) {
+  async upsertBlog (blog) {
     return this.mongoDbInstance.upsertItem(blog);
   }
 
-  async editBlog(blogId, title, text, publiclyVisible, tags) {
+  async editBlog (blogId, title, text, publiclyVisible, tags) {
     let oldBlogPost = await this.findBlog(blogId);
     if (typeof oldBlogPost === 'undefined') {
       throw new Error('Could not find given blog to update');
     } else {
       oldBlogPost = this.fillInBlog(oldBlogPost, title, text, publiclyVisible, tags);
-      return await this.upsertBlog(oldBlogPost);
+      return this.upsertBlog(oldBlogPost);
     }
   }
 
-  async insertBlog(title, text, publiclyVisible, tags) {
+  async insertBlog (title, text, publiclyVisible, tags) {
     let newBlogPost = new this.BlogPostModel();
     newBlogPost._id = oId();
     newBlogPost = this.fillInBlog(newBlogPost, title, text, publiclyVisible, tags);
-    return await this.upsertBlog(newBlogPost);
+    return this.upsertBlog(newBlogPost);
   }
 
-  fillInBlog(blog, title, text, publiclyVisible, tags) {
-    blog.short_title = title.replace(/ /g, '-').replace(/\p/, '').toLocaleLowerCase();
+  fillInBlog (blog, title, text, publiclyVisible, tags) {
+    blog.short_title = title.replace(/ /gu, '-').replace(/\p/u, '').toLocaleLowerCase();
     blog.long_title = title;
     blog.public = publiclyVisible;
     blog.full_text = text;

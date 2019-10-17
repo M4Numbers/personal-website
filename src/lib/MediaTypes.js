@@ -22,5 +22,5 @@
 
 module.exports = {
   'ANIME': 'ANIME',
-  'MANGA': 'MANGA'
+  'MANGA': 'MANGA',
 };

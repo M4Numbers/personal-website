@@ -31,8 +31,7 @@ const MongoDbHandler = require('./MongoDbHandler');
 const logger = require('./logger').bunyanLogger();
 
 class ArtHandler {
-
-  static getHandler() {
+  static getHandler () {
     if (this.artHandlerInstance === undefined) {
       logger.debug('Starting up a new instance of the art database handler');
       this.artHandlerInstance = new ArtHandler();
@@ -40,70 +39,69 @@ class ArtHandler {
     return this.artHandlerInstance;
   }
 
-  constructor() {
+  constructor () {
     this.mongoDbInstance = MongoDbHandler.getMongo();
 
     this.ArtPiece = new Schema({
-      '_id': ObjectId,
+      '_id':   ObjectId,
       'title': String,
       'image': {
         'full_size': String,
-        'thumb': String
+        'thumb':     String,
       },
-      'date_completed': {type: Date},
-      'tags': Array,
-      'time_updated': {type: Date, default: Date.now()},
-      'notes': String
+      'date_completed': { type: Date },
+      'tags':           Array,
+      'time_updated':   {
+        type:    Date,
+        default: Date.now(),
+      },
+      'notes':          String,
     });
     this.ArtPieceModel = this.mongoDbInstance.bootModel('ArtPiece', this.ArtPiece);
   }
 
-  async findArtByRawId(rawId) {
+  async findArtByRawId (rawId) {
     return this.mongoDbInstance.findById(this.ArtPieceModel, rawId);
   }
 
-  async findAllArtPieces(skip, limit, sort) {
+  async findAllArtPieces (skip, limit, sort) {
     return this.mongoDbInstance.findFromQuery(this.ArtPieceModel, {}, skip, limit, sort);
   }
 
-  async findArtPiecesByQuery(query, skip, limit, sort) {
+  async findArtPiecesByQuery (query, skip, limit, sort) {
     return this.mongoDbInstance.findFromQuery(this.ArtPieceModel, query, skip, limit, sort);
   }
 
-  async getTotalArtPieceCount() {
+  async getTotalArtPieceCount () {
     return this.mongoDbInstance.getTotalCountFromQuery(this.ArtPieceModel, {});
   }
 
-  async upsertArt(pieceToUpsert) {
+  async upsertArt (pieceToUpsert) {
     return this.mongoDbInstance.upsertItem(pieceToUpsert);
   }
 
-  async deleteArt(artIdToRemove) {
+  async deleteArt (artIdToRemove) {
     return this.mongoDbInstance.deleteById(this.ArtPieceModel, artIdToRemove);
   }
 
-  async updateExistingArtPiece(originalId, title, completedDate, image, tags, notes) {
+  async updateExistingArtPiece (originalId, title, completedDate, image, tags, notes) {
     let oldArtItem = await this.findArtByRawId(originalId);
     if (typeof oldArtItem === 'undefined') {
       throw new Error('Could not find given art piece to update');
     } else {
-      oldArtItem = this.fillInArtMetadata(
-          oldArtItem, title, completedDate, image, tags, notes,
-      );
-      return await this.upsertArt(oldArtItem);
+      oldArtItem = this.fillInArtMetadata(oldArtItem, title, completedDate, image, tags, notes,);
+      return this.upsertArt(oldArtItem);
     }
   }
 
-  async addNewArtItem(title, completedDate, image, tags, notes) {
+  async addNewArtItem (title, completedDate, image, tags, notes) {
     let newArtPiece = new this.ArtPieceModel();
     newArtPiece._id = oId();
-    newArtPiece = this.fillInArtMetadata(
-        newArtPiece, title, completedDate, image, tags, notes
-    );
-    return await this.upsertArt(newArtPiece);
+    newArtPiece = this.fillInArtMetadata(newArtPiece, title, completedDate, image, tags, notes);
+    return this.upsertArt(newArtPiece);
   }
 
-  fillInArtMetadata(artPieceToUpdate, title, completedDate, image, tags, notes) {
+  fillInArtMetadata (artPieceToUpdate, title, completedDate, image, tags, notes) {
     artPieceToUpdate.title = title;
     artPieceToUpdate.date_completed = completedDate;
     artPieceToUpdate.image.thumb = image;
@@ -112,7 +110,6 @@ class ArtHandler {
     artPieceToUpdate.notes = notes;
     return artPieceToUpdate;
   }
-
 }
 
 ArtHandler.artHandlerInstance = undefined;
