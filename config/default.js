@@ -19,12 +19,6 @@ module.exports = {
     },
   },
   functionality: {},
-  cookies:       {
-    domain:        'localhost',
-    secure_domain: 'localhost',
-    path:          '/',
-    passphrase:    'TO_BE_FILLED_IN_ON_PRODUCTION',
-  },
   database: {
     uri: 'mongodb://user@password:mongodb-server:27017/database',
   },

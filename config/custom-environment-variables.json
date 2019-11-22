@@ -1,19 +1,20 @@
 {
+  "app": {
+    "http2": {
+      "enabled": "APP_HTTP2_ENABLED",
+      "key":     "APP_HTTP2_KEY",
+      "cert":    "APP_HTTP2_CERT"
+    },
+    "name":     "APP_NAME",
+    "hostname": "APP_HOSTNAME",
+    "port":     "APP_PORT"
+  },
+  "jwt": {
+    "public_cert": "JWT_PUBLIC_CERT",
+    "private_key": "JWT_PRIVATE_KEY"
+  },
   "database": {
     "uri": "DATABASE_URI"
-  },
-  "cache": {
-    "type": "CACHE_TYPE",
-    "redis": {
-      "host": "REDIS_HOST",
-      "port": "REDIS_PORT"
-    }
-  },
-  "cookies": {
-    "domain": "COOKIES_DOMAIN",
-    "secure_domain": "COOKIES_DOMAIN_SEC",
-    "path": "COOKIES_PATH",
-    "passphrase": "COOKIES_PASSPHRASE"
   },
   "logger": {
     "level": "LOGGER_LEVEL"

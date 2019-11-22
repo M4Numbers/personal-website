@@ -5,22 +5,23 @@ services:
     command: mongod
     ports:
       - "27017:27017"
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
   j4numbers:
     build:
       dockerfile: Dockerfile
       context: ./
+    volumes:
+      - "./test/spec/helpers/certs:/etc/ssl/"
     environment:
+      APP_NAME: "j4numbers"
+      APP_HOSTNAME: "localhost"
+      APP_PORT: "8080"
+      APP_HTTP2_ENABLED: 1
+      APP_HTTP2_KEY: "/etc/ssl/localhost-privkey.pem"
+      APP_HTTP2_CERT: "/etc/ssl/localhost-cert.pem"
+      JWT_PUBLIC_CERT: "/etc/ssl/localhost-cert.pem"
+      JWT_PRIVATE_KEY: "/etc/ssl/localhost-privkey.pem"
       DATABASE_URI: "mongodb://mongodb:27017/database"
-      CACHE_TYPE: "redis"
-      REDIS_HOST: "redis"
       PROTECTED_HASH: "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
       ADMIN_HASH: "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
-      COOKIES_DOMAIN: "192.168.99.100"
-      COOKIES_DOMAIN_SEC: "192.168.99.100"
-      NPM_PACKAGE_VERSION: "1.0.0"
     ports:
-      - "3000:3000"
+      - "8080:8080"
