@@ -1,6 +1,9 @@
 ### Personal
 .nyc_output/
 
+### Terraform
+tf/site/.terraform
+
 ### Generated
 
 **/.DS_Store

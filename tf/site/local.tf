@@ -1,0 +1,3 @@
+locals {
+  dev-env = "dev"
+}
