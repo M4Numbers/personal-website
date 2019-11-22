@@ -2,7 +2,7 @@ data "aws_vpc" "root_vpc" {
   count = 1
 
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = ["dev-vpc"]
   }
 }
@@ -18,7 +18,7 @@ data "aws_route53_zone" "hosted_zone" {
 
 data "aws_subnet" "personal_website_subnet" {
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = ["${var.subnet[local.dev-env]}"]
   }
 }

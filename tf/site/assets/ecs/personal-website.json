@@ -1,0 +1,15 @@
+[
+  {
+    "name": "personal-website",
+    "image": "284570458590.dkr.ecr.eu-west-2.amazonaws.com/j4numbers/personal-website:latest",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ]
+  }
+]
