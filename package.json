@@ -21,7 +21,7 @@
     "config": "^3.2.3",
     "debug": "~2.6.9",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jsonwebtoken": "^8.5.1",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
