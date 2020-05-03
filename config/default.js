@@ -19,8 +19,9 @@ module.exports = {
     },
   },
   functionality: {},
-  database: {
+  mongo: {
     uri: 'mongodb://user@password:mongodb-server:27017/database',
+    options: { useNewUrlParser: true },
   },
   logger: {
     level: 'info',

@@ -30,6 +30,9 @@
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="FORCE_QUOTE_STYlE" value="true" />
     </JSCodeStyleSettings>
+    <TypeScriptCodeStyleSettings version="0">
+      <option name="USE_DOUBLE_QUOTES" value="false" />
+    </TypeScriptCodeStyleSettings>
     <codeStyleSettings language="JavaScript">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />

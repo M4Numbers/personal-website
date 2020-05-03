@@ -3,9 +3,9 @@ const npath = require('path');
 const sass = require('gulp-sass');
 const babel = require('gulp-babel');
 const clean = require('gulp-clean');
+const ts = require('gulp-typescript');
 
-// const info = require('fha-gulp-info');
-// const fs = require('fs');
+const tsConfig = ts.createProject('src/tsconfig.json');
 
 const srcDir = './';
 const destDir = './public/';
@@ -17,7 +17,7 @@ gulp.task('clean', () => gulp.src(
   {
     read:       false,
     allowEmpty: true,
-  }
+  },
 ).pipe(clean()));
 
 /* --------------------------------------------------------------------- INFO */
@@ -30,6 +30,14 @@ gulp.task('clean', () => gulp.src(
 // });
 
 /* ------------------------------------------------------------------- ASSETS */
+
+gulp.task('typescript', () => gulp
+  .src([
+    npath.resolve(srcDir, 'src/ts/**/*.ts'),
+  ])
+  .pipe(tsConfig())
+  .js
+  .pipe(gulp.dest(npath.resolve(srcDir, 'src/javascript'))));
 
 gulp.task('sass', () => gulp
   .src([
@@ -82,7 +90,16 @@ gulp.task('copy-fonts', () => gulp
 /* -------------------------------------------------------------------- Tasks */
 gulp.task(
   'build',
-  gulp.series('clean', 'sass', 'babel', 'copy-scripts', 'copy-images', 'copy-fonts'),
+  gulp.series(
+    'clean',
+    gulp.parallel(
+      'typescript',
+      gulp.series('sass', 'babel'),
+    ),
+    'copy-scripts',
+    'copy-images',
+    'copy-fonts',
+  ),
 );
 
 gulp.task('default', gulp.series('build'));

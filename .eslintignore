@@ -1,5 +1,7 @@
 public/
+config/
 src/gql
 src/js/
+src/javascript/
 src/images/
 src/stylesheets/

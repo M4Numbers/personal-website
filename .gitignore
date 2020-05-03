@@ -47,6 +47,7 @@ npm-debug.log
 
 ### Compiled Files
 
+/src/javascript/*
 /**/*.css
 /public/*
 
