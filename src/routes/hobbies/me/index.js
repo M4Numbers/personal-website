@@ -23,11 +23,9 @@
 const handleFriendLoginEndpoints = require('./me_auth');
 const handleOverviewEndpoints = require('./me_overview');
 const handleExtendedBlogEndpoints = require('./me_blog');
-const handleKinkEndpoints = require('./me_kinks');
 
 module.exports = (server) => {
   handleFriendLoginEndpoints(server);
   handleOverviewEndpoints(server);
   handleExtendedBlogEndpoints(server);
-  handleKinkEndpoints(server);
 };

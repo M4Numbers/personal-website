@@ -1,6 +1,9 @@
 ### Personal
 .nyc_output/
 
+.idea/
+*.iml
+
 ### Terraform
 tf/site/.terraform
 

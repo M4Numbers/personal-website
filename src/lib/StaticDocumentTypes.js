@@ -25,5 +25,4 @@ module.exports = {
   'CONTACT_ME':   'CONTACT_ME',
   'SITEMAP':      'SITEMAP',
   'KNOWING_ME':   'KNOWING_ME',
-  'KINK_WARNING': 'KINK_WARNING',
 };
