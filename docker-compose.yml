@@ -5,6 +5,13 @@ services:
     command: mongod
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: j4numbers
+    volumes:
+    - "./data/:/docker-entrypoint-initdb.d/"
+
   j4numbers:
     build:
       dockerfile: Dockerfile
@@ -20,7 +27,7 @@ services:
       APP_HTTP2_CERT: "/etc/ssl/localhost-cert.pem"
       JWT_PUBLIC_CERT: "/etc/ssl/localhost-cert.pem"
       JWT_PRIVATE_KEY: "/etc/ssl/localhost-privkey.pem"
-      DATABASE_URI: "mongodb://mongodb:27017/database"
+      DATABASE_URI: "mongodb://root:password:mongodb:27017/j4numbers"
       PROTECTED_HASH: "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
       ADMIN_HASH: "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
     ports:
