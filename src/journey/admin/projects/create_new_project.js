@@ -27,7 +27,8 @@ const postNewProject = async (req, res, next) => {
   try {
     const savedProject = await projectHandlerInstance.insertProject(
       req.body[ 'project-title' ], req.body[ 'project-text' ],
-      req.body[ 'project-visible' ] === 'Y', req.body[ 'project-tags' ].split(/, */u)
+      req.body[ 'project-visible' ] === 'Y',
+      req.body[ 'project-tags' ].split(/, */u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
     );
     res.redirect(303, `/admin/projects/${savedProject._id}`, next);
   } catch (e) {

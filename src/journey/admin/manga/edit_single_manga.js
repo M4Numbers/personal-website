@@ -27,7 +27,7 @@ const editSingleManga = async (req, res, next) => {
   try {
     await mangaHandlerInstance.editManga(
       req.params.mangaId, req.body[ 'book-review' ],
-      req.body[ 'book-tags' ].split(/, ?/u)
+      req.body[ 'book-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
     );
     res.redirect(303, `/admin/manga/${req.params.mangaId}`, next);
   } catch (e) {

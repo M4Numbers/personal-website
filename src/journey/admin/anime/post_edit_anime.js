@@ -26,7 +26,7 @@ const postEditAnime = async (req, res, next) => {
   try {
     await animeHandlerInstance.editAnime(
       req.params.animeId, req.body[ 'show-review' ],
-      req.body[ 'show-tags' ].split(/, ?/u),
+      req.body[ 'show-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
     );
     res.redirect(303, `/admin/anime/${req.params.animeId}`, next);
   } catch (e) {

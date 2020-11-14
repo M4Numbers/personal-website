@@ -28,7 +28,7 @@ const editSingleProject = async (req, res, next) => {
     await projectHandlerInstance.editProject(
       req.params.projectId, req.body[ 'project-title' ],
       req.body[ 'project-text' ], req.body[ 'project-visible' ] === 'Y',
-      req.body[ 'project-tags' ].split(/, */u)
+      req.body[ 'project-tags' ].split(/, */u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
     );
     res.redirect(303, `/admin/projects/${req.params.projectId}`, next);
   } catch (e) {

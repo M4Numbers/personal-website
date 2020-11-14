@@ -28,7 +28,8 @@ const submitEditedArtPiece = async (req, res, next) => {
     await artHandlerInstance.updateExistingArtPiece(
       req.params.artId, req.body[ 'art-title' ],
       req.body[ 'art-completed-date' ], req.files[ 'art-image' ],
-      req.body[ 'art-tags' ].split(/, ?/u), req.body[ 'art-notes' ],
+      req.body[ 'art-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
+      req.body[ 'art-notes' ],
     );
     res.redirect(303, `/admin/art/${req.params.artId}`, next);
   } catch (e) {

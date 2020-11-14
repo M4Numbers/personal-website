@@ -27,7 +27,8 @@ const postNewBlog = async (req, res, next) => {
   try {
     const savedBlog = await blogHandlerInstance.insertBlog(
       req.body[ 'blog-title' ], req.body[ 'blog-text' ],
-      req.body[ 'blog-visible' ] === 'Y', req.body[ 'blog-tags' ].split(/, ?/u)
+      req.body[ 'blog-visible' ] === 'Y',
+      req.body[ 'blog-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
     );
     res.redirect(303, `/admin/blog/${savedBlog._id}`, next);
     next();

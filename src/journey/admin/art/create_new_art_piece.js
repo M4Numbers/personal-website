@@ -31,7 +31,8 @@ const postNewArtPiece = async (req, res, next) => {
     const imageAsBase64 = fs.readFileSync(req.files[ 'art-image' ].path, 'base64');
     const savedArt = await artHandlerInstance.addNewArtItem(
       req.body[ 'art-title' ], req.body[ 'art-completed-date' ],
-      imageAsBase64, req.body[ 'art-tags' ].split(/, ?/u),
+      imageAsBase64,
+      req.body[ 'art-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
       req.body[ 'art-notes' ],
     );
     res.redirect(303, `/admin/art/${savedArt._id}`, next);

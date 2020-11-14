@@ -36,7 +36,8 @@ const editSingleStory = async (req, res, next) => {
       req.params.storyId, req.body[ 'story-title' ],
       req.body[ 'story-status' ], req.body[ 'story-type' ],
       req.body[ 'story-synopsis' ], imageAsBase64,
-      req.body[ 'story-tags' ].split(/, ?/u), req.body[ 'story-notes' ]
+      req.body[ 'story-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
+      req.body[ 'story-notes' ],
     );
     res.redirect(303, `/admin/stories/${req.params.storyId}`, next);
   } catch (e) {

@@ -33,11 +33,11 @@ const createNewChapter = async (req, res, next) => {
     const uploadedChapter = await chapterHandlerInstance.addNewChapter(
       req.params.storyId, req.body[ 'chapter-number' ],
       req.body[ 'chapter-title' ], req.body[ 'chapter-text' ],
-      req.body[ 'chapter-comments' ]
+      req.body[ 'chapter-comments' ],
     );
     await storyHandlerInstance.addChapterToStory(
       req.params.storyId, uploadedChapter.chapter_number,
-      uploadedChapter._id
+      uploadedChapter._id,
     );
     res.redirect(303, `/admin/stories/${req.params.storyId}`, next);
   } catch (e) {

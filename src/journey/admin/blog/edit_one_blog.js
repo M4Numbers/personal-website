@@ -28,7 +28,7 @@ const postEditDetails = async (req, res, next) => {
     await blogHandlerInstance.editBlog(
       req.params.blogId, req.body[ 'blog-title' ],
       req.body[ 'blog-text' ], req.body[ 'blog-visible' ] === 'Y',
-      req.body[ 'blog-tags' ].split(/, ?/u)
+      req.body[ 'blog-tags' ].split(/, ?/u).map((tag) => tag.trim()).filter((tag) => tag !== ''),
     );
     res.redirect(303, `/admin/blog/${req.params.blogId}`, next);
   } catch (e) {
