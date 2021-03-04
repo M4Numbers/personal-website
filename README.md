@@ -44,8 +44,6 @@ deployment, and the map of the site is only split into three authentication leve
      me, probably
      + Me (Blog) - This is an extended blog that has all of the public blog entries in it,
      plus a few private ones that are more personal
-     + Me (Kinks) - This is an 18+ only area of the site which contains some details of what
-     my personal quirks are
  + Admin: this is the administration area of the site which controls what appears in the
  rest of the site.
 
