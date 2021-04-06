@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 const fs = require('fs');
-const uuid = require('uuid/v4');
+const uuid = require('uuid').v4;
 const config = require('config');
 const restify = require('restify');
 

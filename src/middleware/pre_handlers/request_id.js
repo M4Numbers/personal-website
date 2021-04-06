@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-const uuid = require('uuid/v4');
+const uuid = require('uuid').v4;
 
 const requestId = (req, res, next) => {
   req.id = uuid();
