@@ -29,9 +29,9 @@ const markdown = require('markdown-it')();
 const staticHandlerInstance = require('../../../lib/StaticHandler').getHandler();
 const StaticDocumentTypes = require('../../../lib/StaticDocumentTypes');
 
-const generateOverview = (req, res, next) => {
+const generateOverview = async (req, res, next) => {
   try {
-    const staticContent = staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME);
+    const staticContent = await staticHandlerInstance.findStatic(StaticDocumentTypes.KNOWING_ME);
     res.contentType = 'text/html';
     res.header('content-type', 'text/html');
     res.send(200, renderer.render('pages/me/me_index.njk', {
